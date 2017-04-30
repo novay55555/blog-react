@@ -1,0 +1,123 @@
+/* bootstrap样式重置 */
+
+a:focus,
+a:hover {
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+button {
+  outline: none;
+}
+
+:global(.btn.active.focus),
+:global(.btn.active:focus),
+:global(.btn.focus),
+:global(.btn:active.focus),
+:global(.btn:active:focus),
+:global(.btn:focus) {
+  outline: none;
+}
+
+
+/* 公共样式 */
+
+html {
+  height: 100%;
+}
+
+body {
+  position: relative;
+  padding-bottom: 125px;
+  min-height: 100%;
+}
+
+a {
+  transition: all, 0.5s, ease, 0s;
+}
+
+:global(.navbar) :global(.navbar-brand) {
+  padding: 7px;
+  width: 50px;
+}
+
+:global(.navbar) :global(.navbar-brand) img {
+  width: 100%;
+  height: 100%;
+}
+
+.header form {
+  padding: 8px 15px;
+  position: relative;
+}
+
+.header input[type="text"] {
+  padding-right: 30px;
+}
+
+.header form :global(.glyphicon-search) {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  padding: 5px;
+  transform: translate(0, -50%);
+  font-size: 1.1em;
+  color: #333;
+  cursor: pointer;
+}
+
+.header form :global(.glyphicon-search):hover {
+  color: #ff0000;
+}
+
+.header :global(.username) {
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding-top: 15px;
+  width: 100%;
+  min-height: 100px;
+  text-align: center;
+  border-top: 1px solid #dedede;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+   ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+  }
+   ::-webkit-scrollbar-button {
+    display: none;
+  }
+   ::-webkit-scrollbar-track {
+    background-color: #fff;
+  }
+   ::-webkit-scrollbar-thumb {
+    min-height: 48px;
+    background-color: #d2d2d2;
+    border: 3px solid #fff;
+    border-radius: 10px;
+    background-clip: padding-box;
+  }
+}
+
+@media (max-width: 767px) {
+  .header form :global(.form-group) {
+    margin-bottom: 0;
+  }
+  .header :global(.username) {
+    width: 100%;
+  }
+}
