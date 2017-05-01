@@ -1,24 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
-import Modal from './Modal'
+import SigninModal from './SigninModal'
+import RegisterModal from './RegisterModal'
 import commonClass from './common.css'
 
 export default class Header extends Component {
 
-  constructor() {
-    super();
-    this.state = {
-      modalName: '',
-      modalVisiable: false
-    };
-  }
-
-  handleModalShow = modalName => this.setState({ modalName, modalVisiable: true });
-
   render() {
-    const { modalName } = this.state;
-    const { logo, navs } = this.props;
+    const { logo, navs, accountInfo, onSignin, onRegister, activeModal, onModalShow } = this.props;
+    console.log(accountInfo)
     return (
       <div className={commonClass.header}>
         <nav className="navbar navbar-inverse">
@@ -40,79 +31,48 @@ export default class Header extends Component {
                   navs.map((nav, i) => (<li key={i}><Link to={nav.path}>{nav.text}</Link></li>))
                 }
               </ul>
-              <ul className="nav navbar-nav navbar-right">
-                <li>
-                  <form className="form-inline">
-                    <div className="form-group">
-                      <input type="text" className="form-control" name="title" placeholder="Search something..." />
-                      <a href="#" className="glyphicon glyphicon-search"></a>
-                    </div>
-                  </form>
-                </li>
-                {/*<li><a href="#" className="username">用户名用户名用户名</a></li>
-                <li><a href="#">退出</a></li>*/}
-                <li>
-                  <a
-                    href="#"
-                    onClick={e => {
-                      e.preventDefault();
-                      this.handleModalShow('signin');
-                    }}
-                  >
-                    登录
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    onClick={e => {
-                      e.preventDefault();
-                      this.handleModalShow('register');
-                    }}
-                  >
-                    注册
-                  </a>
-                </li>
-              </ul>
+              {
+                accountInfo.isLogin ?
+                  <ul className="nav navbar-nav navbar-right">
+                    <li>
+                      <form className="form-inline">
+                        <div className="form-group">
+                          <input type="text" className="form-control" name="title" placeholder="Search something..." />
+                          <a href="#" className="glyphicon glyphicon-search"></a>
+                        </div>
+                      </form>
+                    </li>
+                    <li><a href="#" className="username">{accountInfo.username}</a></li>
+                    <li><a href="#">退出</a></li>
+                  </ul> :
+                  <ul className="nav navbar-nav navbar-right">
+                    <li>
+                      <form className="form-inline">
+                        <div className="form-group">
+                          <input type="text" className="form-control" name="title" placeholder="Search something..." />
+                          <a href="#" className="glyphicon glyphicon-search"></a>
+                        </div>
+                      </form>
+                    </li>
+                    <li>
+                      <a href="#" onClick={e => {
+                        e.preventDefault();
+                        onModalShow('signin');
+                      }}>登录</a>
+                    </li>
+                    <li>
+                      <a href="#" onClick={e => {
+                        e.preventDefault();
+                        onModalShow('register');
+                      }}>注册</a>
+                    </li>
+                  </ul>
+              }
             </div>
           </div>
         </nav>
-        {
-          modalName ? (
-            modalName === 'signin' ?
-              <Modal
-                title='登录'
-                buttons={[{
-                  text: '确定',
-                  handler: () => {
-                    alert('登录')
-                    this.setState({modalVisiable: false});
-                  }
-                }, {
-                  text: '取消'
-                }]}
-                visiable={this.state.modalVisiable}
-                size='small'
-              >
-                这是个登录弹窗
-              </Modal> :
-              <Modal
-                title='注册'
-                buttons={[{
-                  text: '确定',
-                  handler: () => alert('注册')
-                }, {
-                  text: '取消'
-                }]}
-                visiable={this.state.modalVisiable}
-                size='small'
-              >
-                这是个注册弹窗
-              </Modal>
-          ) : ''
-        }
-
-
+        <SigninModal onSignin={onSignin} visiable={activeModal === 'signin'} />
+        <RegisterModal onRegister={onRegister} visiable={activeModal === 'register'} />
       </div>
     )
   }
@@ -123,5 +83,13 @@ Header.PropTypes = {
   navs: PropTypes.arrayOf({
     text: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  onSignin: PropTypes.func.isRequired,
+  onRegister: PropTypes.func.isRequired,
+  onModalShow: PropTypes.func.isRequired,
+  activeModal: PropTypes.string.isRequired,
+  accountInfo: {
+    isLogin: PropTypes.bool,
+    username: PropTypes.string
+  }
 };

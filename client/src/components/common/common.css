@@ -50,16 +50,16 @@ a {
   height: 100%;
 }
 
-.header form {
+.header form:global(.form-inline) {
   padding: 8px 15px;
   position: relative;
 }
 
-.header input[type="text"] {
+.header :global(.form-inline) input {
   padding-right: 30px;
 }
 
-.header form :global(.glyphicon-search) {
+.header form:global(.form-inline) :global(.glyphicon-search) {
   position: absolute;
   top: 50%;
   right: 20px;
@@ -70,12 +70,12 @@ a {
   cursor: pointer;
 }
 
-.header form :global(.glyphicon-search):hover {
+.header form:global(.form-inline) :global(.glyphicon-search):hover {
   color: #ff0000;
 }
 
 .header :global(.username) {
-  width: 150px;
+  max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -114,7 +114,7 @@ a {
 }
 
 @media (max-width: 767px) {
-  .header form :global(.form-group) {
+  .header form:global(.form-inline) :global(.form-group) {
     margin-bottom: 0;
   }
   .header :global(.username) {

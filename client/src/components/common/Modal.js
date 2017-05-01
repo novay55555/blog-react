@@ -15,7 +15,7 @@ export default class Modal extends Component {
   }
 
   componentWillReceiveProps(nextState) {
-    nextState.visiable ? this.show() : this.hide();
+    if (this.props.visiable !== nextState.visiable) nextState.visiable ? this.show() : this.hide();
   }
 
   componentDidMount() {

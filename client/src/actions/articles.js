@@ -1,4 +1,4 @@
-import { Defer, dateFormatter } from '../../lib/common'
+import { Defer, dateFormatter } from '../lib/common'
 const { get } = Defer($);
 
 export const actionTypes = {
@@ -54,7 +54,7 @@ export const fetchArticles = (page = 1) => dispatch => {
 };
 
 export const fetchArticleTypes = () => dispatch => {
-  dispatch(gettingArticles());
+  dispatch(gettingArticleTypes());
   get(`/api/types/articles`)
     .done(articleTypes => dispatch(gotArticleTypes(articleTypes)))
     .fail(errMsg => dispatch(errGetArticleTypes(errMsg)));

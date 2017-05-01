@@ -1,0 +1,71 @@
+import { Defer } from '../lib/common'
+import md5 from 'blueimp-md5'
+
+const { post } = Defer($);
+
+export const actionTypes = {
+  POSTING_SIGNIN: 'POSTING_SIGNIN',
+  POSTED_SIGNIN: 'POSTED_SIGNIN',
+  ERROR_POST_SIGNIN: 'ERROR_POST_SIGNIN',
+  POSTING_REGISTER: 'POSTING_REGISTER',
+  POSTED_REGISTER: 'POSTED_REGISTER',
+  ERROR_POST_REGISTER: 'ERROR_POST_REGISTER',
+  SHOW_MODAL: 'SHOW_MODAL',
+  HIDE_MODAL: 'HIDE_MODAL'
+};
+
+export const showModal = modalName => ({
+  type: actionTypes.SHOW_MODAL,
+  modalName
+});
+
+export const hideModal = () => ({
+  type: actionTypes.HIDE_MODAL
+});
+
+const postingSignin = () => ({
+  type: actionTypes.POSTING_SIGNIN
+});
+
+const postedSignin = username => ({
+  type: actionTypes.POSTED_SIGNIN,
+  username
+});
+
+const errorPostSignin = () => ({
+  type: actionTypes.ERROR_POST_SIGNIN
+});
+
+const postingRegister = () => ({
+  type: actionTypes.POSTING_REGISTER
+});
+
+const postedRegister = () => ({
+  type: actionTypes.POSTED_REGISTER
+});
+
+const errorPostRegister = () => ({
+  type: actionTypes.ERROR_POST_REGISTER
+});
+
+export const fetchSignin = (username, password, callback) => dispatch => {
+  dispatch(postingSignin());
+  post(`/api/login`, { name: username, password: md5(password) })
+    .done(() => {
+      dispatch(postedSignin('hahaha'))  // TODO: 后台需要返回username
+      alert('登录成功')
+      callback && callback();
+    })
+    .fail(errMsg => dispatch(errorPostSignin()));
+};
+
+export const fetchRegister = (username, password, email, callback) => dispatch => {
+  dispatch(postingRegister());
+  post(`/api/register`, { name: username, password: md5(password), email })
+    .done(() => {
+      dispatch(postedRegister());
+      alert('注册成功')
+      callback && callback();
+    })
+    .fail(errMsg => dispatch(errorPostRegister()));
+};
