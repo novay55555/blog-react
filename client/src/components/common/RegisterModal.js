@@ -10,27 +10,21 @@ export default class RegisterModal extends Component {
       username: '',
       password: '',
       email: '',
-      usernameValidate: null,
-      passwordValidate: null,
-      emailValidate: null
+      usernamePass: false,
+      passwordPass: false,
+      emailPass: false
     };
   }
 
   render() {
-    const { username, password, email, usernameValidate, passwordValidate, emailValidate } = this.state;
-    const { onRegister } = this.props;
+    const { username, password, email, usernamePass, passwordPass, emailPass } = this.state;
+    const { onRegister, visiable, onCancel } = this.props;
     return (
       <Modal
         title='注册'
-        buttons={[{
-          text: '确定',
-          handler: () => {
-            if (!usernameValidate() && !passwordValidate() && !emailValidate()) onRegister(username, password, email);
-          }
-        }, {
-          text: '取消'
-        }]}
-        visiable={this.props.visiable}
+        visiable={visiable}
+        onOk={() => { if (usernamePass && passwordPass && emailPass) onRegister(username, password, email) }}
+        onCancel={onCancel}
         size='small'
       >
         <form>
@@ -45,10 +39,7 @@ export default class RegisterModal extends Component {
                 errMsg: '用户名不能为空'
               }]
             }
-            notifyPass={validator => this.setState({
-              username: validator.getValue(),
-              usernameValidate: () => validator.start()
-            })}
+            onChange={(username, usernamePass) => this.setState({ username, usernamePass })}
             maxLength='12'
           />
           <Input
@@ -65,10 +56,7 @@ export default class RegisterModal extends Component {
                 errMsg: '密码长度不少于6个'
               }]
             }
-            notifyPass={validator => this.setState({
-              password: validator.getValue(),
-              passwordValidate: () => validator.start()
-            })}
+            onChange={(password, passwordPass) => this.setState({ password, passwordPass })}
             maxLength='16'
           />
           <Input
@@ -85,13 +73,16 @@ export default class RegisterModal extends Component {
                 errMsg: '邮箱地址格式有误喔~'
               }]
             }
-            notifyPass={validator => this.setState({
-              email: validator.value,
-              emailValidate: () => validator.start()
-            })}
+            onChange={(email, emailPass) => this.setState({ email, emailPass })}
           />
         </form>
       </Modal>
     )
   }
 }
+
+RegisterModal.PropTypes = {
+  onRegister: PropTypes.func.isRequired,
+  visiable: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired
+};

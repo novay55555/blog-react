@@ -61,9 +61,7 @@ export default class Input extends Component {
     };
   };
 
-  change = e => {
-    this.props.onChange(e.target.value, this.state.validator.start());
-  };
+  change = e => this.props.onChange && this.props.onChange.call(this.props.onChange, e.target.value, this.state.validator.start());
 
   render() {
     const { status, errMsg } = this.state;

@@ -8,8 +8,7 @@ import commonClass from './common.css'
 export default class Header extends Component {
 
   render() {
-    const { logo, navs, accountInfo, onSignin, onRegister, activeModal, onModalShow } = this.props;
-    console.log(accountInfo)
+    const { logo, navs, accountInfo, onSignin, onRegister, activeModal, onModalShow, onModalHide } = this.props;
     return (
       <div className={commonClass.header}>
         <nav className="navbar navbar-inverse">
@@ -71,8 +70,8 @@ export default class Header extends Component {
             </div>
           </div>
         </nav>
-        <SigninModal onSignin={onSignin} visiable={activeModal === 'signin'} />
-        <RegisterModal onRegister={onRegister} visiable={activeModal === 'register'} />
+        <SigninModal onSignin={onSignin} onCancel={onModalHide} visiable={activeModal === 'signin'} />
+        <RegisterModal onRegister={onRegister} onCancel={onModalHide} visiable={activeModal === 'register'} />
       </div>
     )
   }

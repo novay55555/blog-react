@@ -14,25 +14,15 @@ export default class SigninModal extends Component {
     };
   }
 
-  handleUsernameChange = (username, usernamePass) => this.setState({ username, usernamePass });
-
-  handlePasswordChange = (password, passwordPass) => this.setState({ password, passwordPass });
-
   render() {
     const { username, password, usernamePass, passwordPass } = this.state;
-    const { onSignin, visiable } = this.props;
+    const { onSignin, visiable, onCancel } = this.props;
     return (
       <Modal
         title='登录'
-        buttons={[{
-          text: '确定',
-          handler: () => {
-            if (usernamePass && passwordPass) onSignin(username, password);
-          }
-        }, {
-          text: '取消'
-        }]}
         visiable={visiable}
+        onOk={() => { if (usernamePass && passwordPass) onSignin(username, password) }}
+        onCancel={onCancel}
         size='small'>
         <form>
           <Input
@@ -40,7 +30,7 @@ export default class SigninModal extends Component {
             name='username'
             type='text'
             placeholder='请输入用户名'
-            onChange={this.handleUsernameChange}
+            onChange={(username, usernamePass) => this.setState({ username, usernamePass })}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -54,7 +44,7 @@ export default class SigninModal extends Component {
             name='password'
             type='password'
             placeholder='请输入密码'
-            onChange={this.handlePasswordChange}
+            onChange={(password, passwordPass) => this.setState({ password, passwordPass })}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -74,5 +64,6 @@ export default class SigninModal extends Component {
 
 SigninModal.PropTypes = {
   onSignin: PropTypes.func.isRequired,
-  visiable: PropTypes.bool.isRequired
+  visiable: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
