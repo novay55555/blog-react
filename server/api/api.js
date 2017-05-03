@@ -38,7 +38,7 @@ module.exports = function (app, credenticals, nodemailer) {
 			if (user[0].role == 0) req.session.isAdmin = true;
 			req.session.isLogin = true;
 			req.session.user = user[0];
-			res.json({ code: 1 });
+			res.json({ code: 1, content: { username: req.session.user, isAdmin: req.session.isAdmin } });
 		});
 	});
 
@@ -47,9 +47,9 @@ module.exports = function (app, credenticals, nodemailer) {
 	 */
 	app.get('/api/signup', function (req, res) {
 		delete req.session.isLogin;
-		delete req.session.isAdmin;
 		delete req.session.user;
-		res.json({ code: 1 });
+		if (req.session.isAdmin) delete req.session.isAdmin;
+		res.json({ code: 1, content: {} });
 	});
 
 	/**
