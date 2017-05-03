@@ -20,6 +20,9 @@ export default class Modal extends Component {
 
   componentDidMount() {
     this.props.visiable && this.show();
+    $(this.container).on('hidden.bs.modal', () => {
+      if (this.props.visiable) this.props.onCancel && this.props.onCancel();
+    });
   }
 
   hide = () => $(this.container).modal('hide');
@@ -27,9 +30,9 @@ export default class Modal extends Component {
   show = () => $(this.container).modal('show');
 
   render() {
-    const { title, buttons, visiable, size } = this.props;
+    const { className, title, buttons, visiable, size, onOk, okText, cancelText } = this.props;
     return (
-      <div ref={modal => this.container = modal} className="modal fade" tabIndex="-1">
+      <div ref={modal => this.container = modal} className={`modal fade ${className}`} tabIndex="-1">
         <div className={`modal-dialog ${size ? this.state.sizeClass[size] : ''}`}>
           <div className="modal-content">
             {
@@ -42,23 +45,25 @@ export default class Modal extends Component {
             <div className="modal-body">
               {this.props.children}
             </div>
-            {
-              buttons ?
-                <div className="modal-footer">
-                  {
-                    buttons.reverse().map((button, i, array) => (
-                      <button
-                        type="button"
-                        key={i}
-                        className={`btn ${i === 0 ? 'btn-default' : 'btn-primary'}`}
-                        onClick={button.handler || this.hide}
-                      >
-                        {button.text}
-                      </button>
-                    ))
-                  }
-                </div> : ''
-            }
+            <div className="modal-footer">
+              {
+                onOk ?
+                  <button
+                    type="button"
+                    className={`btn btn-primary`}
+                    onClick={onOk || this.hide}
+                  >
+                    {okText || '确定'}
+                  </button> : ''
+              }
+              <button
+                type="button"
+                className={`btn btn-default`}
+                onClick={this.hide}
+              >
+                {cancelText || '取消'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -67,11 +72,12 @@ export default class Modal extends Component {
 }
 
 Modal.PropTypes = {
+  className: PropTypes.string,
   title: PropTypes.string,
-  buttons: PropTypes.arrayOf({
-    text: PropTypes.string.isRequired,
-    handler: PropTypes.func
-  }),
   visiable: PropTypes.bool.isRequired,
-  size: PropTypes.string
+  size: PropTypes.string,
+  onOK: PropTypes.func,
+  onCancel: PropTypes.func,
+  okText: PropTypes.string,
+  cancelText: PropTypes.string
 };
