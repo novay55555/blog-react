@@ -9,19 +9,30 @@ export default class SigninModal extends Component {
     this.state = {
       username: '',
       password: '',
-      usernamePass: false,
-      passwordPass: false
+      usernameValidator: null,
+      passwordValidator: null
     };
   }
 
+  getUsernameValidator = usernameValidator => this.setState({ usernameValidator });
+
+  getPasswordValidator = passwordValidator => this.setState({ passwordValidator });
+
+  handleSignin = () => {
+    const { username, password, usernameValidator, passwordValidator } = this.state;
+    const { onSignin } = this.props;
+    const usernamePass = usernameValidator.start();
+    const passwordPass = passwordValidator.start();
+    if (usernamePass && passwordPass) onSignin(username, password);
+  };
+
   render() {
-    const { username, password, usernamePass, passwordPass } = this.state;
-    const { onSignin, visiable, onCancel, isFetching } = this.props;
+    const { visiable, onCancel, isFetching } = this.props;
     return (
       <Modal
         title='登录'
         visiable={visiable}
-        onOk={() => { if (usernamePass && passwordPass) onSignin(username, password) }}
+        onOk={this.handleSignin}
         onCancel={onCancel}
         loading={isFetching}
         size='small'>
@@ -31,7 +42,8 @@ export default class SigninModal extends Component {
             name='username'
             type='text'
             placeholder='请输入用户名'
-            onChange={(username, usernamePass) => this.setState({ username, usernamePass })}
+            onChange={username => this.setState({ username })}
+            getValidator={this.getUsernameValidator}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -45,7 +57,8 @@ export default class SigninModal extends Component {
             name='password'
             type='password'
             placeholder='请输入密码'
-            onChange={(password, passwordPass) => this.setState({ password, passwordPass })}
+            onChange={password => this.setState({ password })}
+            getValidator={this.getPasswordValidator}
             validates={
               [{
                 rule: 'isNotEmpty',

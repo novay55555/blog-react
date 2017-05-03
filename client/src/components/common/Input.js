@@ -27,7 +27,10 @@ export default class Input extends Component {
   }
 
   componentDidMount() {
-    this.initValidator(this.props.validates);
+    if(this.props.validates){
+      this.initValidator(this.props.validates);
+      this.props.getValidator && this.props.getValidator.call(this.props.getValidator, this.state.validator);
+    }
   }
 
   initValidator = validates => {
@@ -65,7 +68,7 @@ export default class Input extends Component {
 
   render() {
     const { status, errMsg } = this.state;
-    const { className, label, name, validates, onChange, notifyPass, ...props } = this.props;
+    const { className, label, name, validates, onChange, getValidator, ...props } = this.props;
     return (
       <div className={`form-group ${className || ''} ${status}`}>
         <label className="control-label" htmlFor={name}>{status === 'has-error' ? errMsg : label}</label>
@@ -90,5 +93,6 @@ Input.PropTypes = {
   validates: PropTypes.arrayOf({
     rule: PropTypes.string.isRequired,
     errMsg: PropTypes.string.isRequired
-  })
+  }),
+  getValidator: PropTypes.func
 };

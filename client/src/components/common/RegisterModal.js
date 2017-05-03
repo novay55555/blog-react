@@ -10,20 +10,34 @@ export default class RegisterModal extends Component {
       username: '',
       password: '',
       email: '',
-      usernamePass: false,
-      passwordPass: false,
-      emailPass: false
+      usernameValidator: null,
+      passwordValidator: null,
+      emailValidator: null
     };
   }
 
+  getUsernameValidator = usernameValidator => this.setState({ usernameValidator });
+
+  getPasswordValidator = passwordValidator => this.setState({ passwordValidator });
+
+  getEmailValidator = emailValidator => this.setState({ emailValidator });
+
+  handleRegister = () => {
+    const { username, password, email, usernameValidator, passwordValidator, emailValidator } = this.state;
+    const { onRegister } = this.props;
+    const usernamePass = usernameValidator.start();
+    const passwordPass = passwordValidator.start();
+    const emailPass = emailValidator.start();
+    if (usernamePass && passwordPass && emailPass) onRegister(username, password, email)
+  };
+
   render() {
-    const { username, password, email, usernamePass, passwordPass, emailPass } = this.state;
     const { onRegister, visiable, onCancel, isFetching } = this.props;
     return (
       <Modal
         title='注册'
         visiable={visiable}
-        onOk={() => { if (usernamePass && passwordPass && emailPass) onRegister(username, password, email) }}
+        onOk={this.handleRegister}
         onCancel={onCancel}
         loading={isFetching}
         size='small'
@@ -34,13 +48,14 @@ export default class RegisterModal extends Component {
             name='username'
             type='text'
             placeholder='请输入用户名'
+            getValidator={this.getUsernameValidator}
             validates={
               [{
                 rule: 'isNotEmpty',
                 errMsg: '用户名不能为空'
               }]
             }
-            onChange={(username, usernamePass) => this.setState({ username, usernamePass })}
+            onChange={username => this.setState({ username })}
             maxLength='12'
           />
           <Input
@@ -48,6 +63,7 @@ export default class RegisterModal extends Component {
             name='password'
             type='password'
             placeholder='请输入密码'
+            getValidator={this.getPasswordValidator}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -57,7 +73,7 @@ export default class RegisterModal extends Component {
                 errMsg: '密码长度不少于6个'
               }]
             }
-            onChange={(password, passwordPass) => this.setState({ password, passwordPass })}
+            onChange={password => this.setState({ password })}
             maxLength='16'
           />
           <Input
@@ -65,6 +81,7 @@ export default class RegisterModal extends Component {
             name='text'
             type='text'
             placeholder='请输入邮箱地址'
+            getValidator={this.getEmailValidator}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -74,7 +91,7 @@ export default class RegisterModal extends Component {
                 errMsg: '邮箱地址格式有误喔~'
               }]
             }
-            onChange={(email, emailPass) => this.setState({ email, emailPass })}
+            onChange={email => this.setState({ email })}
           />
         </form>
       </Modal>
@@ -85,5 +102,6 @@ export default class RegisterModal extends Component {
 RegisterModal.PropTypes = {
   onRegister: PropTypes.func.isRequired,
   visiable: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired
 };
