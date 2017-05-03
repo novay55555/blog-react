@@ -8,7 +8,8 @@ import commonClass from './common.css'
 export default class Header extends Component {
 
   render() {
-    const { logo, navs, accountInfo, onSignin, onRegister, activeModal, onModalShow, onModalHide, isFetching } = this.props;
+    const { logo, navs, accountInfo, onSignin, onRegister, onSignout,
+      activeModal, onModalShow, onModalHide, isFetching } = this.props;
     return (
       <div className={commonClass.header}>
         <nav className="navbar navbar-inverse">
@@ -42,7 +43,12 @@ export default class Header extends Component {
                       </form>
                     </li>
                     <li><a href="#" className="username">{accountInfo.username}</a></li>
-                    <li><a href="#">{isFetching ? '正在退出...' :　'退出'}</a></li>
+                    <li>
+                      <a href="#" onClick={e => {
+                        e.preventDefault();
+                        onSignout()
+                      }}>{isFetching ? '正在退出...' : '退出'}</a>
+                    </li>
                   </ul> :
                   <ul className="nav navbar-nav navbar-right">
                     <li>
@@ -70,7 +76,7 @@ export default class Header extends Component {
             </div>
           </div>
         </nav>
-        <SigninModal onSignin={onSignin} onCancel={onModalHide} visiable={activeModal === 'signin'}　isFetching={isFetching} />
+        <SigninModal onSignin={onSignin} onCancel={onModalHide} visiable={activeModal === 'signin'} isFetching={isFetching} />
         <RegisterModal onRegister={onRegister} onCancel={onModalHide} visiable={activeModal === 'register'} isFetching={isFetching} />
       </div>
     )

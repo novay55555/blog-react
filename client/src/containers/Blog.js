@@ -4,13 +4,15 @@ import { connect } from 'react-redux'
 import ContainerFluid from '../components/common/ContainerFluid'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
-import { fetchRegister, fetchSignin, showModal, hideModal } from '../actions/account'
+import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal } from '../actions/account'
 
 class Blog extends Component {
 
   handleRegister = (username, password, email) => this.props.dispatch(fetchRegister(username, password, email, this.handleModalHide));
 
   handleSignin = (username, password) => this.props.dispatch(fetchSignin(username, password, this.handleModalHide));
+
+  handleSignout = () => this.props.dispatch(fetchSignout());
 
   handleModalShow = modalName => this.props.dispatch(showModal(modalName));
 
@@ -49,6 +51,7 @@ class Blog extends Component {
               ]}
           onSignin={this.handleSignin}
           onRegister={this.handleRegister}
+          onSignout={this.handleSignout}
           onModalShow={this.handleModalShow}
           onModalHide={this.handleModalHide}
           activeModal={activeModal}

@@ -1,7 +1,7 @@
 import { Defer } from '../lib/common'
 import md5 from 'blueimp-md5'
 
-const { post } = Defer($);
+const { get, post } = Defer($);
 
 export const actionTypes = {
   POSTING_SIGNIN: 'POSTING_SIGNIN',
@@ -11,8 +11,23 @@ export const actionTypes = {
   POSTED_REGISTER: 'POSTED_REGISTER',
   ERROR_POST_REGISTER: 'ERROR_POST_REGISTER',
   SHOW_MODAL: 'SHOW_MODAL',
-  HIDE_MODAL: 'HIDE_MODAL'
+  HIDE_MODAL: 'HIDE_MODAL',
+  GETTING_SIGNOUT: 'GETTING_SIGNOUT',
+  GOT_SIGNOUT: 'GOT_SIGNOUT',
+  ERROR_GET_SIGNOUT: 'ERROR_GET_SIGNOUT'
 };
+
+const gettingSignout = () => ({
+  type: actionTypes.GETTING_SIGNOUT
+});
+
+const gotSignout = () => ({
+  type: actionTypes.GOT_SIGNOUT
+});
+
+const errorGetSignout = () => ({
+  type: actionTypes.ERROR_GET_SIGNOUT
+});
 
 export const showModal = modalName => ({
   type: actionTypes.SHOW_MODAL,
@@ -27,9 +42,10 @@ const postingSignin = () => ({
   type: actionTypes.POSTING_SIGNIN
 });
 
-const postedSignin = username => ({
+const postedSignin = (username, isAdmin) => ({
   type: actionTypes.POSTED_SIGNIN,
-  username
+  username,
+  isAdmin
 });
 
 const errorPostSignin = () => ({
@@ -51,12 +67,15 @@ const errorPostRegister = () => ({
 export const fetchSignin = (username, password, callback) => dispatch => {
   dispatch(postingSignin());
   post(`/api/login`, { name: username, password: md5(password) })
-    .done(() => {
-      dispatch(postedSignin('hahaha'))  // TODO: 后台需要返回username
+    .done(data => {
+      dispatch(postedSignin(data.username, data.isAdmin));
       alert('登录成功')
       callback && callback();
     })
-    .fail(errMsg => dispatch(errorPostSignin()));
+    .fail(errMsg => {
+      dispatch(errorPostSignin());
+      alert(errMsg);
+    });
 };
 
 export const fetchRegister = (username, password, email, callback) => dispatch => {
@@ -67,5 +86,15 @@ export const fetchRegister = (username, password, email, callback) => dispatch =
       alert('注册成功')
       callback && callback();
     })
-    .fail(errMsg => dispatch(errorPostRegister()));
+    .fail(errMsg => {
+      dispatch(errorPostSignin());
+      alert(errMsg);
+    });
+};
+
+export const fetchSignout = () => dispatch => {
+  dispatch(gettingSignout());
+  get(`/api/signout`)
+    .done(() => dispatch(gotSignout()))
+    .fail(() => errorGetSignout());
 };

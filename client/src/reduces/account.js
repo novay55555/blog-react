@@ -51,11 +51,18 @@ const account = (state = { isLogin: false }, action) => {
         isFetching: true
       };
     case actionTypes.GOT_SIGNOUT:
+      return {
+        ...state,
+        isFetching: false,
+        username: '',
+        isAdmin: false,
+        isLogin: false
+      };
     case actionTypes.ERROR_GET_SIGNOUT:
       return {
         ...state,
         isFetching: false
-      };
+      }
     default:
       return state;
   }
