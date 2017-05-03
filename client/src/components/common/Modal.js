@@ -30,7 +30,7 @@ export default class Modal extends Component {
   show = () => $(this.container).modal('show');
 
   render() {
-    const { className, title, buttons, visiable, size, onOk, okText, cancelText } = this.props;
+    const { className, title, size, onOk, okText, cancelText, loading } = this.props;
     return (
       <div ref={modal => this.container = modal} className={`modal fade ${className}`} tabIndex="-1">
         <div className={`modal-dialog ${size ? this.state.sizeClass[size] : ''}`}>
@@ -46,16 +46,6 @@ export default class Modal extends Component {
               {this.props.children}
             </div>
             <div className="modal-footer">
-              {
-                onOk ?
-                  <button
-                    type="button"
-                    className={`btn btn-primary`}
-                    onClick={onOk || this.hide}
-                  >
-                    {okText || '确定'}
-                  </button> : ''
-              }
               <button
                 type="button"
                 className={`btn btn-default`}
@@ -63,6 +53,17 @@ export default class Modal extends Component {
               >
                 {cancelText || '取消'}
               </button>
+              {
+                onOk ?
+                  <button
+                    type="button"
+                    className={`btn btn-primary`}
+                    onClick={onOk || this.hide}
+                    style={loading ? { opacity: .5, pointerEvents: 'none' } : {}}
+                  >
+                    {okText || '确定'}
+                  </button> : ''
+              }
             </div>
           </div>
         </div>
@@ -79,5 +80,6 @@ Modal.PropTypes = {
   onOK: PropTypes.func,
   onCancel: PropTypes.func,
   okText: PropTypes.string,
-  cancelText: PropTypes.string
+  cancelText: PropTypes.string,
+  loading: PropTypes.bool
 };

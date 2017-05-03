@@ -12,7 +12,8 @@ const account = (state = { isLogin: false }, action) => {
         ...state,
         isFetching: false,
         isLogin: true,
-        username: action.username
+        username: action.username,
+        isAdmin: action.isAdmin
       };
     case actionTypes.ERROR_POST_SIGNIN:
       return {
@@ -43,6 +44,17 @@ const account = (state = { isLogin: false }, action) => {
       return {
         ...state,
         activeModal: undefined
+      };
+    case actionTypes.GETTING_SIGNOUT:
+      return {
+        ...state,
+        isFetching: true
+      };
+    case actionTypes.GOT_SIGNOUT:
+    case actionTypes.ERROR_GET_SIGNOUT:
+      return {
+        ...state,
+        isFetching: false
       };
     default:
       return state;

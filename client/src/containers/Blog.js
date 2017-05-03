@@ -7,7 +7,7 @@ import Footer from '../components/common/Footer'
 import { fetchRegister, fetchSignin, showModal, hideModal } from '../actions/account'
 
 class Blog extends Component {
-  
+
   handleRegister = (username, password, email) => this.props.dispatch(fetchRegister(username, password, email, this.handleModalHide));
 
   handleSignin = (username, password) => this.props.dispatch(fetchSignin(username, password, this.handleModalHide));
@@ -17,27 +17,43 @@ class Blog extends Component {
   handleModalHide = () => this.props.dispatch(hideModal());
 
   render() {
-    const {accountInfo, activeModal} = this.props;
+    const { accountInfo, activeModal, isFetching } = this.props;
     return (
       <div>
         <Header
           logo='/build/img/kato.jpg'
-          navs={[
-            {
-              text: '博客',
-              path: '/'
-            },
-            {
-              text: 'スタディー',
-              path: '/study'
-            }
-          ]}
+          navs={
+            accountInfo.isAdmin ?
+              [
+                {
+                  text: '博客',
+                  path: '/'
+                },
+                {
+                  text: 'スタディー',
+                  path: '/study'
+                },
+                {
+                  text: '里世界',
+                  path: '/inside-world'
+                }
+              ] : [
+                {
+                  text: '博客',
+                  path: '/'
+                },
+                {
+                  text: 'スタディー',
+                  path: '/study'
+                }
+              ]}
           onSignin={this.handleSignin}
           onRegister={this.handleRegister}
           onModalShow={this.handleModalShow}
           onModalHide={this.handleModalHide}
           activeModal={activeModal}
           accountInfo={accountInfo}
+          isFetching={isFetching}
         />
         <main>
           {this.props.children}
@@ -49,14 +65,26 @@ class Blog extends Component {
 }
 
 const mapStateToProps = state => {
-  const { isLogin, username, activeModal } = state.account;
+  const { isLogin, username, activeModal, isAdmin, isFetching } = state.account;
   return {
     accountInfo: {
       isLogin,
-      username
+      username,
+      isAdmin
     },
-    activeModal
+    activeModal,
+    isFetching
   };
 };
 
 export default connect(mapStateToProps)(Blog)
+
+Blog.PropTypes = {
+  accountInfo: {
+    isLogin: PropTypes.bool,
+    username: PropTypes.string,
+    isAdmin: PropTypes.bool
+  },
+  activeModal: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired
+}

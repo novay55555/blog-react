@@ -16,13 +16,14 @@ export default class SigninModal extends Component {
 
   render() {
     const { username, password, usernamePass, passwordPass } = this.state;
-    const { onSignin, visiable, onCancel } = this.props;
+    const { onSignin, visiable, onCancel, isFetching } = this.props;
     return (
       <Modal
         title='登录'
         visiable={visiable}
         onOk={() => { if (usernamePass && passwordPass) onSignin(username, password) }}
         onCancel={onCancel}
+        loading={isFetching}
         size='small'>
         <form>
           <Input
@@ -65,5 +66,6 @@ export default class SigninModal extends Component {
 SigninModal.PropTypes = {
   onSignin: PropTypes.func.isRequired,
   visiable: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired
 };

@@ -23,7 +23,7 @@ export const Defer = function ($) {
         if (data.code === api.successCode) {
           def.resolve(data.content);
         } else {
-          def.reject(data.message);
+          def.reject(data.msg);
         }
       },
       error: function (jqXHR) {
@@ -50,7 +50,7 @@ export const Defer = function ($) {
         if (data.code === api.successCode) {
           def.resolve(data.content);
         } else {
-          def.reject(data.message);
+          def.reject(data.msg);
         }
       },
       error: function (jqXHR) {

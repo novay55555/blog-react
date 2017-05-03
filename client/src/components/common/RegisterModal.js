@@ -18,13 +18,14 @@ export default class RegisterModal extends Component {
 
   render() {
     const { username, password, email, usernamePass, passwordPass, emailPass } = this.state;
-    const { onRegister, visiable, onCancel } = this.props;
+    const { onRegister, visiable, onCancel, isFetching } = this.props;
     return (
       <Modal
         title='注册'
         visiable={visiable}
         onOk={() => { if (usernamePass && passwordPass && emailPass) onRegister(username, password, email) }}
         onCancel={onCancel}
+        loading={isFetching}
         size='small'
       >
         <form>
