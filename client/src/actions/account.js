@@ -1,6 +1,8 @@
 import { Defer } from '../lib/common'
 import md5 from 'blueimp-md5'
+import config from '../lib/config'
 
+const accountApi = config.api.account;
 const { get, post } = Defer($);
 
 export const actionTypes = {
@@ -66,7 +68,7 @@ const errorPostRegister = () => ({
 
 export const fetchSignin = (username, password, callback) => dispatch => {
   dispatch(postingSignin());
-  post(`/api/login`, { name: username, password: md5(password) })
+  post(`${accountApi.signin}`, { name: username, password: md5(password) })
     .done(data => {
       dispatch(postedSignin(data.username, data.isAdmin));
       alert('登录成功')
@@ -80,7 +82,7 @@ export const fetchSignin = (username, password, callback) => dispatch => {
 
 export const fetchRegister = (username, password, email, callback) => dispatch => {
   dispatch(postingRegister());
-  post(`/api/register`, { name: username, password: md5(password), email })
+  post(`${accountApi.register}`, { name: username, password: md5(password), email })
     .done(() => {
       dispatch(postedRegister());
       alert('注册成功')
@@ -94,7 +96,7 @@ export const fetchRegister = (username, password, email, callback) => dispatch =
 
 export const fetchSignout = () => dispatch => {
   dispatch(gettingSignout());
-  get(`/api/signout`)
+  get(`${accountApi.signout}`)
     .done(() => dispatch(gotSignout()))
     .fail(() => errorGetSignout());
 };
