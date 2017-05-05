@@ -80,6 +80,7 @@ export const loadScript = url => {
   document.body.appendChild(script);
   return def;
 };
+
 /**
  * 动态加载多个script	
  * @param  {array} urls 脚本路径数组
@@ -90,6 +91,34 @@ export const loadScripts = urls => {
   let defs = urls.map(url => loadScript(url));
   return defs;
 };
+
+/**
+ * 动态加载单个样式文件
+ * @param  {string} url 脚本路径
+ * @return {object} def Deferred对象
+ */
+export const loadStyleSheet = url => {
+  if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
+  let def = $.Deferred(),
+    styleSheet = document.createElement('link');
+    styleSheet.href = url;
+    styleSheet.rel = 'stylesheet';
+    styleSheet.addEventListener('load', () => def.resolve());
+    document.head.appendChild(styleSheet);
+    return def;
+};
+
+/**
+ * 动态加载多个样式文件
+ * @param  {array} urls 脚本路径数组
+ * @return {array} defs Deferred对象数组
+ */
+export const loadStyleSheets = urls => {
+  if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
+  let defs = urls.map(url => loadStyleSheet(url));
+  return defs;
+};
+
 /**
  * 日期格式化   
  * @param {number} timestamp 时间戳

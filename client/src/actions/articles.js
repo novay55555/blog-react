@@ -1,4 +1,7 @@
 import { Defer, dateFormatter } from '../lib/common'
+import config from '../lib/config'
+import { loadScript, loadStyleSheet } from '../lib/common'
+const articleApi = config.api.articles;
 const { get } = Defer($);
 
 export const actionTypes = {
@@ -7,8 +10,29 @@ export const actionTypes = {
   ERROR_GET_ARTICLES: 'ERROR_GET_ARTICLES',
   GETTING_ARTICLE_TYPES: 'GETTING_ARTICLE_TYPES',
   GOT_ARTICLE_TYPES: 'GOT_ARTICLE_TYPES',
-  ERROR_GET_ARTICLE_TYPES: 'ERROR_GET_ARTICLE_TYPES'
+  ERROR_GET_ARTICLE_TYPES: 'ERROR_GET_ARTICLE_TYPES',
+  GETTING_ARTICLE: 'GETTING_ARTICLE',
+  GOT_ARTICLE: 'GOT_ARTICLE',
+  ERROR_GET_ARTICLE: 'ERROR_GET_ARTICLE',
 };
+
+const gettingArticle = () => ({
+  type: actionTypes.GETTING_ARTICLE
+});
+
+const gotArticle = article => ({
+  type: actionTypes.GOT_ARTICLE,
+  item: {
+    ...article,
+    date: dateFormatter(article.date)
+  }
+});
+
+const errorGetArticle = errMsg => ({
+  type: actionTypes.ERROR_GET_ARTICLE,
+  item: [],
+  errMsg
+});
 
 const gettingArticles = () => ({
   type: actionTypes.GETTING_ARTICLES
@@ -18,6 +42,7 @@ const gotArticles = articles => ({
   type: actionTypes.GOT_ARTICLES,
   items: articles.map(article => {
     article.date = dateFormatter(article.date);
+    article.link = `/article/${article._id}`;
     return article;
   })
 });
@@ -48,14 +73,27 @@ const errGetArticleTypes = errMsg => ({
 
 export const fetchArticles = (page = 1) => dispatch => {
   dispatch(gettingArticles());
-  get(`/api/articles/${page}`)
+  get(`${articleApi.lists(page)}`)
     .done(articles => dispatch(gotArticles(articles)))
     .fail(errMsg => dispatch(errorGetArticles(errMsg)));
 };
 
 export const fetchArticleTypes = () => dispatch => {
   dispatch(gettingArticleTypes());
-  get(`/api/types/articles`)
+  get(`${articleApi.types}`)
     .done(articleTypes => dispatch(gotArticleTypes(articleTypes)))
     .fail(errMsg => dispatch(errGetArticleTypes(errMsg)));
+};
+
+export const fetchArticle = id => dispatch => {
+  dispatch(gettingArticle());
+  if (window.hasOwnProperty('hljs')) {
+    get(`${articleApi.current(id)}`)
+      .done(article => dispatch(gotArticle(article)))
+      .fail(errMsg => dispatch(errorGetArticle(errMsg)));
+  } else {
+    $.when(get(`${articleApi.current(id)}`), loadScript('/vendor/highlightjs/highlight.js'), loadStyleSheet('/vendor/highlightjs/monokai-sublime.css'))
+      .done(article => dispatch(gotArticle(article)))
+      .fail(errMsg => dispatch(errorGetArticle(errMsg)));
+  }
 };

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Lists from '../components/articles/List'
+import Loading from '../components/common/Loading'
 import { fetchArticles } from '../actions/articles'
 import articlesCss from '../components/articles/articles.css'
 
@@ -20,9 +21,9 @@ class ArticleLists extends Component {
   }
 
   render() {
-    const { articles, page, total, isFetchingArticles } = this.props;
+    const { articles, page, total, isFetching } = this.props;
     return (
-      <Lists className={articlesCss.list} articles={articles} />
+      isFetching ? <Loading /> : <Lists className={articlesCss.list} articles={articles} />
     )
   }
 }

@@ -5,6 +5,11 @@ const config = {
       signin: `/api/login`,
       register: `/api/register`,
       signout: `/api/signout`
+    },
+    articles: {
+      lists: page => `/api/articles/${page}`,
+      current: id => `/api/article/${id}`,
+      types: `/api/types/articles`
     }
   }
 };
