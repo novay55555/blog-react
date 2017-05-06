@@ -38,13 +38,15 @@ const gettingArticles = () => ({
   type: actionTypes.GETTING_ARTICLES
 });
 
-const gotArticles = articles => ({
+const gotArticles = lists => ({
   type: actionTypes.GOT_ARTICLES,
-  items: articles.map(article => {
+  items: lists.articles.map(article => {
     article.date = dateFormatter(article.date);
     article.link = `/article/${article._id}`;
     return article;
-  })
+  }),
+  total: Math.ceil(lists.total / 10),
+  page: lists.page
 });
 
 const errorGetArticles = errMsg => ({
@@ -71,11 +73,14 @@ const errGetArticleTypes = errMsg => ({
   errMsg
 });
 
-export const fetchArticles = (page = 1) => dispatch => {
+export const fetchArticles = (page = 1) => (dispatch, getState) => {
+  const currentPage = getState().articles.lists.page;
+  if (page == currentPage) return Promise.resolve();
   dispatch(gettingArticles());
   get(`${articleApi.lists(page)}`)
-    .done(articles => dispatch(gotArticles(articles)))
+    .done(lists => dispatch(gotArticles(lists)))
     .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+
 };
 
 export const fetchArticleTypes = () => dispatch => {
@@ -85,7 +90,9 @@ export const fetchArticleTypes = () => dispatch => {
     .fail(errMsg => dispatch(errGetArticleTypes(errMsg)));
 };
 
-export const fetchArticle = id => dispatch => {
+export const fetchArticle = id => (dispatch, getState) => {
+  const currentId = getState().articles.current.item._id;
+  if (id == currentId) return Promise.resolve();
   dispatch(gettingArticle());
   if (window.hasOwnProperty('hljs')) {
     get(`${articleApi.current(id)}`)

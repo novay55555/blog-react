@@ -11,6 +11,7 @@ export default
       <IndexRedirect to='/articles' />
       <Route path='articles' component={Article}>
         <IndexRoute component={ArticleLists} />
+        <Route path=':page' component={ArticleLists}></Route>
       </Route>
       <Route path='article' component={Article}>
         <Route path=':id' component={ArticleContent}></Route>

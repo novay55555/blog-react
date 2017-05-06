@@ -34,6 +34,7 @@ body {
   position: relative;
   padding-bottom: 125px;
   min-height: 100%;
+  font-size: 16px;
 }
 
 a {

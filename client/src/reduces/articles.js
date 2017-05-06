@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { actionTypes } from '../actions/articles'
 
-const lists = (state = { items: [], page: 1, total: 0 }, action) => {
+const lists = (state = { items: [] }, action) => {
   switch (action.type) {
     case actionTypes.GETTING_ARTICLES:
       return {
@@ -13,7 +13,8 @@ const lists = (state = { items: [], page: 1, total: 0 }, action) => {
         ...state,
         isFetching: false,
         items: action.items,
-        total: action.items.length
+        total: action.total,
+        page: action.page
       };
     case actionTypes.ERROR_GET_ARTICLES:
       return {
