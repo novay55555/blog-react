@@ -5,6 +5,7 @@ import ContainerFluid from '../components/common/ContainerFluid'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
 import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal } from '../actions/account'
+import {linkToSearchPath} from '../actions/articles'
 
 class Blog extends Component {
 
@@ -17,6 +18,8 @@ class Blog extends Component {
   handleModalShow = modalName => this.props.dispatch(showModal(modalName));
 
   handleModalHide = () => this.props.dispatch(hideModal());
+
+  handleSearch = title => linkToSearchPath(title);
 
   render() {
     const { accountInfo, activeModal, isFetching } = this.props;
@@ -54,6 +57,7 @@ class Blog extends Component {
           onSignout={this.handleSignout}
           onModalShow={this.handleModalShow}
           onModalHide={this.handleModalHide}
+          onSearch={this.handleSearch}
           activeModal={activeModal}
           accountInfo={accountInfo}
           isFetching={isFetching}

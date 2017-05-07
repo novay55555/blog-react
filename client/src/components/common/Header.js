@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import Search from './SearchInput'
 import SigninModal from './SigninModal'
 import RegisterModal from './RegisterModal'
 import commonClass from './common.css'
@@ -8,7 +9,7 @@ import commonClass from './common.css'
 export default class Header extends Component {
 
   render() {
-    const { logo, navs, accountInfo, onSignin, onRegister, onSignout,
+    const { logo, navs, accountInfo, onSignin, onRegister, onSignout, onSearch,
       activeModal, onModalShow, onModalHide, isFetching } = this.props;
     return (
       <div className={commonClass.header}>
@@ -36,10 +37,11 @@ export default class Header extends Component {
                   <ul className="nav navbar-nav navbar-right">
                     <li>
                       <form className="form-inline">
-                        <div className="form-group">
-                          <input type="text" className="form-control" name="title" placeholder="Search something..." />
-                          <a href="#" className="glyphicon glyphicon-search"></a>
-                        </div>
+                        <Search
+                          name='title'
+                          icon='glyphicon-search'
+                          placeholder='Search something...' 
+                          onSearch={value => onSearch(value)}/>
                       </form>
                     </li>
                     <li><a href="#" className="username">{accountInfo.username}</a></li>
@@ -53,10 +55,11 @@ export default class Header extends Component {
                   <ul className="nav navbar-nav navbar-right">
                     <li>
                       <form className="form-inline">
-                        <div className="form-group">
-                          <input type="text" className="form-control" name="title" placeholder="Search something..." />
-                          <a href="#" className="glyphicon glyphicon-search"></a>
-                        </div>
+                        <Search
+                          name='title'
+                          icon='glyphicon-search'
+                          placeholder='Search something...' 
+                          onSearch={value => onSearch(value)}/>
                       </form>
                     </li>
                     <li>
@@ -91,6 +94,7 @@ Header.PropTypes = {
   }).isRequired,
   onSignin: PropTypes.func.isRequired,
   onRegister: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
   onModalShow: PropTypes.func.isRequired,
   activeModal: PropTypes.string.isRequired,
   accountInfo: {

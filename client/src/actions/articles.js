@@ -1,3 +1,4 @@
+import {browserHistory} from 'react-router'
 import { Defer, dateFormatter } from '../lib/common'
 import config from '../lib/config'
 import { loadScript, loadStyleSheet } from '../lib/common'
@@ -123,7 +124,7 @@ export const fetchArticlesByTitle = (title, page = 1) => (dispatch, getState) =>
   if (title === lists.searchTitle && page == lists.page) return Promise.resolve();
   dispatch(gettingArticlesByTitle(title));
   get(`${articleApi.searchByTitle(title, page)}`)
-    .done(articles => dispatch(gotArticles(article)))
+    .done(articles => dispatch(gotArticles(articles)))
     .fail(errMsg => dispatch(errorGetArticle(errMsg)));
 };
 
@@ -134,4 +135,12 @@ export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
   get(`${articleApi.searchByType(type, page)}`)
     .done(articles => dispatch(gotArticles(articles)))
     .fail(errMsg => dispatch(errorGetArticle(errMsg)));
+};
+
+export const linkToSearchPath = title => {
+  if(title.trim() === ''){
+    browserHistory.push(`/articles/1`);
+  } else {
+    browserHistory.push(`/articles/search/${title}/1`);
+  }
 };
