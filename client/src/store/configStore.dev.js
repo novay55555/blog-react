@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import rootReducer from '../reduces'
 
 const enhancer = compose(
-    applyMiddleware(thunk, createLogger())
+    applyMiddleware(thunk, createLogger({collapsed: true}))
 );
 
 const configStore = initialState => {
