@@ -8,10 +8,11 @@ import ArticleContent from '../containers/ArticleContent'
 export default
   <Router>
     <Route path='/' component={Blog}>
-      <IndexRedirect to='/articles' />
-      <Route path='articles' component={Article}>
-        <IndexRoute component={ArticleLists} />
+      <IndexRedirect to='/articles/1' />
+      <Route path='articles/' component={Article}>
         <Route path=':page' component={ArticleLists}></Route>
+        <Route path='search/:searchTitle/:page' component={ArticleLists}></Route>
+        <Route path=':searchType/:page' component={ArticleLists}></Route>
       </Route>
       <Route path='article' component={Article}>
         <Route path=':id' component={ArticleContent}></Route>

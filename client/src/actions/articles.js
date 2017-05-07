@@ -14,7 +14,19 @@ export const actionTypes = {
   GETTING_ARTICLE: 'GETTING_ARTICLE',
   GOT_ARTICLE: 'GOT_ARTICLE',
   ERROR_GET_ARTICLE: 'ERROR_GET_ARTICLE',
+  GETTING_ARTICLES_BY_TITLE: 'GETTING_ARTICLES_BY_TITLE',
+  GETTING_ARTICLES_BY_TYPE: 'GETTING_ARTICLES_BY_TYPE'
 };
+
+const gettingArticlesByTitle = title => ({
+  type: actionTypes.GETTING_ARTICLES_BY_TITLE,
+  searchTitle: title
+});
+
+const gettingArticlesByType = type => ({
+  type: actionTypes.GETTING_ARTICLES_BY_TYPE,
+  searchType: type
+});
 
 const gettingArticle = () => ({
   type: actionTypes.GETTING_ARTICLE
@@ -62,8 +74,8 @@ const gettingArticleTypes = () => ({
 const gotArticleTypes = types => ({
   type: actionTypes.GOT_ARTICLE_TYPES,
   items: types.map(type => ({
-    link: `/types/${type}`,
-    text: `${type}`
+    link: `/articles/${type}/1`,
+    text: type
   }))
 });
 
@@ -74,13 +86,14 @@ const errGetArticleTypes = errMsg => ({
 });
 
 export const fetchArticles = (page = 1) => (dispatch, getState) => {
-  const currentPage = getState().articles.lists.page;
-  if (page == currentPage) return Promise.resolve();
+  const lists = getState().articles.lists;
+  const {searchTitle, searchType} = lists;
+  const currentPage = lists.page;
+  if ((!searchTitle && !searchType) && page == currentPage) return Promise.resolve();
   dispatch(gettingArticles());
   get(`${articleApi.lists(page)}`)
     .done(lists => dispatch(gotArticles(lists)))
     .fail(errMsg => dispatch(errorGetArticles(errMsg)));
-
 };
 
 export const fetchArticleTypes = () => dispatch => {
@@ -103,4 +116,22 @@ export const fetchArticle = id => (dispatch, getState) => {
       .done(article => dispatch(gotArticle(article)))
       .fail(errMsg => dispatch(errorGetArticle(errMsg)));
   }
+};
+
+export const fetchArticlesByTitle = (title, page = 1) => (dispatch, getState) => {
+  const lists = getState().articles.lists;
+  if (title === lists.searchTitle && page == lists.page) return Promise.resolve();
+  dispatch(gettingArticlesByTitle(title));
+  get(`${articleApi.searchByTitle(title, page)}`)
+    .done(articles => dispatch(gotArticles(article)))
+    .fail(errMsg => dispatch(errorGetArticle(errMsg)));
+};
+
+export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
+  const lists = getState().articles.lists;
+  if(type === lists.searchType && page == lists.page) return Promise.resolve();
+  dispatch(gettingArticlesByType(type));
+  get(`${articleApi.searchByType(type, page)}`)
+    .done(articles => dispatch(gotArticles(articles)))
+    .fail(errMsg => dispatch(errorGetArticle(errMsg)));
 };

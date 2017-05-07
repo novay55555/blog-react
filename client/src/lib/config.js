@@ -9,7 +9,9 @@ const config = {
     articles: {
       lists: page => `/api/articles/${page}`,
       current: id => `/api/article/${id}`,
-      types: `/api/types/articles`
+      types: `/api/types/articles`,
+      searchByTitle: (title, page) => `/api/search/title/${title}/${page}`,
+      searchByType: (type, page) => `/api/search/type/${type}/${page}`
     }
   }
 };

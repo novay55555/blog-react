@@ -6,7 +6,9 @@ const lists = (state = { items: [] }, action) => {
     case actionTypes.GETTING_ARTICLES:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
+        searchTitle: '',
+        searchType: ''
       };
     case actionTypes.GOT_ARTICLES:
       return {
@@ -21,6 +23,20 @@ const lists = (state = { items: [] }, action) => {
         ...state,
         isFetching: false,
         errMsg: action.errMsg
+      };
+    case actionTypes.GETTING_ARTICLES_BY_TITLE:
+      return {
+        ...state,
+        isFetching: true,
+        searchTitle: action.searchTitle,
+        searchType: ''
+      };
+    case actionTypes.GETTING_ARTICLES_BY_TYPE:
+      return {
+        ...state,
+        isFetching: true,
+        searchTitle: '',
+        searchType: action.searchType
       };
     default:
       return state;
