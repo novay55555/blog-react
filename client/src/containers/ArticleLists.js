@@ -61,3 +61,10 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(ArticleLists)
+
+ArticleLists.PropTypes = {
+  articles: PropTypes.array.isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  isFetching: PropTypes.bool.isRequired
+};

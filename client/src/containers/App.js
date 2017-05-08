@@ -8,10 +8,7 @@ import routes from '../routes'
 const store = configStore();
 
 export default class App extends Component {
-  constructor() {
-    super();
-  }
-
+  
   render() {
     return (
       <Provider store={store}>

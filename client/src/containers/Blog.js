@@ -94,4 +94,4 @@ Blog.PropTypes = {
   },
   activeModal: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired
-}
+};

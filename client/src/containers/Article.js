@@ -7,10 +7,6 @@ import { fetchArticleTypes } from '../actions/articles'
 
 class Article extends Component {
 
-  constructor() {
-    super();
-  }
-
   componentWillMount() {
     this.props.dispatch(fetchArticleTypes());
   }
@@ -39,3 +35,8 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(Article)
+
+Article.PropTypes = {
+  types: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool.isRequired
+};

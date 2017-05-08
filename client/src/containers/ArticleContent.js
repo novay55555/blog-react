@@ -28,3 +28,8 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(ArticleContent)
+
+ArticleContent.PropTypes = {
+  item: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired
+};
