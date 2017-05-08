@@ -1,4 +1,4 @@
-import { Defer } from '../lib/common'
+import { Defer, notification } from '../lib/common'
 import md5 from 'blueimp-md5'
 import config from '../lib/config'
 
@@ -71,12 +71,11 @@ export const fetchSignin = (username, password, callback) => dispatch => {
   post(`${accountApi.signin}`, { name: username, password: md5(password) })
     .done(data => {
       dispatch(postedSignin(data.username, data.isAdmin));
-      alert('登录成功')
       callback && callback();
     })
     .fail(errMsg => {
+      notification({type: 'error', message: errMsg, timeout: 3000});
       dispatch(errorPostSignin());
-      alert(errMsg);
     });
 };
 
@@ -84,13 +83,13 @@ export const fetchRegister = (username, password, email, callback) => dispatch =
   dispatch(postingRegister());
   post(`${accountApi.register}`, { name: username, password: md5(password), email })
     .done(() => {
+      notification({message: '注册成功'});
       dispatch(postedRegister());
-      alert('注册成功')
       callback && callback();
     })
     .fail(errMsg => {
+      notification({type: 'error', message: errMsg, timeout: 3000});
       dispatch(errorPostSignin());
-      alert(errMsg);
     });
 };
 
@@ -98,5 +97,8 @@ export const fetchSignout = () => dispatch => {
   dispatch(gettingSignout());
   get(`${accountApi.signout}`)
     .done(() => dispatch(gotSignout()))
-    .fail(() => errorGetSignout());
+    .fail(errMsg => {
+      notification({type: 'error', message: errMsg, timeout: 3000});
+      errorGetSignout();
+    });
 };

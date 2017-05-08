@@ -42,6 +42,27 @@ module.exports = {
 					'postcss-loader'
 				]
 			})
+		}, {
+			test: /\.css$/,
+			include: [
+				path.resolve(__dirname, 'node_modules', 'react-notifications')
+			],
+			use: cssExtractTextPlugin.extract({
+				use: [{
+					loader: 'css-loader',
+					options: {
+						modules: true,
+						camelCase: true,
+						localIdentName: '[local]',
+						importLoaders: 1
+					}
+				},
+					'postcss-loader'
+				]
+			})
+		}, {
+			test: /\.(eot|svg|ttf|woff|woff2)$/,
+			use: 'file-loader?name=[name].[ext]'
 		}]
 	},
 	resolve: {

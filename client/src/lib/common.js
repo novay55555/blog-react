@@ -1,3 +1,4 @@
+import {NotificationManager} from 'react-notifications'
 import config from './config'
 
 const { api } = config;
@@ -141,3 +142,15 @@ export const dateFormatter = (timestamp, formatStyle) => {
       return year + '-' + month + '-' + date;
   }
 }
+
+export const notification = (options = {}) => {
+  const opts = Object.assign({
+    type: 'success',
+    message: 'Hello world!',
+    title: '',
+    timeout: 1000,
+    callback: null,
+    priority: false 
+  }, options);
+  NotificationManager[opts.type](opts.message, opts.title, opts.timeout, opts.callback, opts.priority);
+};
