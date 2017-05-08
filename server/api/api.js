@@ -83,20 +83,18 @@ module.exports = function (app, credenticals, nodemailer) {
 		User.find({ name: req.body.name, password: req.body.password }, function (err, user) {
 			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
 			if (!user.length) return res.json({ code: 0, msg: '用户名或密码错误' });
-			if (user[0].role == 0) req.session.isAdmin = true;
+			user[0].role == 0 ? req.session.isAdmin = true : req.session.isAdmin = false;
 			req.session.isLogin = true;
-			req.session.user = user[0];
-			res.json({ code: 1, content: { username: req.session.user, isAdmin: req.session.isAdmin } });
+			res.json({ code: 1, content: { username: user[0]['name'], isAdmin: req.session.isAdmin, isLogin: req.session.isLogin } });
 		});
 	});
 
 	/**
 	 * 登出
 	 */
-	app.get('/api/signup', function (req, res) {
+	app.get('/api/signout', function (req, res) {
 		delete req.session.isLogin;
-		delete req.session.user;
-		if (req.session.isAdmin) delete req.session.isAdmin;
+		delete req.session.isAdmin;
 		res.json({ code: 1, content: {} });
 	});
 
