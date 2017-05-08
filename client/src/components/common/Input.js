@@ -27,7 +27,7 @@ export default class Input extends Component {
   }
 
   componentDidMount() {
-    if(this.props.validates){
+    if (this.props.validates) {
       this.initValidator(this.props.validates);
       this.props.getValidator && this.props.getValidator.call(this.props.getValidator, this.state.validator);
     }

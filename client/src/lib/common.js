@@ -7,26 +7,26 @@ const { api } = config;
  * @param {function} $ jQuery构造函数
  * @return {object} jQuery的ajax方法对象
  */
-export const Defer = function ($) {
+export const Defer = function($) {
   /**
    * GET方法
    * @param {string} url API路径
    * @param {object} options 底层ajax的选项
    */
-  const get = function (url, options = {}) {
+  const get = function(url, options = {}) {
     let def = $.Deferred();
     let opts = $.extend({
       type: "GET",
       url: url,
       dataType: "json",
-      success: function (data) {
+      success: function(data) {
         if (data.code === api.successCode) {
           def.resolve(data.content);
         } else {
           def.reject(data.msg);
         }
       },
-      error: function (jqXHR) {
+      error: function(jqXHR) {
         def.reject(jqXHR.responseText);
       }
     }, options);
@@ -39,21 +39,21 @@ export const Defer = function ($) {
    * @param {object} data post参数
    * @param {object} options 底层ajax的选项
    */
-  const post = function (url, data = {}, options = {}) {
+  const post = function(url, data = {}, options = {}) {
     let def = $.Deferred();
     let opts = $.extend({
       type: 'POST',
       url: url,
       data: data,
       dataType: 'json',
-      success: function (data) {
+      success: function(data) {
         if (data.code === api.successCode) {
           def.resolve(data.content);
         } else {
           def.reject(data.msg);
         }
       },
-      error: function (jqXHR) {
+      error: function(jqXHR) {
         def.reject(jqXHR.responseText);
       }
     }, options);
@@ -101,11 +101,11 @@ export const loadStyleSheet = url => {
   if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
   let def = $.Deferred(),
     styleSheet = document.createElement('link');
-    styleSheet.href = url;
-    styleSheet.rel = 'stylesheet';
-    styleSheet.addEventListener('load', () => def.resolve());
-    document.head.appendChild(styleSheet);
-    return def;
+  styleSheet.href = url;
+  styleSheet.rel = 'stylesheet';
+  styleSheet.addEventListener('load', () => def.resolve());
+  document.head.appendChild(styleSheet);
+  return def;
 };
 
 /**

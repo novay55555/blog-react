@@ -12,7 +12,7 @@ class Article extends Component {
   }
 
   render() {
-    const { types, isFetching} = this.props;
+    const { types, isFetching } = this.props;
     return (
       <ContainerFluid>
         <div className="col-lg-2 col-sm-3">
@@ -27,7 +27,7 @@ class Article extends Component {
 }
 
 const mapStateToProps = state => {
-  const { items: types, isFetching} = state.articles.types;
+  const { items: types, isFetching } = state.articles.types;
   return {
     types,
     isFetching

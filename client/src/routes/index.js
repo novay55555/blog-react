@@ -5,9 +5,9 @@ import Article from '../containers/Article'
 import ArticleLists from '../containers/ArticleLists'
 import ArticleContent from '../containers/ArticleContent'
 
-export default
-  <Router>
-    <Route path='/' component={Blog}>
+export default <
+Router >
+  <Route path='/' component={Blog}>
       <IndexRedirect to='/articles/1' />
       <Route path='articles/' component={Article}>
         <Route path=':page' component={ArticleLists}></Route>
@@ -17,5 +17,5 @@ export default
       <Route path='article' component={Article}>
         <Route path=':id' component={ArticleContent}></Route>
       </Route>
-    </Route>
-  </Router>
+    </Route> <
+  /Router>

@@ -9,8 +9,19 @@ import commonClass from './common.css'
 export default class Header extends Component {
 
   render() {
-    const { logo, navs, accountInfo, onSignin, onRegister, onSignout, onSearch,
-      activeModal, onModalShow, onModalHide, isFetching } = this.props;
+    const {
+      logo,
+      navs,
+      accountInfo,
+      onSignin,
+      onRegister,
+      onSignout,
+      onSearch,
+      activeModal,
+      onModalShow,
+      onModalHide,
+      isFetching
+    } = this.props;
     return (
       <div className={commonClass.header}>
         <nav className="navbar navbar-inverse">

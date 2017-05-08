@@ -1,4 +1,4 @@
-import {browserHistory} from 'react-router'
+import { browserHistory } from 'react-router'
 import { Defer, dateFormatter } from '../lib/common'
 import config from '../lib/config'
 import { loadScript, loadStyleSheet } from '../lib/common'
@@ -88,7 +88,7 @@ const errGetArticleTypes = errMsg => ({
 
 export const fetchArticles = (page = 1) => (dispatch, getState) => {
   const lists = getState().articles.lists;
-  const {searchTitle, searchType} = lists;
+  const { searchTitle, searchType } = lists;
   const currentPage = lists.page;
   if ((!searchTitle && !searchType) && page == currentPage) return Promise.resolve();
   dispatch(gettingArticles());
@@ -130,7 +130,7 @@ export const fetchArticlesByTitle = (title, page = 1) => (dispatch, getState) =>
 
 export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
   const lists = getState().articles.lists;
-  if(type === lists.searchType && page == lists.page) return Promise.resolve();
+  if (type === lists.searchType && page == lists.page) return Promise.resolve();
   dispatch(gettingArticlesByType(type));
   get(`${articleApi.searchByType(type, page)}`)
     .done(articles => dispatch(gotArticles(articles)))
@@ -138,7 +138,7 @@ export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
 };
 
 export const linkToSearchPath = title => {
-  if(title.trim() === ''){
+  if (title.trim() === '') {
     browserHistory.push(`/articles/1`);
   } else {
     browserHistory.push(`/articles/search/${title}/1`);

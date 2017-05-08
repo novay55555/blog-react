@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import rootReducer from '../reduces'
 
 const enhancer = compose(
-    applyMiddleware(thunk)
+  applyMiddleware(thunk)
 );
 
 const configStore = initialState => createStore(rootReducer, initialState, enhancer);

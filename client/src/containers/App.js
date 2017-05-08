@@ -8,12 +8,12 @@ import routes from '../routes'
 const store = configStore();
 
 export default class App extends Component {
-  
+
   render() {
     return (
       <Provider store={store}>
          <Router routes={routes} history={browserHistory}></Router>
-      </Provider> 
+      </Provider>
     )
   }
 }

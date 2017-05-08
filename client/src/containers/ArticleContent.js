@@ -14,7 +14,7 @@ class ArticleContent extends Component {
   render() {
     const { item, isFetching } = this.props;
     return (
-       isFetching ? <Loading /> : <Content article={item} isFetching={isFetching} />
+      isFetching ? <Loading /> : <Content article={item} isFetching={isFetching} />
     )
   }
 }

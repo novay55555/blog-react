@@ -37,15 +37,15 @@ class ArticleLists extends Component {
     const isEmpty = articles.length === 0;
     return (
       isFetching ? <Loading /> :
-        (
-          isEmpty ? <div>没有更多了啦(= =##)</div> :
-            <div>
+      (
+        isEmpty ? <div>没有更多了啦(= =##)</div> :
+        <div>
               <Lists className={articlesCss.list} articles={articles} />
               <div style={{ textAlign: 'center' }}>
                 <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
               </div>
             </div>
-        )
+      )
     )
   }
 }

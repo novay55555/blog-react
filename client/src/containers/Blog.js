@@ -5,7 +5,7 @@ import ContainerFluid from '../components/common/ContainerFluid'
 import Header from '../components/common/Header'
 import Footer from '../components/common/Footer'
 import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal } from '../actions/account'
-import {linkToSearchPath} from '../actions/articles'
+import { linkToSearchPath } from '../actions/articles'
 
 class Blog extends Component {
 
