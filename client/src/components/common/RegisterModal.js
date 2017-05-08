@@ -49,6 +49,7 @@ export default class RegisterModal extends Component {
             type='text'
             placeholder='请输入用户名'
             getValidator={this.getUsernameValidator}
+            onKeyUp={e => e.keyCode === 13 && this.handleRegister()}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -64,6 +65,7 @@ export default class RegisterModal extends Component {
             type='password'
             placeholder='请输入密码'
             getValidator={this.getPasswordValidator}
+            onKeyUp={e => e.keyCode === 13 && this.handleRegister()}
             validates={
               [{
                 rule: 'isNotEmpty',
@@ -82,6 +84,7 @@ export default class RegisterModal extends Component {
             type='text'
             placeholder='请输入邮箱地址'
             getValidator={this.getEmailValidator}
+            onKeyUp={e => e.keyCode === 13 && this.handleRegister()}
             validates={
               [{
                 rule: 'isNotEmpty',

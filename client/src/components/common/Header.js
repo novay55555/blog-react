@@ -47,12 +47,14 @@ export default class Header extends Component {
                 accountInfo.isLogin ?
                   <ul className="nav navbar-nav navbar-right">
                     <li>
-                      <form className="form-inline">
+                      <form className="form-inline"
+                        onSubmit={e => e.preventDefault()}>
                         <Search
                           name='title'
                           icon='glyphicon-search'
-                          placeholder='Search something...' 
-                          onSearch={value => onSearch(value)}/>
+                          placeholder='Search something...'
+                          onSearch={value => onSearch(value)}
+                          onKeyUp={e => e.keyCode === 13 && onSearch(e.target.value)} />
                       </form>
                     </li>
                     <li><a href="#" className="username">{accountInfo.username}</a></li>
@@ -65,12 +67,14 @@ export default class Header extends Component {
                   </ul> :
                   <ul className="nav navbar-nav navbar-right">
                     <li>
-                      <form className="form-inline">
+                      <form className="form-inline"
+                        onSubmit={e => e.preventDefault()}>
                         <Search
                           name='title'
                           icon='glyphicon-search'
-                          placeholder='Search something...' 
-                          onSearch={value => onSearch(value)}/>
+                          placeholder='Search something...'
+                          onSearch={value => onSearch(value)}
+                          onKeyUp={e => e.keyCode === 13 && onSearch(e.target.value)}/>
                       </form>
                     </li>
                     <li>

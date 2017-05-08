@@ -43,6 +43,7 @@ export default class SigninModal extends Component {
             type='text'
             placeholder='请输入用户名'
             onChange={username => this.setState({ username })}
+            onKeyUp={e => e.keyCode === 13 && this.handleSignin()}
             getValidator={this.getUsernameValidator}
             validates={
               [{
@@ -58,6 +59,7 @@ export default class SigninModal extends Component {
             type='password'
             placeholder='请输入密码'
             onChange={password => this.setState({ password })}
+            onKeyUp={e => e.keyCode === 13 && this.handleSignin()}
             getValidator={this.getPasswordValidator}
             validates={
               [{

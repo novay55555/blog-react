@@ -1,7 +1,7 @@
 import { browserHistory } from 'react-router'
 import { Defer, dateFormatter } from '../lib/common'
 import config from '../lib/config'
-import { loadScript, loadStyleSheet } from '../lib/common'
+import { loadScript, loadStylesheet } from '../lib/common'
 const articleApi = config.api.articles;
 const { get } = Defer($);
 
@@ -113,7 +113,7 @@ export const fetchArticle = id => (dispatch, getState) => {
       .done(article => dispatch(gotArticle(article)))
       .fail(errMsg => dispatch(errorGetArticle(errMsg)));
   } else {
-    $.when(get(`${articleApi.current(id)}`), loadScript('/vendor/highlightjs/highlight.js'), loadStyleSheet('/vendor/highlightjs/monokai-sublime.css'))
+    $.when(get(`${articleApi.current(id)}`), loadScript('/vendor/highlightjs/highlight.js'), loadStylesheet('/vendor/highlightjs/monokai-sublime.css'))
       .done(article => dispatch(gotArticle(article)))
       .fail(errMsg => dispatch(errorGetArticle(errMsg)));
   }
