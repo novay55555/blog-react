@@ -7,26 +7,26 @@ const { api } = config;
  * @param {function} $ jQuery构造函数
  * @return {object} jQuery的ajax方法对象
  */
-export const Defer = function($) {
+export const Defer = $ => {
   /**
    * GET方法
    * @param {string} url API路径
    * @param {object} options 底层ajax的选项
    */
-  const get = function(url, options = {}) {
+  const get = (url, options = {}) => {
     let def = $.Deferred();
     let opts = $.extend({
       type: "GET",
       url: url,
       dataType: "json",
-      success: function(data) {
+      success: data => {
         if (data.code === api.successCode) {
           def.resolve(data.content);
         } else {
           def.reject(data.msg);
         }
       },
-      error: function(jqXHR) {
+      error: jqXHR => {
         def.reject(jqXHR.responseText);
       }
     }, options);
@@ -39,21 +39,21 @@ export const Defer = function($) {
    * @param {object} data post参数
    * @param {object} options 底层ajax的选项
    */
-  const post = function(url, data = {}, options = {}) {
+  const post = (url, data = {}, options = {}) => {
     let def = $.Deferred();
     let opts = $.extend({
       type: 'POST',
       url: url,
       data: data,
       dataType: 'json',
-      success: function(data) {
+      success: data => {
         if (data.code === api.successCode) {
           def.resolve(data.content);
         } else {
           def.reject(data.msg);
         }
       },
-      error: function(jqXHR) {
+      error: jqXHR => {
         def.reject(jqXHR.responseText);
       }
     }, options);
@@ -97,14 +97,14 @@ export const loadScripts = urls => {
  * @param  {string} url 脚本路径
  * @return {object} def Deferred对象
  */
-export const loadStyleSheet = url => {
+export const loadStylesheet = url => {
   if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
   let def = $.Deferred(),
-    styleSheet = document.createElement('link');
-  styleSheet.href = url;
-  styleSheet.rel = 'stylesheet';
-  styleSheet.addEventListener('load', () => def.resolve());
-  document.head.appendChild(styleSheet);
+    stylesheet = document.createElement('link');
+  stylesheet.href = url;
+  stylesheet.rel = 'stylesheet';
+  stylesheet.addEventListener('load', () => def.resolve());
+  document.head.appendChild(stylesheet);
   return def;
 };
 
@@ -113,9 +113,9 @@ export const loadStyleSheet = url => {
  * @param  {array} urls 脚本路径数组
  * @return {array} defs Deferred对象数组
  */
-export const loadStyleSheets = urls => {
+export const loadStylesheets = urls => {
   if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
-  let defs = urls.map(url => loadStyleSheet(url));
+  let defs = urls.map(url => loadStylesheet(url));
   return defs;
 };
 
