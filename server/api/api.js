@@ -8,11 +8,16 @@ module.exports = function (app, credenticals, nodemailer) {
 	 * 获取文章
 	 */
 	app.get('/api/articles/:page', function (req, res) {
-		var page = req.params.page || 1;
+		var page = parseInt(req.params.page);
 		Article.find(function (err, articles) {
 			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-			res.json({ code: 1, content: articles })
-		}).sort({ date: -1 }).limit(10).skip(10 * req.params.page - 1);
+			var data =  {
+				total: articles.length,	// TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
+				page: page,
+				articles: articles.splice((page - 1) * 10, 10)
+			};
+			res.json({ code: 1, content: data })
+		}).sort({ date: -1 });
 	});
 
 	/**
@@ -23,8 +28,51 @@ module.exports = function (app, credenticals, nodemailer) {
 			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
 			res.json({ code: 1, content: types[0].type });
 		});
-	})
+	});
 
+	/**
+	 * 文章内容
+	 */
+	app.get('/api/article/:id', function (req, res) {
+		Article.findById(req.params.id, function (err, article) {
+			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+			res.json({ code: 1, content: article });
+		});
+	});
+
+	/**
+	 * 文章搜索(标题)
+	 */
+	app.get('/api/search/title/:title/:page', function (req, res) {
+		var page = parseInt(req.params.page);
+		var condition = new RegExp(req.params.title, 'i');
+		Article.find({ title: condition }, function (err, articles) {
+			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+			var data = {
+				total: articles.length,
+				page: page,
+				articles: articles.splice((page - 1) * 10, 10)
+			};
+			res.json({ code: 1, content: data });
+		}).sort({ date: -1 });
+	});
+
+	/**
+	 * 文章搜索(类型)
+	 */
+	app.get('/api/search/type/:type/:page', function (req, res) {
+		var page = parseInt(req.params.page);
+		var condition = new RegExp(req.params.type, 'i');
+		Article.find({ articleType: condition }, function (err, articles) {
+			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+			var data = {
+				total: articles.length,
+				page: page,
+				articles: articles.splice((page - 1) * 10, 10)
+			};
+			res.json({ code: 1, content: data });
+		}).sort({ date: -1 });
+	});
 
 	/**
 	 * 登录
