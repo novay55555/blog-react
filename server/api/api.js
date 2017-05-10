@@ -11,7 +11,7 @@ module.exports = function (app, credenticals, nodemailer) {
 		var page = parseInt(req.params.page);
 		Article.find(function (err, articles) {
 			if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-			var data =  {
+			var data = {
 				total: articles.length,	// TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
 				page: page,
 				articles: articles.splice((page - 1) * 10, 10)
@@ -85,7 +85,15 @@ module.exports = function (app, credenticals, nodemailer) {
 			if (!user.length) return res.json({ code: 0, msg: '用户名或密码错误' });
 			user[0].role == 0 ? req.session.isAdmin = true : req.session.isAdmin = false;
 			req.session.isLogin = true;
-			res.json({ code: 1, content: { username: user[0]['name'], isAdmin: req.session.isAdmin, isLogin: req.session.isLogin } });
+			req.session.username = user[0]['name'];
+			res.json({
+				code: 1,
+				content: {
+					username: req.session.username,
+					isAdmin: req.session.isAdmin,
+					isLogin: req.session.isLogin
+				}
+			});
 		});
 	});
 
@@ -96,6 +104,23 @@ module.exports = function (app, credenticals, nodemailer) {
 		delete req.session.isLogin;
 		delete req.session.isAdmin;
 		res.json({ code: 1, content: {} });
+	});
+
+	/**
+	 * 验证session
+	 */
+	app.get('/api/checkout', (req, res) => {
+		req.session.isLogin ? res.json({
+			code: 1,
+			content: {
+				username: req.session.username,
+				isAdmin: req.session.isAdmin,
+				isLogin: req.session.isLogin
+			}
+		}) : res.json({
+			code: 2,
+			msg: 'session已过期'
+		});
 	});
 
 	/**
@@ -142,6 +167,44 @@ module.exports = function (app, credenticals, nodemailer) {
 				res.json({ code: 1, userId: user._id });
 			});
 		});
+	});
+
+	/**
+	 * 后台获取文章列表
+	 */
+	app.get('/api/inside/articles/:page', (req, res) => {
+		checkAdmin(req.session).then(() => {
+			const page = parseInt(req.params.page);
+			Article.find(function (err, articles) {
+				if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+				const data = {
+					total: articles.length,	// TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
+					page: page,
+					articles: articles.splice((page - 1) * 10, 10)
+				};
+				res.json({ code: 1, content: data })
+			}).sort({ date: -1 });
+		}).catch(err => res.json(err));
+	});
+
+	/**
+	 * 后台搜索文章列表
+	 */
+	app.get('/api/inside/search/title/:title/:page', function (req, res) {
+		checkAdmin(req.session).then(() => {
+			var page = parseInt(req.params.page);
+			var condition = new RegExp(req.params.title, 'i');
+			Article.find({ title: condition }, function (err, articles) {
+				if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+				var data = {
+					total: articles.length,
+					page: page,
+					articles: articles.splice((page - 1) * 10, 10)
+				};
+				res.json({ code: 1, content: data });
+			}).sort({ date: -1 });
+		}).catch(err => res.json(err));
+
 	});
 
 	/**
@@ -430,4 +493,9 @@ module.exports = function (app, credenticals, nodemailer) {
 function checkIdentity(req, res, callback) {
 	if (!req.session.isAdmin) return res.json({ code: 0, msg: '身份非法' });
 	callback();
+}
+
+function checkAdmin(session) {
+	if (!session.isAdmin) return Promise.reject({ code: 9, msg: '身份非法' });
+	return Promise.resolve();
 }
