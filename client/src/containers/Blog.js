@@ -1,13 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Header from '../components/common/BlogHeader'
+import Header from '../components/common/HeaderBlog'
 import Footer from '../components/common/Footer'
 import { NotificationContainer } from 'react-notifications'
-import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal } from '../actions/account'
+import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal, fetchSession } from '../actions/account'
 import { linkToSearchPath } from '../actions/articles'
 
 class Blog extends Component {
+
+  componentWillMount(){
+    this.props.dispatch(fetchSession());
+  }
 
   handleRegister = (username, password, email) => this.props.dispatch(fetchRegister(username, password, email, this.handleModalHide));
 

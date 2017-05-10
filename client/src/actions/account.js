@@ -16,8 +16,20 @@ export const actionTypes = {
   HIDE_MODAL: 'HIDE_MODAL',
   GETTING_SIGNOUT: 'GETTING_SIGNOUT',
   GOT_SIGNOUT: 'GOT_SIGNOUT',
-  ERROR_GET_SIGNOUT: 'ERROR_GET_SIGNOUT'
+  ERROR_GET_SIGNOUT: 'ERROR_GET_SIGNOUT',
+  CHECKOUT_SESSION_ALIVE: 'CHECKOUT_SESSION_ALIVE',
+  CHECKOUT_SESSION_DEAD: 'CHECKOUT_SESSION_DEAD'
 };
+
+const checkoutSessionDead = () => ({
+  type: actionTypes.CHECKOUT_SESSION_DEAD
+});
+
+const checkoutSessionAlive = (username, isAdmin) => ({
+  type: actionTypes.CHECKOUT_SESSION_ALIVE,
+  username,
+  isAdmin
+});
 
 const gettingSignout = () => ({
   type: actionTypes.GETTING_SIGNOUT
@@ -99,6 +111,12 @@ export const fetchSignout = () => dispatch => {
     .done(() => dispatch(gotSignout()))
     .fail(errMsg => {
       notification({ type: 'error', message: errMsg, timeout: 3000 });
-      errorGetSignout();
+      dispatch(errorGetSignout());
     });
+};
+
+export const fetchSession = () => dispatch => {
+  get(`${accountApi.checkout}`)
+    .done(data => dispatch(checkoutSessionAlive(data.username, data.isAdmin)))
+    .fail(errMsg => dispatch(checkoutSessionDead()));
 };

@@ -60,18 +60,20 @@ export default class Pagination extends Component {
   }
 
   render() {
-    const { maxPage, currentPage, baseURL, ...props } = this.props;
+    const { maxPage, currentPage, onClick, baseURL, ...props } = this.props;
     const btnArray = this.createButtons(maxPage);
     return (
       <ul className="pagination" {...props}>
         {btnArray.map((btn, i) => {
           const pageObj = { btn, i, maxPage, currentPage, baseURL };
-          const currentURL = this.getCurrentURL(pageObj);
+          const currentURL = baseURL ? this.getCurrentURL(pageObj) : '';
           return btn === currentPage ?
             <li key={'page' + i} className="active"><span>{btn}<span
               className="sr-only">(current)</span></span>
             </li> :
-            <li key={'page' + i}><Link to={currentURL} onClick={e => {
+            <li key={'page' + i}><Link to={currentURL || '#'} onClick={e => {
+              onClick && e.preventDefault();
+              onClick && onClick(i + 1);
               e.target.blur();
               this.selectPage(pageObj);
             }}>{btn}</Link></li>

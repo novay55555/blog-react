@@ -62,7 +62,21 @@ const account = (state = { isLogin: false }, action) => {
       return {
         ...state,
         isFetching: false
-      }
+      };
+    case actionTypes.CHECKOUT_SESSION_ALIVE:
+      return {
+        ...state,
+        username: action.username,
+        isLogin: true,
+        isAdmin: action.isAdmin
+      };
+    case actionTypes.CHECKOUT_SESSION_DEAD:
+      return {
+        ...state,
+        username: '',
+        isLogin: false,
+        isAdmin: false
+      };
     default:
       return state;
   }

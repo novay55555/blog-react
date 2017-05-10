@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import ContainerFluid from '../components/common/ContainerFluid'
-import Aside from '../components/articles/Aside'
-import { fetchArticleTypes } from '../actions/articles'
+import Container from '../../components/common/Container'
+import Aside from '../../components/articles/Aside'
+import { fetchArticleTypes } from '../../actions/articles'
 
 class Article extends Component {
 
@@ -14,14 +14,14 @@ class Article extends Component {
   render() {
     const { types, isFetching } = this.props;
     return (
-      <ContainerFluid>
+      <Container isFluid={true}>
         <div className="col-lg-2 col-sm-3">
           <Aside lists={types} />
         </div>
         <div className="col-lg-8 col-sm-8">
           {this.props.children}
         </div>
-      </ContainerFluid>
+      </Container>
     )
   }
 }

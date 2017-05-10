@@ -1,5 +1,5 @@
 import { browserHistory } from 'react-router'
-import { Defer, dateFormatter } from '../lib/common'
+import { Defer, dateFormatter, notification } from '../lib/common'
 import config from '../lib/config'
 import { loadScript, loadStylesheet } from '../lib/common'
 const articleApi = config.api.articles;
@@ -125,7 +125,7 @@ export const fetchArticlesByTitle = (title, page = 1) => (dispatch, getState) =>
   dispatch(gettingArticlesByTitle(title));
   get(`${articleApi.searchByTitle(title, page)}`)
     .done(articles => dispatch(gotArticles(articles)))
-    .fail(errMsg => dispatch(errorGetArticle(errMsg)));
+    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
 };
 
 export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
@@ -134,7 +134,7 @@ export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
   dispatch(gettingArticlesByType(type));
   get(`${articleApi.searchByType(type, page)}`)
     .done(articles => dispatch(gotArticles(articles)))
-    .fail(errMsg => dispatch(errorGetArticle(errMsg)));
+    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
 };
 
 export const linkToSearchPath = title => {
@@ -143,4 +143,11 @@ export const linkToSearchPath = title => {
   } else {
     browserHistory.push(`/articles/search/${title}/1`);
   }
+};
+
+export const fetchInsideArticles = (page = 1) => dispatch => {
+  dispatch(gettingArticles());
+  get(`${articleApi.inside(page)}`)
+    .done(articles => dispatch(gotArticles(articles)))
+    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
 };

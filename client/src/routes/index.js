@@ -1,11 +1,12 @@
 import React from 'react'
 import { Router, Route, IndexRoute, IndexRedirect, browserHistory } from 'react-router'
 import Blog from '../containers/Blog'
-import Article from '../containers/Article'
-import ArticleLists from '../containers/ArticleLists'
-import ArticleContent from '../containers/ArticleContent'
+import Article from '../containers/articles/Article'
+import ArticleLists from '../containers/articles/Lists'
+import ArticleContent from '../containers/articles/Content'
 import Error from '../components/common/Error'
 import Inside from '../containers/Inside'
+import InsideArticles from '../containers/inside/Articles'
 
 const routes = (
   <Route path='/'>
@@ -22,7 +23,7 @@ const routes = (
     </Route>
     <Route path='inside-world' component={Inside}>
       <IndexRedirect to='/inside-world/articles' />
-      <Route path='articles'></Route>
+      <Route path='articles' component={InsideArticles}></Route>
       <Route path='users'></Route>
     </Route>
     <Route component={Blog}>

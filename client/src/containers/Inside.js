@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Header from '../components/common/InsideHeader'
+import Header from '../components/common/HeaderInside'
 import Footer from '../components/common/Footer'
+import Container from '../components/common/Container'
 import { NotificationContainer } from 'react-notifications'
 export default class Inside extends Component {
   render() {
@@ -20,7 +21,9 @@ export default class Inside extends Component {
             }
           ]} />
         <main>
-          {this.props.children}
+          <Container>
+            {this.props.children}
+          </Container>
         </main>
         <Footer />
         <NotificationContainer />

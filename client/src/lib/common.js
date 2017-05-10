@@ -143,6 +143,10 @@ export const dateFormatter = (timestamp, formatStyle) => {
   }
 }
 
+/**
+ * 提示插件封装, 文档详见
+ * https://github.com/minhtranite/react-notifications
+ */
 export const notification = (options = {}) => {
   const opts = Object.assign({
     type: 'success',

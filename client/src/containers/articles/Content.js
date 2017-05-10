@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Content from '../components/articles/Content'
-import Loading from '../components/common/Loading'
-import { fetchArticle } from '../actions/articles'
+import Content from '../../components/articles/Content'
+import Loading from '../../components/common/Loading'
+import { fetchArticle } from '../../actions/articles'
 
 class ArticleContent extends Component {
 

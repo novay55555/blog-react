@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Lists from '../components/articles/List'
-import Loading from '../components/common/Loading'
-import Pagination from '../components/common/Pagination'
-import { fetchArticles, fetchArticlesByTitle, fetchArticlesByType } from '../actions/articles'
-import articlesCss from '../components/articles/articles.css'
+import Lists from '../../components/articles/List'
+import Loading from '../../components/common/Loading'
+import Pagination from '../../components/common/Pagination'
+import { fetchArticles, fetchArticlesByTitle, fetchArticlesByType } from '../../actions/articles'
+import articlesCss from '../../components/articles/articles.css'
 
 class ArticleLists extends Component {
 
