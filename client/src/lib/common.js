@@ -1,4 +1,4 @@
-import {NotificationManager} from 'react-notifications'
+import { NotificationManager } from 'react-notifications'
 import config from './config'
 
 const { api } = config;
@@ -150,7 +150,7 @@ export const notification = (options = {}) => {
     title: '',
     timeout: 1000,
     callback: null,
-    priority: false 
+    priority: false
   }, options);
   NotificationManager[opts.type](opts.message, opts.title, opts.timeout, opts.callback, opts.priority);
 };

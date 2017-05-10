@@ -62,7 +62,7 @@
 
 @media (max-width: 480px) {
   .list a span:nth-child(1),
-  .list a span:nth-child(2){
+  .list a span:nth-child(2) {
     display: none;
   }
   .content>p>span:nth-child(1),

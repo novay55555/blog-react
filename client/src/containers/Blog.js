@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import ContainerFluid from '../components/common/ContainerFluid'
 import Header from '../components/common/BlogHeader'
 import Footer from '../components/common/Footer'
-import {NotificationContainer} from 'react-notifications'
+import { NotificationContainer } from 'react-notifications'
 import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal } from '../actions/account'
 import { linkToSearchPath } from '../actions/articles'
 

@@ -5,6 +5,7 @@ import Article from '../containers/Article'
 import ArticleLists from '../containers/ArticleLists'
 import ArticleContent from '../containers/ArticleContent'
 import Error from '../components/common/Error'
+import Inside from '../containers/Inside'
 
 const routes = (
   <Route path='/'>
@@ -19,7 +20,11 @@ const routes = (
         </Route>
       </Route>
     </Route>
-    <Route path='inside-world' component={Blog}></Route>
+    <Route path='inside-world' component={Inside}>
+      <IndexRedirect to='/inside-world/articles' />
+      <Route path='articles'></Route>
+      <Route path='users'></Route>
+    </Route>
     <Route component={Blog}>
       <Route path='*' component={Error}></Route>
     </Route>

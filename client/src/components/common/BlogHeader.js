@@ -6,7 +6,7 @@ import SigninModal from './SigninModal'
 import RegisterModal from './RegisterModal'
 import commonClass from './common.css'
 
-export default class Header extends Component {
+export default class BlogHeader extends Component {
 
   render() {
     const {
@@ -101,7 +101,7 @@ export default class Header extends Component {
   }
 }
 
-Header.PropTypes = {
+BlogHeader.PropTypes = {
   logo: PropTypes.string,
   navs: PropTypes.arrayOf({
     text: PropTypes.string.isRequired,

@@ -74,7 +74,7 @@ export const fetchSignin = (username, password, callback) => dispatch => {
       callback && callback();
     })
     .fail(errMsg => {
-      notification({type: 'error', message: errMsg, timeout: 3000});
+      notification({ type: 'error', message: errMsg, timeout: 3000 });
       dispatch(errorPostSignin());
     });
 };
@@ -83,12 +83,12 @@ export const fetchRegister = (username, password, email, callback) => dispatch =
   dispatch(postingRegister());
   post(`${accountApi.register}`, { name: username, password: md5(password), email })
     .done(() => {
-      notification({message: '注册成功'});
+      notification({ message: '注册成功' });
       dispatch(postedRegister());
       callback && callback();
     })
     .fail(errMsg => {
-      notification({type: 'error', message: errMsg, timeout: 3000});
+      notification({ type: 'error', message: errMsg, timeout: 3000 });
       dispatch(errorPostSignin());
     });
 };
@@ -98,7 +98,7 @@ export const fetchSignout = () => dispatch => {
   get(`${accountApi.signout}`)
     .done(() => dispatch(gotSignout()))
     .fail(errMsg => {
-      notification({type: 'error', message: errMsg, timeout: 3000});
+      notification({ type: 'error', message: errMsg, timeout: 3000 });
       errorGetSignout();
     });
 };
