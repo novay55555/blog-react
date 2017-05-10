@@ -55,7 +55,7 @@ const gotArticles = lists => ({
   type: actionTypes.GOT_ARTICLES,
   items: lists.articles.map(article => {
     article.date = dateFormatter(article.date);
-    article.link = `/article/${article._id}`;
+    article.link = `/articles/content/${article._id}`;
     return article;
   }),
   total: Math.ceil(lists.total / 10),

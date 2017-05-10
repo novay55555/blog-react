@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ContainerFluid from '../components/common/ContainerFluid'
-import Header from '../components/common/Header'
+import Header from '../components/common/BlogHeader'
 import Footer from '../components/common/Footer'
 import {NotificationContainer} from 'react-notifications'
 import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal } from '../actions/account'
@@ -61,8 +61,7 @@ class Blog extends Component {
           onSearch={this.handleSearch}
           activeModal={activeModal}
           accountInfo={accountInfo}
-          isFetching={isFetching}
-        />
+          isFetching={isFetching}/>
         <main>
           {this.props.children}
         </main>

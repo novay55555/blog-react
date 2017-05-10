@@ -4,17 +4,24 @@ import Blog from '../containers/Blog'
 import Article from '../containers/Article'
 import ArticleLists from '../containers/ArticleLists'
 import ArticleContent from '../containers/ArticleContent'
+import Error from '../components/common/Error'
 
 const routes = (
-  <Route path='/' component={Blog}>
+  <Route path='/'>
     <IndexRedirect to='/articles/1' />
-    <Route path='articles/' component={Article}>
-      <Route path=':page' component={ArticleLists}></Route>
-      <Route path='search/:searchTitle/:page' component={ArticleLists}></Route>
-      <Route path=':searchType/:page' component={ArticleLists}></Route>
+    <Route path='articles/' component={Blog}>
+      <Route component={Article}>
+        <Route path='content/:id' component={ArticleContent}></Route>
+        <Route component={ArticleLists}>
+          <Route path='search/:searchTitle/:page'></Route>
+          <Route path=':page'></Route>
+          <Route path=':searchType/:page'></Route>
+        </Route>
+      </Route>
     </Route>
-    <Route path='article' component={Article}>
-      <Route path=':id' component={ArticleContent}></Route>
+    <Route path='inside-world' component={Blog}></Route>
+    <Route component={Blog}>
+      <Route path='*' component={Error}></Route>
     </Route>
   </Route>
 );
