@@ -4,13 +4,7 @@ import { Link } from 'react-router'
 
 export default class Pagination extends Component {
 
-  constructor() {
-    super();
-    this.selectPage = this.selectPage.bind(this);
-    this.getCurrentURL = this.getCurrentURL.bind(this);
-  }
-
-  selectPage(pageObj) {
+  selectPage = pageObj => {
     const { i, maxPage, currentPage } = pageObj;
     let { btn } = pageObj;
     if (typeof btn !== 'number') {
@@ -23,9 +17,9 @@ export default class Pagination extends Component {
     this.setState({
       currentPage: btn
     });
-  }
+  };
 
-  getCurrentURL(pageObj) {
+  getCurrentURL = pageObj => {
     const { i, maxPage, currentPage, baseURL } = pageObj;
     let { btn } = pageObj;
     if (typeof btn !== 'number') {
@@ -36,7 +30,20 @@ export default class Pagination extends Component {
       }
     }
     return `${baseURL}/${btn}`;
-  }
+  };
+
+  getCurrentPage = pageObj => {
+    const { i, maxPage, currentPage, baseURL } = pageObj;
+    let { btn } = pageObj;
+    if (typeof btn !== 'number') {
+      if (i === 1) {
+        btn = currentPage - 5 > 1 ? currentPage - 5 : 1;
+      } else {
+        btn = currentPage + 5 > maxPage ? maxPage : currentPage + 5;
+      }
+    }
+    return btn;
+  };
 
   createButtons(maxPage) {
     const { currentPage } = this.props;
@@ -73,7 +80,7 @@ export default class Pagination extends Component {
             </li> :
             <li key={'page' + i}><Link to={currentURL || '#'} onClick={e => {
               onClick && e.preventDefault();
-              onClick && onClick(i + 1);
+              onClick && onClick(this.getCurrentPage(pageObj));
               e.target.blur();
               this.selectPage(pageObj);
             }}>{btn}</Link></li>
@@ -86,5 +93,6 @@ export default class Pagination extends Component {
 Pagination.PropTypes = {
   maxPage: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
-  baseURL: PropTypes.string.isRequired
+  baseURL: PropTypes.string,
+  onClick: PropTypes.func
 };
