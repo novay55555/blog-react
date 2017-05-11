@@ -9,7 +9,7 @@ import { linkToSearchPath } from '../actions/articles'
 
 class Blog extends Component {
 
-  componentWillMount(){
+  componentWillMount() {
     this.props.dispatch(fetchSession());
   }
 
