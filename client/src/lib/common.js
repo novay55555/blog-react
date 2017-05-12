@@ -158,3 +158,10 @@ export const notification = (options = {}) => {
   }, options);
   NotificationManager[opts.type](opts.message, opts.title, opts.timeout, opts.callback, opts.priority);
 };
+
+/**
+ * 对querySelectorAll的再次封装, 便于直接使用数组的方法
+ * @param {string} selector 选择器
+ * @param {DOM} context 原生DOM 
+ */
+export const querySelectors = (selector, context = document) => Array.prototype.slice.call(context.querySelectorAll(selector));

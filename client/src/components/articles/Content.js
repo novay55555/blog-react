@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import marked from 'marked'
 import articleCss from './articles.css'
+import { querySelectors } from '../../lib/common'
 
 export default class ArticleContent extends Component {
 
   componentDidMount() {
-    if (!this.props.isFetching && Object.keys(this.props.article).length > 0) document.querySelectorAll('pre code').forEach(block => hljs.highlightBlock(block));
+    if (!this.props.isFetching && Object.keys(this.props.article).length > 0) querySelectors('pre code').forEach(block => hljs.highlightBlock(block));
   }
 
   render() {
