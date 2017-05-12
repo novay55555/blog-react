@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import ArticleTable from '../../components/inside/ArticleTable'
+import Table from '../../components/inside/ArticleTable'
+import Nav from '../../components/inside/ArticleNav'
+import Search from '../../components/inside/ArticleSearch'
 import Loading from '../../components/common/Loading'
 import Pagination from '../../components/common/Pagination'
-import { fetchInsideArticles } from '../../actions/articles'
+import { fetchInsideArticles, fetchInsideArticlesByTitle } from '../../actions/articles'
 
 class InsideArticles extends Component {
   componentWillMount() {
@@ -13,31 +15,35 @@ class InsideArticles extends Component {
 
   handleClick = page => this.props.dispatch(fetchInsideArticles(page));
 
+  handleSearch = (title, page) => this.props.dispatch(fetchInsideArticlesByTitle(title, page));
+
   render() {
-    const { articles, page, total, isFetching } = this.props;
+    const { articles, page, total, isFetching, searchTitle } = this.props;
     const isEmpty = articles.length === 0;
     return (
-      isFetching ? <Loading /> :
-      (
-        isEmpty ? <div>没有更多了啦(= =##)</div> :
-        <div>
-              <ArticleTable items={articles} />
-              <div style={{textAlign: 'center'}}>
-                <Pagination maxPage={total} currentPage={page} onClick={this.handleClick} />
-              </div>
-            </div>
-      )
+      <div>
+        <Nav />
+        <Search onSearch={this.handleSearch} />
+        {
+          isEmpty ? <div>没有更多了啦(= =##)</div> :
+            (isFetching ? <Loading /> : <Table items={articles} />)
+        }
+        <div style={{ textAlign: 'center' }}>
+          <Pagination maxPage={total} currentPage={page} onClick={page => searchTitle ? this.handleSearch(searchTitle, page) : this.handleClick(page)} />
+        </div>
+      </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { items: articles, page, total, isFetching } = state.articles.lists;
+  const { items: articles, page, total, isFetching, searchTitle } = state.articles.lists;
   return {
     articles,
     page,
     total,
-    isFetching
+    isFetching,
+    searchTitle
   }
 };
 

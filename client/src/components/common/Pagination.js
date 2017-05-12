@@ -80,7 +80,7 @@ export default class Pagination extends Component {
             </li> :
             <li key={'page' + i}><Link to={currentURL || '#'} onClick={e => {
               onClick && e.preventDefault();
-              onClick && onClick(this.getCurrentPage(pageObj));
+              onClick && onClick.call(onClick, this.getCurrentPage(pageObj));
               e.target.blur();
               this.selectPage(pageObj);
             }}>{btn}</Link></li>

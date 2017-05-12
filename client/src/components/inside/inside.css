@@ -44,3 +44,25 @@
 .articles td:last-child a:nth-child(2) {
   float: right;
 }
+
+.search {
+  display: inline-block;
+  width: 200px;
+  transition: width .2s ease-in-out;
+}
+
+.search:global(.active) {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .articles>tbody>tr>td:nth-child(2),
+  .articles>tbody>tr>td:nth-child(3),
+  .articles>thead>tr>th:nth-child(2),
+  .articles>thead>tr>th:nth-child(3) {
+    display: none;
+  }
+  .articles>thead>tr>th:last-child {
+    width: 85px;
+  }
+}

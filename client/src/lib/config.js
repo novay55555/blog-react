@@ -13,7 +13,8 @@ const config = {
       types: `/api/types/articles`,
       searchByTitle: (title, page) => `/api/search/title/${title}/${page}`,
       searchByType: (type, page) => `/api/search/type/${type}/${page}`,
-      inside: page => `/api/inside/articles/${page}`
+      inside: page => `/api/inside/articles/${page}`,
+      insideSearchByTitle: (title, page) => `/api/inside/search/title/${title}/${page}`
     }
   }
 };

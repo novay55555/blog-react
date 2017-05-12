@@ -40,3 +40,7 @@ export default class ArticleTable extends Component {
     )
   }
 }
+
+ArticleTable.PropTypes = {
+  items: PropTypes.array.isRequired
+};

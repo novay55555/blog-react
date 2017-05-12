@@ -151,3 +151,11 @@ export const fetchInsideArticles = (page = 1) => dispatch => {
     .done(articles => dispatch(gotArticles(articles)))
     .fail(errMsg => dispatch(errorGetArticles(errMsg)));
 };
+
+export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
+  if (title.trim() === '') return dispatch(fetchInsideArticles());
+  dispatch(gettingArticlesByTitle(title));
+  get(`${articleApi.insideSearchByTitle(title, page)}`)
+    .done(articles => dispatch(gotArticles(articles)))
+    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+};
