@@ -24,7 +24,7 @@ export default class SearchInput extends Component {
           value={value}
           onChange={this.change}
           {...props} />
-        <a href="#" className={`glyphicon ${icon}`}
+        <a href="#" className={`glyphicon ${icon || 'glyphicon-search'}`}
           onClick={e => {
             e.preventDefault();
             return onSearch.call(onSearch, value);
@@ -36,7 +36,7 @@ export default class SearchInput extends Component {
 
 SearchInput.PropTypes = {
   className: PropTypes.string,
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   onSearch: PropTypes.func.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string
 };
