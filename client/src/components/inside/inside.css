@@ -1,0 +1,39 @@
+.articles{
+    table-layout: fixed;
+}
+
+.articles>tbody>tr>td,
+.articles>thead>tr>th{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+.articles>thead>tr>th:first-child{
+    width: 40%;
+}
+.articles>thead>tr>th:nth-child(4){
+    width: 60%;
+}
+.articles>thead>tr>th:nth-child(2),
+.articles>thead>tr>th:nth-child(3){
+    width: 120px;
+}
+
+.articles>thead>tr>th:last-child{
+    width: 100px;
+}
+.articles td:first-child,
+.articles td:nth-child(4){
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.articles td:last-child a:hover{
+    color: #5bc0de;
+}
+.articles td:last-child a:nth-child(1){
+    float: left;
+}
+.articles td:last-child a:nth-child(2){
+    float: right;
+}

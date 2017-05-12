@@ -9,7 +9,7 @@ export default class Table extends Component {
 				<thead>
 					<tr>
 						{
-							columns.map(column => <td key={column.key}>{column.title}</td>)
+							columns.map(column => <th key={column.key}>{column.title}</th>)
 						}
 					</tr>
 				</thead>

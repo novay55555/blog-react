@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Table from '../../components/common/Table'
+import insideCss from './inside.css'
 
 export default class ArticleTable extends Component {
   constructor() {
@@ -34,7 +35,7 @@ export default class ArticleTable extends Component {
     const { items } = this.props;
     return (
       <div>
-				<Table columns={this.state.columns} dataSource={items} />
+				<Table className={insideCss.articles} columns={this.state.columns} dataSource={items} />
 			</div>
     )
   }
