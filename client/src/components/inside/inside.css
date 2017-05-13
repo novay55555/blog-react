@@ -33,6 +33,15 @@
   white-space: nowrap;
 }
 
+.articles td:first-child a {
+  display: block;
+  color: #333;
+}
+
+.articles td:first-child a:hover {
+  color: #5bc0de;
+}
+
 .articles td:last-child a:hover {
   color: #5bc0de;
 }

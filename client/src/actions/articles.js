@@ -16,8 +16,27 @@ export const actionTypes = {
   GOT_ARTICLE: 'GOT_ARTICLE',
   ERROR_GET_ARTICLE: 'ERROR_GET_ARTICLE',
   GETTING_ARTICLES_BY_TITLE: 'GETTING_ARTICLES_BY_TITLE',
-  GETTING_ARTICLES_BY_TYPE: 'GETTING_ARTICLES_BY_TYPE'
+  GETTING_ARTICLES_BY_TYPE: 'GETTING_ARTICLES_BY_TYPE',
+  DELETING_ARTICLE: 'DELETING_ARTICLE',
+  DELETED_ARTICLE: 'DELETED_ARTICLE',
+  ERROR_DELETE_ARTICLE: 'ERROR_DELETE_ARTICLE'
 };
+
+const deleteingArticle = () => ({
+  type: actionTypes.DELETING_ARTICLE
+});
+
+const deletedArticle = (articles, id) => ({
+  type: actionTypes.DELETED_ARTICLE,
+  getItems: () => {
+    articles.splice(articles.findIndex(article => article._id === id), 1);
+    return articles;
+  }
+});
+
+const errorDeleteArticle = () => ({
+  type: actionTypes.ERROR_DELETE_ARTICLE
+});
 
 const gettingArticlesByTitle = title => ({
   type: actionTypes.GETTING_ARTICLES_BY_TITLE,
@@ -158,4 +177,14 @@ export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
   get(`${articleApi.insideSearchByTitle(title, page)}`)
     .done(articles => dispatch(gotArticles(articles)))
     .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+};
+
+export const fetchDeleteArticle = id => (dispatch, getState) => {
+  dispatch(deleteingArticle());
+  get(`${articleApi.delete(id)}`)
+    .done(dispatch(deletedArticle(getState().articles.lists.items, id)))
+    .fail(errMsg => {
+      dispatch(errorDeleteArticle())
+      notification({ type: 'error', message: errMsg, timeout: 3000 });
+    });
 };

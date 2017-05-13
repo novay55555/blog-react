@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router'
 import Table from '../../components/common/Table'
 import insideCss from './inside.css'
 
@@ -9,7 +10,8 @@ export default class ArticleTable extends Component {
     this.state = {
       columns: [{
         title: '标题',
-        key: 'title'
+        key: 'title',
+        render: (text, record) => (<a href={record.link} target='_blank'>{record.title}</a>)
       }, {
         title: '文章类型',
         key: 'articleType'
@@ -22,25 +24,52 @@ export default class ArticleTable extends Component {
       }, {
         title: '操作',
         key: 'operate',
-        render: () => (
+        render: (text, record) => (
           <span>
-						<a href="#">编辑</a>
-						<a href="#">删除</a>
-					</span>
+            <a href="#">编辑</a>
+            <a href="#" onClick={this.handleDelete(record._id)}>删除</a>
+          </span>
         )
       }]
     }
   }
+
+  handleDelete = id => {
+    let _clickTime = 0;
+    let _target = null;
+    let _timer;
+    return e => {
+      e.preventDefault();
+      if (!_target) _target = $(e.target).popover({
+        placement: 'top',
+        content: '再次点击确认删除',
+        trigger: 'manual'
+      });
+      if (_clickTime++ === 0) {
+        _target.popover('show');
+        _timer = setTimeout(() => {
+          _target.popover('hide');
+          _clickTime = 0;
+        }, 3000);
+      } else {
+        this.props.onDelete(id);
+        _target.popover('hide');
+        clearTimeout(_timer);
+      }
+    }
+  };
+
   render() {
-    const { items } = this.props;
+    const { items, isUpdating } = this.props;
     return (
-      <div>
-				<Table className={insideCss.articles} columns={this.state.columns} dataSource={items} />
-			</div>
+      <div style={isUpdating ? { opacity: .5, pointerEvents: 'none' } : {}}>
+        <Table className={insideCss.articles} columns={this.state.columns} dataSource={items} />
+      </div>
     )
   }
 }
 
 ArticleTable.PropTypes = {
-  items: PropTypes.array.isRequired
+  items: PropTypes.array.isRequired,
+  isUpdating: PropTypes.bool.isRequired
 };

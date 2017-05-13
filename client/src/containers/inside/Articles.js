@@ -6,7 +6,7 @@ import Nav from '../../components/inside/ArticleNav'
 import Search from '../../components/inside/ArticleSearch'
 import Loading from '../../components/common/Loading'
 import Pagination from '../../components/common/Pagination'
-import { fetchInsideArticles, fetchInsideArticlesByTitle } from '../../actions/articles'
+import { fetchInsideArticles, fetchInsideArticlesByTitle, fetchDeleteArticle } from '../../actions/articles'
 
 class InsideArticles extends Component {
   componentWillMount() {
@@ -17,8 +17,10 @@ class InsideArticles extends Component {
 
   handleSearch = (title, page) => this.props.dispatch(fetchInsideArticlesByTitle(title, page));
 
+  handleDelete = id => this.props.dispatch(fetchDeleteArticle(id));
+
   render() {
-    const { articles, page, total, isFetching, searchTitle } = this.props;
+    const { articles, page, total, isFetching, isUpdating, searchTitle } = this.props;
     const isEmpty = articles.length === 0;
     return (
       <div>
@@ -26,23 +28,34 @@ class InsideArticles extends Component {
         <Search onSearch={this.handleSearch} />
         {
           isEmpty ? <div>没有更多了啦(= =##)</div> :
-            (isFetching ? <Loading /> : <Table items={articles} />)
+            (isFetching ? <Loading /> :
+              <div>
+                <Table
+                  items={articles}
+                  isUpdating={isUpdating}
+                  onDelete={this.handleDelete} />
+                <div style={{ textAlign: 'center' }}>
+                  <Pagination
+                    maxPage={total}
+                    currentPage={page}
+                    onClick={page => searchTitle ? this.handleSearch(searchTitle, page) : this.handleClick(page)} />
+                </div>
+              </div>
+            )
         }
-        <div style={{ textAlign: 'center' }}>
-          <Pagination maxPage={total} currentPage={page} onClick={page => searchTitle ? this.handleSearch(searchTitle, page) : this.handleClick(page)} />
-        </div>
       </div>
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { items: articles, page, total, isFetching, searchTitle } = state.articles.lists;
+  const { items: articles, page, total, isFetching, isUpdating, searchTitle } = state.articles.lists;
   return {
     articles,
     page,
     total,
     isFetching,
+    isUpdating,
     searchTitle
   }
 };

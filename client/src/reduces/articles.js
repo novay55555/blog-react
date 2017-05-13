@@ -38,6 +38,22 @@ const lists = (state = { items: [] }, action) => {
         searchTitle: '',
         searchType: action.searchType
       };
+    case actionTypes.DELETING_ARTICLE:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case actionTypes.DELETED_ARTICLE:
+      return {
+        ...state,
+        isUpdating: false,
+        items: action.getItems()
+      };
+    case actionTypes.ERROR_DELETE_ARTICLE:
+      return {
+        ...state,
+        isUpdating: false
+      };
     default:
       return state;
   }

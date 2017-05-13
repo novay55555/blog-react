@@ -7,7 +7,7 @@ module.exports = {
 	context: __dirname,
 	entry: {
 		app: './src/index.js',
-		vendor: ['react', 'react-dom', 'react-router', 'redux', 'react-redux']
+		vendor: ['react', 'react-dom', 'react-router', 'redux', 'react-redux', 'babel-polyfill']
 	},
 	output: {
 		path: path.resolve(__dirname, 'build'),

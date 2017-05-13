@@ -14,7 +14,8 @@ const config = {
       searchByTitle: (title, page) => `/api/search/title/${title}/${page}`,
       searchByType: (type, page) => `/api/search/type/${type}/${page}`,
       inside: page => `/api/inside/articles/${page}`,
-      insideSearchByTitle: (title, page) => `/api/inside/search/title/${title}/${page}`
+      insideSearchByTitle: (title, page) => `/api/inside/search/title/${title}/${page}`,
+      delete: id => `/api/article-delete/${id}`
     }
   }
 };
