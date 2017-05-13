@@ -13,17 +13,17 @@ export default class Nav extends Component {
   change = activeIndex => this.setState({ activeIndex });
 
   render() {
-    const { activeIndex } = this.state;
-    const { types, className, onClick, tabs, ...props } = this.props;
+    const { activeIndex: currentIndex } = this.state;
+    const { activeIndex, types, className, onClick, tabs, ...props } = this.props;
     return (
       <ul className={`nav nav-${types || 'tabs'} ${className || ''}`} {...props}>
         {
           tabs.map((tab, i) => (
-            <li key={i} role="presentation" className={activeIndex === i ? 'active' : ''}>
+            <li key={i} role="presentation" className={currentIndex === i ? 'active' : ''}>
               <Link to={tab.path || '#'} onClick={e => {
                 this.change(i);
                 onClick && e.preventDefault();
-                onClick && onClick();
+                onClick && onClick(i);
               }}>{tab.text}</Link>
             </li>
           ))

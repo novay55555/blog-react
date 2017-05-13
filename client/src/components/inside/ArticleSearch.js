@@ -12,7 +12,7 @@ export default class ArticleSearch extends Component {
   render() {
     const { onSearch } = this.props;
     return (
-      <div style={{textAlign: 'right', margin: '20px 0'}}>
+      <div style={{textAlign: 'right', marginBottom: 20}}>
         <Search 
           className={insideCss.search} 
           placeholder='Search some articles' 

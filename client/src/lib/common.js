@@ -152,7 +152,7 @@ export const notification = (options = {}) => {
     type: 'success',
     message: 'Hello world!',
     title: '',
-    timeout: 1000,
+    timeout: 1500,
     callback: null,
     priority: false
   }, options);

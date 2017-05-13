@@ -64,6 +64,14 @@
   width: 100%;
 }
 
+.article-form :global(.form-group):last-of-type {
+  text-align: right;
+}
+
+.article-form :global(.articles-type) button {
+  margin-right: 5px;
+}
+
 @media (max-width: 480px) {
   .articles>tbody>tr>td:nth-child(2),
   .articles>tbody>tr>td:nth-child(3),
@@ -73,5 +81,8 @@
   }
   .articles>thead>tr>th:last-child {
     width: 85px;
+  }
+  .article-form {
+    padding: 0 15px;
   }
 }

@@ -11,8 +11,9 @@ export default class ArticleNav extends Component {
   }
 
   render() {
+    const { onClick } = this.props;
     return (
-      <Nav tabs={this.state.tabs} onClick={() => console.log(1)} />
+      <Nav tabs={this.state.tabs} onClick={onClick} style={{marginBottom: 20}} />
     )
   }
 }

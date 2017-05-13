@@ -38,7 +38,11 @@ body {
 }
 
 a {
-  transition: color 0.5s, border-color 0.5s, background 0.5s;
+  transition: color .25s ease-in-out, border-color .25s, background .25s ease-in-out;
+}
+
+button {
+  transition: color .25s ease-in-out, border-color .25s, background .25s ease-in-out;
 }
 
 :global(.navbar) :global(.navbar-brand) {

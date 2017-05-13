@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-export default class Input extends Component {
+export default class Textarea extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,9 +18,6 @@ export default class Input extends Component {
         },
         maxLength: (value, length, errMsg) => {
           if (value.length > length) return errMsg;
-        },
-        isEmail: (value, errMsg) => {
-          if (!/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) return errMsg;
         }
       }
     };
@@ -39,12 +36,12 @@ export default class Input extends Component {
     const _cache = [];
     validates.forEach(validate => {
       _cache.push(() => {
-        let input = self.state.element,
+        let textarea = self.state.element,
           args = validate.rule.split(':'),
           validateRule = args.shift();
         args.push(validate.errMsg);
-        args.unshift(input.value);
-        return self.state.rules[validateRule].apply(input, args);
+        args.unshift(textarea.value);
+        return self.state.rules[validateRule].apply(textarea, args);
       });
     });
     validator.start = () => {
@@ -68,15 +65,14 @@ export default class Input extends Component {
 
   render() {
     const { status, errMsg } = this.state;
-    const { className, label, name, type, validates, onChange, getValidator, ...props } = this.props;
+    const { className, label, name, validates, onChange, getValidator, ...props } = this.props;
     return (
       <div className={`form-group ${className || ''} ${status}`}>
         <label className="control-label" htmlFor={name || ''}>{status === 'has-error' ? errMsg : label}</label>
-        <input
-          ref={input => this.state.element = input}
+        <textarea
+          ref={ref => this.state.element = ref}
           className="form-control"
           name={name || ''}
-          type={type || 'text'}
           onChange={this.change}
           {...props}
         />
@@ -85,11 +81,10 @@ export default class Input extends Component {
   }
 }
 
-Input.PropTypes = {
+Textarea.PropTypes = {
   className: PropTypes.string,
   label: PropTypes.string,
   name: PropTypes.string,
-  type: PropTypes.string,
   placeholder: PropTypes.string,
   validates: PropTypes.arrayOf({
     rule: PropTypes.string.isRequired,
