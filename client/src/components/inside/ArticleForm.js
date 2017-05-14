@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import marked from 'marked'
 import Input from '../common/Input'
 import Textarea from '../common/Textarea'
-import { dateFormatter } from '../../lib/common'
+import { dateFormatter, querySelectors } from '../../lib/common'
 import insideCss from './inside.css'
+import { loadMarkdownEditor } from '../../actions/inside'
 
 export default class ArticleForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      element: null,
       title: '',
       author: this.props.author || '',
       date: dateFormatter(Date.now()),
@@ -22,6 +25,23 @@ export default class ArticleForm extends Component {
       contentValidator: null,
       currentTypeIndex: 0
     };
+  }
+
+  componentDidMount() {
+    loadMarkdownEditor().done(() => {
+      $(this.state.element).find('#markdownEditor').removeAttr('readonly').markdown({
+        onPreview: function(e) {
+          let previewContent;
+          if (e.isDirty()) {
+            previewContent = marked(e.getContent());
+          } else {
+            previewContent = "You should write something to preiview, right?"
+          }
+          setTimeout(() => querySelectors('pre code').forEach(block => hljs.highlightBlock(block)), 50); // TODO: onPreview钩子是没插入到DOM的, hljs没办法高亮, 目前延迟解决该问题
+          return previewContent;
+        }
+      });
+    })
   }
 
   handleSubmit = () => {
@@ -61,7 +81,9 @@ export default class ArticleForm extends Component {
     const { title, author, date, description, content, currentTypeIndex } = this.state;
     const { onSubmit, articleTypes } = this.props;
     return (
-      <form className={`form ${insideCss.articleForm}`} onSubmit={e => e.preventDefault()}>
+      <form ref={ref => this.state.element = ref}
+        className={`form ${insideCss.articleForm}`}
+        onSubmit={e => e.preventDefault()}>
         <Input
           label='文章标题'
           placeholder='请输入文章标题'
@@ -114,8 +136,10 @@ export default class ArticleForm extends Component {
           </p>
         </div>
         <Textarea
+          id='markdownEditor'
           label='文章内容'
           placeholder='Write something...'
+          readOnly='readonly'
           value={content}
           validates={[{
             rule: 'isNotEmpty',

@@ -72,6 +72,24 @@
   margin-right: 5px;
 }
 
+.article-form textarea {
+  min-height: 400px;
+}
+
+.article-form :global(.md-editor)>textarea {
+  background: #fff;
+}
+
+.article-form :global(.md-editor)>textarea,
+.article-form :global(.md-preview) {
+  padding: 6px 12px;
+}
+
+.article-form :global(.has-error) :global(.md-editor),
+.article-form :global(.has-error) :global(.md-editor.active) {
+  border-color: #a94442;
+}
+
 @media (max-width: 480px) {
   .articles>tbody>tr>td:nth-child(2),
   .articles>tbody>tr>td:nth-child(3),
@@ -84,5 +102,8 @@
   }
   .article-form {
     padding: 0 15px;
+  }
+  .article-form textarea {
+    min-height: 200px;
   }
 }

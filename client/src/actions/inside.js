@@ -1,7 +1,7 @@
-import { Defer, notification } from '../lib/common'
+import { Defer, notification, loadScript, loadStylesheet } from '../lib/common'
 import config from '../lib/config'
 
-const { post } = Defer($);
+const { get, post } = Defer($);
 const articleApi = config.api.articles;
 
 export const actionTypes = {
@@ -39,4 +39,53 @@ export const fetchAddArticle = article => dispatch => {
       dispatch(errorAddArticle());
       notification({ type: 'error', message: errMsg });
     });
+};
+
+export const loadMarkdownEditor = () => {
+  const def = $.Deferred();
+  const markdownPlugins = () => {
+    const def = $.Deferred();
+    if (typeof $.fn.markdown === 'undefined') {
+      notification({ type: 'info', message: 'Loading markdown editor' });
+      $.when(
+          loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
+          loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
+          loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
+        )
+        .done(() => {
+          notification({ message: 'Markdown editor loaded!' });
+          def.resolve();
+        })
+        .fail(() => {
+          notification({ type: 'error', message: 'Fail to load markdown editor, please refresh your page' });
+        });
+    } else {
+      def.resolve();
+    }
+    return def;
+  };
+
+  const highlightPlugins = () => {
+    const def = $.Deferred();
+    if (!window.hasOwnProperty('hljs')) {
+      notification({ type: 'info', message: 'Loading highlightjs' });
+      $.when(
+          loadScript('/vendor/highlightjs/highlight.js'),
+          loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
+        )
+        .done(() => {
+          notification({ message: 'Highlightjs loaded!' });
+          def.resolve();
+        })
+        .fail(() => {
+          notification({ type: 'error', message: 'Fail to load highlightjs' });
+        })
+    } else {
+      def.resolve();
+    }
+    return def;
+  };
+
+  $.when(markdownPlugins(), highlightPlugins()).done(() => def.resolve());
+  return def;
 };
