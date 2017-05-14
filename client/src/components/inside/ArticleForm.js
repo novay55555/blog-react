@@ -27,6 +27,10 @@ export default class ArticleForm extends Component {
     };
   }
 
+  componentWillReceiveProps(nextState) {
+    if (Object.keys(nextState.article).length > 0) this.setState(nextState.article);
+  }
+
   componentDidMount() {
     loadMarkdownEditor().done(() => {
       $(this.state.element).find('#markdownEditor').removeAttr('readonly').markdown({
@@ -35,7 +39,7 @@ export default class ArticleForm extends Component {
           if (e.isDirty()) {
             previewContent = marked(e.getContent());
           } else {
-            previewContent = "You should write something to preiview, right?"
+            previewContent = "You should write something to preiview, right?";
           }
           setTimeout(() => querySelectors('pre code').forEach(block => hljs.highlightBlock(block)), 50); // TODO: onPreview钩子是没插入到DOM的, hljs没办法高亮, 目前延迟解决该问题
           return previewContent;
@@ -79,11 +83,14 @@ export default class ArticleForm extends Component {
 
   render() {
     const { title, author, date, description, content, currentTypeIndex } = this.state;
-    const { onSubmit, articleTypes } = this.props;
+    const { onSubmit, articleTypes, isFetching } = this.props;
     return (
       <form ref={ref => this.state.element = ref}
         className={`form ${insideCss.articleForm}`}
         onSubmit={e => e.preventDefault()}>
+        {
+          isFetching ? <div className="loading"></div> : ''
+        }
         <Input
           label='文章标题'
           placeholder='请输入文章标题'

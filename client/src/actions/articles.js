@@ -3,7 +3,7 @@ import { Defer, dateFormatter, notification } from '../lib/common'
 import config from '../lib/config'
 import { loadScript, loadStylesheet } from '../lib/common'
 const articleApi = config.api.articles;
-const { get } = Defer($);
+const { get, post } = Defer($);
 
 export const actionTypes = {
   GETTING_ARTICLES: 'GETTING_ARTICLES',
@@ -19,8 +19,24 @@ export const actionTypes = {
   GETTING_ARTICLES_BY_TYPE: 'GETTING_ARTICLES_BY_TYPE',
   DELETING_ARTICLE: 'DELETING_ARTICLE',
   DELETED_ARTICLE: 'DELETED_ARTICLE',
-  ERROR_DELETE_ARTICLE: 'ERROR_DELETE_ARTICLE'
+  ERROR_DELETE_ARTICLE: 'ERROR_DELETE_ARTICLE',
+  EDITING_ARTICLE: 'EDITING_ARTICLE',
+  EDITED_ARTICLE: 'EDITED_ARTICLE',
+  ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE'
 };
+
+const editingArticle = () => ({
+  type: actionTypes.EDITING_ARTICLE
+});
+
+const editedArticle = article => ({
+  type: actionTypes.EDITED_ARTICLE,
+  article
+});
+
+const errorEditArticle = () => ({
+  type: actionTypes.ERROR_EDIT_ARTICLE
+});
 
 const deleteingArticle = () => ({
   type: actionTypes.DELETING_ARTICLE
@@ -182,9 +198,22 @@ export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
 export const fetchDeleteArticle = id => (dispatch, getState) => {
   dispatch(deleteingArticle());
   get(`${articleApi.delete(id)}`)
-    .done(dispatch(deletedArticle(getState().articles.lists.items, id)))
+    .done(() => dispatch(deletedArticle(getState().articles.lists.items, id)))
     .fail(errMsg => {
       dispatch(errorDeleteArticle())
       notification({ type: 'error', message: errMsg, timeout: 3000 });
     });
 };
+
+export const fetchEditArticle = article => dispatch => {
+  dispatch(editingArticle());
+  post(`${aticleApi.edit(article.id)}`, article)
+    .done(() => {
+      dispatch(editedArticle(article));
+      notification({ message: '编辑成功' });
+    })
+    .fail(errMsg => {
+      dispatch(errorEditArticle());
+      notification({ type: 'error', message: errMsg });
+    });
+}

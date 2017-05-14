@@ -8,7 +8,7 @@ import Loading from '../../components/common/Loading'
 import Pagination from '../../components/common/Pagination'
 import Form from '../../components/inside/ArticleForm'
 import { fetchInsideArticles, fetchInsideArticlesByTitle, fetchDeleteArticle, fetchArticleTypes } from '../../actions/articles'
-import { changeArticleTabs, fetchAddArticle } from '../../actions/inside'
+import { changeArticleTabs, fetchAddArticle, fetchEditArticle } from '../../actions/inside'
 
 class InsideArticles extends Component {
   componentWillMount() {
@@ -28,6 +28,8 @@ class InsideArticles extends Component {
 
   handleAddArticle = article => this.props.dispatch(fetchAddArticle(article));
 
+  handleEditArticle = id => this.props.dispatch(fetchEditArticle(id));
+
   render() {
     const {
       articles,
@@ -38,12 +40,14 @@ class InsideArticles extends Component {
       searchTitle,
       activeIndex,
       types,
-      author
+      author,
+      editArticle,
+      isFetchingArticle
     } = this.props;
     const isEmpty = articles.length === 0;
     return (
       <div>
-        <Nav onClick={this.handleTabChange} />
+        <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
         {
           activeIndex === 0 ? <Search onSearch={this.handleSearch} /> : ''
         }
@@ -55,7 +59,8 @@ class InsideArticles extends Component {
                   <Table
                     items={articles}
                     isUpdating={isUpdating}
-                    onDelete={this.handleDeleteArticle} />
+                    onDelete={this.handleDeleteArticle}
+                    onEdit={this.handleEditArticle} />
                   <div style={{ textAlign: 'center' }}>
                     <Pagination
                       maxPage={total}
@@ -67,7 +72,9 @@ class InsideArticles extends Component {
             <Form
               articleTypes={types}
               author={author}
-              onSubmit={this.handleAddArticle} />
+              article={editArticle}
+              onSubmit={this.handleAddArticle}
+              isFetching={isFetchingArticle} />
         }
       </div>
     )
@@ -83,7 +90,7 @@ const mapStateToProps = state => {
     isUpdating,
     searchTitle
   } = state.articles.lists;
-  const { activeIndex } = state.inside.articles;
+  const { activeIndex, item: editArticle, isFetching: isFetchingArticle } = state.inside.articles;
   const { items: types } = state.articles.types;
   const { username: author } = state.account;
   return {
@@ -95,7 +102,9 @@ const mapStateToProps = state => {
     searchTitle,
     activeIndex,
     types,
-    author
+    author,
+    editArticle,
+    isFetchingArticle
   }
 };
 

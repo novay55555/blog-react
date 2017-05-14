@@ -26,7 +26,10 @@ export default class ArticleTable extends Component {
         key: 'operate',
         render: (text, record) => (
           <span>
-            <a href="#">编辑</a>
+            <a href="#" onClick={e => {
+              e.preventDefault();
+              this.props.onEdit(record._id);
+            }}>编辑</a>
             <a href="#" onClick={this.handleDelete(record._id)}>删除</a>
           </span>
         )
@@ -71,5 +74,7 @@ export default class ArticleTable extends Component {
 
 ArticleTable.PropTypes = {
   items: PropTypes.array.isRequired,
-  isUpdating: PropTypes.bool.isRequired
+  isUpdating: PropTypes.bool.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired
 };

@@ -16,7 +16,8 @@ const config = {
       inside: page => `/api/inside/articles/${page}`,
       insideSearchByTitle: (title, page) => `/api/inside/search/title/${title}/${page}`,
       delete: id => `/api/article-delete/${id}`,
-      add: `/api/article-publish`
+      add: `/api/article-publish`,
+      edit: id => `/api/article-update/${id}`
     }
   }
 };

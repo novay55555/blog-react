@@ -64,6 +64,10 @@
   width: 100%;
 }
 
+.article-form {
+  position: relative;
+}
+
 .article-form :global(.form-group):last-of-type {
   text-align: right;
 }
@@ -73,7 +77,7 @@
 }
 
 .article-form textarea {
-  min-height: 400px;
+  height: 400px;
 }
 
 .article-form :global(.md-editor)>textarea {
@@ -88,6 +92,25 @@
 .article-form :global(.has-error) :global(.md-editor),
 .article-form :global(.has-error) :global(.md-editor.active) {
   border-color: #a94442;
+}
+
+.article-form :global(.loading) {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, .5);
+  z-index: 10;
+}
+
+.article-form :global(.loading)::after {
+  content: "Now loading...";
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 26px;
 }
 
 @media (max-width: 480px) {

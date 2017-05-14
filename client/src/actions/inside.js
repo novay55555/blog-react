@@ -1,4 +1,4 @@
-import { Defer, notification, loadScript, loadStylesheet } from '../lib/common'
+import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common'
 import config from '../lib/config'
 
 const { get, post } = Defer($);
@@ -8,8 +8,27 @@ export const actionTypes = {
   CHANGE_ARTICLE_TABS: 'CHANGE_ARTICLE_TABS',
   ADDING_ARTICLE: 'ADDING_ARTICLE',
   ADDED_ARTICLE: 'ADDED_ARTICLE',
-  ERROR_ADD_ARTICLE: 'ERROR_ADD_ARTICLE'
+  ERROR_ADD_ARTICLE: 'ERROR_ADD_ARTICLE',
+  GETTING_EDIT_ARTICLE: 'GETTING_EDIT_ARTICLE',
+  GOT_EDIT_ARTICLE: 'GOT_EDIT_ARTICLE',
+  ERROR_GET_EDIT_ARTICLE: 'ERROR_GET_EDIT_ARTICLE'
 };
+
+const gettingArticle = () => ({
+  type: actionTypes.GETTING_EDIT_ARTICLE
+});
+
+const gotArticle = article => ({
+  type: actionTypes.GOT_EDIT_ARTICLE,
+  item: {
+    ...article,
+    date: dateFormatter(article.date)
+  }
+});
+
+const errorGetArticle = () => ({
+  type: actionTypes.ERROR_GET_EDIT_ARTICLE
+});
 
 const addingArticle = () => ({
   type: actionTypes.ADDING_ARTICLE
@@ -88,4 +107,15 @@ export const loadMarkdownEditor = () => {
 
   $.when(markdownPlugins(), highlightPlugins()).done(() => def.resolve());
   return def;
+};
+
+export const fetchEditArticle = id => dispatch => {
+  dispatch(changeArticleTabs(1));
+  dispatch(gettingArticle());
+  get(`${articleApi.current(id)}`)
+    .done(article => dispatch(gotArticle(article)))
+    .fail(errMsg => {
+      dispatch(errorGetArticle());
+      notification({ type: 'error', message: errMsg });
+    });
 };
