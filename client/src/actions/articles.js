@@ -16,45 +16,10 @@ export const actionTypes = {
   GOT_ARTICLE: 'GOT_ARTICLE',
   ERROR_GET_ARTICLE: 'ERROR_GET_ARTICLE',
   GETTING_ARTICLES_BY_TITLE: 'GETTING_ARTICLES_BY_TITLE',
-  GETTING_ARTICLES_BY_TYPE: 'GETTING_ARTICLES_BY_TYPE',
-  DELETING_ARTICLE: 'DELETING_ARTICLE',
-  DELETED_ARTICLE: 'DELETED_ARTICLE',
-  ERROR_DELETE_ARTICLE: 'ERROR_DELETE_ARTICLE',
-  EDITING_ARTICLE: 'EDITING_ARTICLE',
-  EDITED_ARTICLE: 'EDITED_ARTICLE',
-  ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE'
+  GETTING_ARTICLES_BY_TYPE: 'GETTING_ARTICLES_BY_TYPE'
 };
 
-const editingArticle = () => ({
-  type: actionTypes.EDITING_ARTICLE
-});
-
-const editedArticle = article => ({
-  type: actionTypes.EDITED_ARTICLE,
-  article
-});
-
-const errorEditArticle = () => ({
-  type: actionTypes.ERROR_EDIT_ARTICLE
-});
-
-const deleteingArticle = () => ({
-  type: actionTypes.DELETING_ARTICLE
-});
-
-const deletedArticle = (articles, id) => ({
-  type: actionTypes.DELETED_ARTICLE,
-  getItems: () => {
-    articles.splice(articles.findIndex(article => article._id === id), 1);
-    return articles;
-  }
-});
-
-const errorDeleteArticle = () => ({
-  type: actionTypes.ERROR_DELETE_ARTICLE
-});
-
-const gettingArticlesByTitle = title => ({
+export const gettingArticlesByTitle = title => ({
   type: actionTypes.GETTING_ARTICLES_BY_TITLE,
   searchTitle: title
 });
@@ -64,11 +29,11 @@ const gettingArticlesByType = type => ({
   searchType: type
 });
 
-const gettingArticle = () => ({
+export const gettingArticle = () => ({
   type: actionTypes.GETTING_ARTICLE
 });
 
-const gotArticle = article => ({
+export const gotArticle = article => ({
   type: actionTypes.GOT_ARTICLE,
   item: {
     ...article,
@@ -76,17 +41,17 @@ const gotArticle = article => ({
   }
 });
 
-const errorGetArticle = errMsg => ({
+export const errorGetArticle = errMsg => ({
   type: actionTypes.ERROR_GET_ARTICLE,
   item: [],
   errMsg
 });
 
-const gettingArticles = () => ({
+export const gettingArticles = () => ({
   type: actionTypes.GETTING_ARTICLES
 });
 
-const gotArticles = lists => ({
+export const gotArticles = lists => ({
   type: actionTypes.GOT_ARTICLES,
   items: lists.articles.map(article => {
     article.date = dateFormatter(article.date);
@@ -97,7 +62,7 @@ const gotArticles = lists => ({
   page: lists.page
 });
 
-const errorGetArticles = errMsg => ({
+export const errorGetArticles = errMsg => ({
   type: actionTypes.ERROR_GET_ARTICLES,
   items: [],
   errMsg
@@ -179,41 +144,3 @@ export const linkToSearchPath = title => {
     browserHistory.push(`/articles/search/${title}/1`);
   }
 };
-
-export const fetchInsideArticles = (page = 1) => dispatch => {
-  dispatch(gettingArticles());
-  get(`${articleApi.inside(page)}`)
-    .done(articles => dispatch(gotArticles(articles)))
-    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
-};
-
-export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
-  if (title.trim() === '') return dispatch(fetchInsideArticles());
-  dispatch(gettingArticlesByTitle(title));
-  get(`${articleApi.insideSearchByTitle(title, page)}`)
-    .done(articles => dispatch(gotArticles(articles)))
-    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
-};
-
-export const fetchDeleteArticle = id => (dispatch, getState) => {
-  dispatch(deleteingArticle());
-  get(`${articleApi.delete(id)}`)
-    .done(() => dispatch(deletedArticle(getState().articles.lists.items, id)))
-    .fail(errMsg => {
-      dispatch(errorDeleteArticle())
-      notification({ type: 'error', message: errMsg, timeout: 3000 });
-    });
-};
-
-export const fetchEditArticle = article => dispatch => {
-  dispatch(editingArticle());
-  post(`${aticleApi.edit(article.id)}`, article)
-    .done(() => {
-      dispatch(editedArticle(article));
-      notification({ message: '编辑成功' });
-    })
-    .fail(errMsg => {
-      dispatch(errorEditArticle());
-      notification({ type: 'error', message: errMsg });
-    });
-}

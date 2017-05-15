@@ -7,8 +7,8 @@ import Search from '../../components/inside/ArticleSearch'
 import Loading from '../../components/common/Loading'
 import Pagination from '../../components/common/Pagination'
 import Form from '../../components/inside/ArticleForm'
-import { fetchInsideArticles, fetchInsideArticlesByTitle, fetchDeleteArticle, fetchArticleTypes } from '../../actions/articles'
-import { changeArticleTabs, fetchAddArticle, fetchEditArticle } from '../../actions/inside'
+import { fetchArticleTypes } from '../../actions/articles'
+import { changeArticleTabs, fetchInsideArticles, fetchInsideArticlesByTitle, fetchAddArticle, fetchInsideArticle, fetchDeleteArticle } from '../../actions/inside'
 
 class InsideArticles extends Component {
   componentWillMount() {
@@ -28,7 +28,7 @@ class InsideArticles extends Component {
 
   handleAddArticle = article => this.props.dispatch(fetchAddArticle(article));
 
-  handleEditArticle = id => this.props.dispatch(fetchEditArticle(id));
+  handleEditArticle = id => this.props.dispatch(fetchInsideArticle(id));
 
   render() {
     const {
@@ -41,7 +41,7 @@ class InsideArticles extends Component {
       activeIndex,
       types,
       author,
-      editArticle,
+      article,
       isFetchingArticle
     } = this.props;
     const isEmpty = articles.length === 0;
@@ -72,7 +72,7 @@ class InsideArticles extends Component {
             <Form
               articleTypes={types}
               author={author}
-              article={editArticle}
+              article={article}
               onSubmit={this.handleAddArticle}
               isFetching={isFetchingArticle} />
         }
@@ -90,7 +90,8 @@ const mapStateToProps = state => {
     isUpdating,
     searchTitle
   } = state.articles.lists;
-  const { activeIndex, item: editArticle, isFetching: isFetchingArticle } = state.inside.articles;
+  const { item: article, isFetching: isFetchingArticle } = state.articles.current;
+  const { activeIndex } = state.inside.articles;
   const { items: types } = state.articles.types;
   const { username: author } = state.account;
   return {
@@ -103,7 +104,7 @@ const mapStateToProps = state => {
     activeIndex,
     types,
     author,
-    editArticle,
+    article,
     isFetchingArticle
   }
 };

@@ -1,5 +1,6 @@
 import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common'
 import config from '../lib/config'
+import { gettingArticles, gotArticles, errorGetArticles, gettingArticlesByTitle, gettingArticle, gotArticle, errorGetArticle } from './articles'
 
 const { get, post } = Defer($);
 const articleApi = config.api.articles;
@@ -9,25 +10,41 @@ export const actionTypes = {
   ADDING_ARTICLE: 'ADDING_ARTICLE',
   ADDED_ARTICLE: 'ADDED_ARTICLE',
   ERROR_ADD_ARTICLE: 'ERROR_ADD_ARTICLE',
-  GETTING_EDIT_ARTICLE: 'GETTING_EDIT_ARTICLE',
-  GOT_EDIT_ARTICLE: 'GOT_EDIT_ARTICLE',
-  ERROR_GET_EDIT_ARTICLE: 'ERROR_GET_EDIT_ARTICLE'
+  DELETING_ARTICLE: 'DELETING_ARTICLE',
+  DELETED_ARTICLE: 'DELETED_ARTICLE',
+  ERROR_DELETE_ARTICLE: 'ERROR_DELETE_ARTICLE',
+  EDITING_ARTICLE: 'EDITING_ARTICLE',
+  EDITED_ARTICLE: 'EDITED_ARTICLE',
+  ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE'
 };
 
-const gettingArticle = () => ({
-  type: actionTypes.GETTING_EDIT_ARTICLE
+const editingArticle = () => ({
+  type: actionTypes.EDITING_ARTICLE
 });
 
-const gotArticle = article => ({
-  type: actionTypes.GOT_EDIT_ARTICLE,
-  item: {
-    ...article,
-    date: dateFormatter(article.date)
+const editedArticle = article => ({
+  type: actionTypes.EDITED_ARTICLE,
+  article
+});
+
+const errorEditArticle = () => ({
+  type: actionTypes.ERROR_EDIT_ARTICLE
+});
+
+const deleteingArticle = () => ({
+  type: actionTypes.DELETING_ARTICLE
+});
+
+const deletedArticle = (articles, id) => ({
+  type: actionTypes.DELETED_ARTICLE,
+  getItems: () => {
+    articles.splice(articles.findIndex(article => article._id === id), 1);
+    return articles;
   }
 });
 
-const errorGetArticle = () => ({
-  type: actionTypes.ERROR_GET_EDIT_ARTICLE
+const errorDeleteArticle = () => ({
+  type: actionTypes.ERROR_DELETE_ARTICLE
 });
 
 const addingArticle = () => ({
@@ -46,6 +63,21 @@ export const changeArticleTabs = tabIndex => ({
   type: actionTypes.CHANGE_ARTICLE_TABS,
   tabIndex
 });
+
+export const fetchInsideArticles = (page = 1) => dispatch => {
+  dispatch(gettingArticles());
+  get(`${articleApi.inside(page)}`)
+    .done(articles => dispatch(gotArticles(articles)))
+    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+};
+
+export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
+  if (title.trim() === '') return dispatch(fetchInsideArticles());
+  dispatch(gettingArticlesByTitle(title));
+  get(`${articleApi.insideSearchByTitle(title, page)}`)
+    .done(articles => dispatch(gotArticles(articles)))
+    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+};
 
 export const fetchAddArticle = article => dispatch => {
   dispatch(addingArticle());
@@ -67,10 +99,10 @@ export const loadMarkdownEditor = () => {
     if (typeof $.fn.markdown === 'undefined') {
       notification({ type: 'info', message: 'Loading markdown editor' });
       $.when(
-          loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
-          loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
-          loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
-        )
+        loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
+        loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
+        loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
+      )
         .done(() => {
           notification({ message: 'Markdown editor loaded!' });
           def.resolve();
@@ -89,9 +121,9 @@ export const loadMarkdownEditor = () => {
     if (!window.hasOwnProperty('hljs')) {
       notification({ type: 'info', message: 'Loading highlightjs' });
       $.when(
-          loadScript('/vendor/highlightjs/highlight.js'),
-          loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
-        )
+        loadScript('/vendor/highlightjs/highlight.js'),
+        loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
+      )
         .done(() => {
           notification({ message: 'Highlightjs loaded!' });
           def.resolve();
@@ -109,13 +141,36 @@ export const loadMarkdownEditor = () => {
   return def;
 };
 
-export const fetchEditArticle = id => dispatch => {
+export const fetchInsideArticle = id => dispatch => {
   dispatch(changeArticleTabs(1));
   dispatch(gettingArticle());
   get(`${articleApi.current(id)}`)
     .done(article => dispatch(gotArticle(article)))
     .fail(errMsg => {
       dispatch(errorGetArticle());
+      notification({ type: 'error', message: errMsg });
+    });
+};
+
+export const fetchDeleteArticle = id => (dispatch, getState) => {
+  dispatch(deleteingArticle());
+  get(`${articleApi.delete(id)}`)
+    .done(() => dispatch(deletedArticle(getState().articles.lists.items, id)))
+    .fail(errMsg => {
+      dispatch(errorDeleteArticle())
+      notification({ type: 'error', message: errMsg, timeout: 3000 });
+    });
+};
+
+export const fetchEditArticle = article => dispatch => {
+  dispatch(editingArticle());
+  post(`${aticleApi.edit(article.id)}`, article)
+    .done(() => {
+      dispatch(editedArticle(article));
+      notification({ message: '编辑成功' });
+    })
+    .fail(errMsg => {
+      dispatch(errorEditArticle());
       notification({ type: 'error', message: errMsg });
     });
 };

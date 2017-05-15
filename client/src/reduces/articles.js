@@ -1,16 +1,17 @@
 import { combineReducers } from 'redux'
-import { actionTypes } from '../actions/articles'
+import { actionTypes as articleActionTypes } from '../actions/articles'
+import { actionTypes as insideActionTypes } from '../actions/inside'
 
 const lists = (state = { items: [] }, action) => {
   switch (action.type) {
-    case actionTypes.GETTING_ARTICLES:
+    case articleActionTypes.GETTING_ARTICLES:
       return {
         ...state,
         isFetching: true,
         searchTitle: '',
         searchType: ''
       };
-    case actionTypes.GOT_ARTICLES:
+    case articleActionTypes.GOT_ARTICLES:
       return {
         ...state,
         isFetching: false,
@@ -18,38 +19,38 @@ const lists = (state = { items: [] }, action) => {
         total: action.total,
         page: action.page
       };
-    case actionTypes.ERROR_GET_ARTICLES:
+    case articleActionTypes.ERROR_GET_ARTICLES:
       return {
         ...state,
         isFetching: false,
         errMsg: action.errMsg
       };
-    case actionTypes.GETTING_ARTICLES_BY_TITLE:
+    case articleActionTypes.GETTING_ARTICLES_BY_TITLE:
       return {
         ...state,
         isFetching: true,
         searchTitle: action.searchTitle,
         searchType: ''
       };
-    case actionTypes.GETTING_ARTICLES_BY_TYPE:
+    case articleActionTypes.GETTING_ARTICLES_BY_TYPE:
       return {
         ...state,
         isFetching: true,
         searchTitle: '',
         searchType: action.searchType
       };
-    case actionTypes.DELETING_ARTICLE:
+    case insideActionTypes.DELETING_ARTICLE:
       return {
         ...state,
         isUpdating: true
       };
-    case actionTypes.DELETED_ARTICLE:
+    case insideActionTypes.DELETED_ARTICLE:
       return {
         ...state,
         isUpdating: false,
         items: action.getItems()
       };
-    case actionTypes.ERROR_DELETE_ARTICLE:
+    case insideActionTypes.ERROR_DELETE_ARTICLE:
       return {
         ...state,
         isUpdating: false
@@ -61,18 +62,18 @@ const lists = (state = { items: [] }, action) => {
 
 const types = (state = { items: [] }, action) => {
   switch (action.type) {
-    case actionTypes.GETTING_ARTICLE_TYPES:
+    case articleActionTypes.GETTING_ARTICLE_TYPES:
       return {
         ...state,
         isFetching: true
       };
-    case actionTypes.GOT_ARTICLE_TYPES:
+    case articleActionTypes.GOT_ARTICLE_TYPES:
       return {
         ...state,
         isFetching: false,
         items: action.items
       };
-    case actionTypes.ERROR_GET_ARTICLE_TYPES:
+    case articleActionTypes.ERROR_GET_ARTICLE_TYPES:
       return {
         ...state,
         isFetching: false,
@@ -85,18 +86,18 @@ const types = (state = { items: [] }, action) => {
 
 const current = (state = { item: {} }, action) => {
   switch (action.type) {
-    case actionTypes.GETTING_ARTICLE:
+    case articleActionTypes.GETTING_ARTICLE:
       return {
         ...state,
         isFetching: true
       };
-    case actionTypes.GOT_ARTICLE:
+    case articleActionTypes.GOT_ARTICLE:
       return {
         ...state,
         isFetching: false,
         item: action.item
       };
-    case actionTypes.ERROR_GET_ARTICLE:
+    case articleActionTypes.ERROR_GET_ARTICLE:
       return {
         ...state,
         isFetching: false,
