@@ -55,6 +55,11 @@ const lists = (state = { items: [] }, action) => {
         ...state,
         isUpdating: false
       };
+    case insideActionTypes.ADDED_ARTICLE:
+      return {
+        ...state,
+        items: action.getNewItems()
+      };
     default:
       return state;
   }
@@ -86,6 +91,21 @@ const types = (state = { items: [] }, action) => {
 
 const current = (state = { item: {} }, action) => {
   switch (action.type) {
+    case insideActionTypes.ADDING_ARTICLE:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case insideActionTypes.ADDED_ARTICLE:
+      return {
+        ...state,
+        isUpdating: false
+      };
+    case insideActionTypes.ERROR_ADD_ARTICLE:
+      return {
+        ...state,
+        isUpdating: false
+      };
     case articleActionTypes.GETTING_ARTICLE:
       return {
         ...state,

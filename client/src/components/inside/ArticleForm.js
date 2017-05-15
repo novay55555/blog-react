@@ -68,14 +68,16 @@ export default class ArticleForm extends Component {
     const descriptionPass = descriptionValidator.start();
     const contentPass = contentValidator.start();
     if (titlePass && authorPass && datePass && descriptionPass && contentPass) {
-      this.props.onSubmit({
+      let submitData = {
         title,
         author,
         date,
         description,
         articleType,
         content
-      });
+      };
+      if (this.state._id) submitData.id = this.state._id;
+      this.props.onSubmit(submitData);
     }
   };
 
@@ -83,7 +85,7 @@ export default class ArticleForm extends Component {
 
   render() {
     const { title, author, date, description, content, currentTypeIndex } = this.state;
-    const { onSubmit, articleTypes, isFetching } = this.props;
+    const { onSubmit, articleTypes, isFetching, isUpdating } = this.props;
     return (
       <form ref={ref => this.state.element = ref}
         className={`form ${insideCss.articleForm}`}
@@ -155,7 +157,11 @@ export default class ArticleForm extends Component {
           onChange={content => this.setState({ content })}
           getValidator={contentValidator => this.setState({ contentValidator })} />
         <div className="form-group">
-          <button className='btn btn-info' onClick={this.handleSubmit}>Submit!</button>
+          <button
+            className='btn btn-info'
+            onClick={this.handleSubmit}
+            style={isUpdating ? { opacity: .5, pointerEvents: 'none' } : {}}>
+            {isUpdating ? 'Submitting...' : 'Submit!'}</button>
         </div>
       </form>
     )

@@ -51,17 +51,23 @@ const addingArticle = () => ({
   type: actionTypes.ADDING_ARTICLE
 });
 
-const addedArticle = () => ({
-  type: actionTypes.ADDED_ARTICLE
+const addedArticle = (newArticle, articles) => ({
+  type: actionTypes.ADDED_ARTICLE,
+  getNewItems: () => {
+    articles.unshift(newArticle);
+    articles.pop();
+    return articles;
+  }
 });
 
 const errorAddArticle = () => ({
   type: actionTypes.ERROR_ADD_ARTICLE
 });
 
-export const changeArticleTabs = tabIndex => ({
+export const changeArticleTabs = (tabIndex, mode = 'add') => ({
   type: actionTypes.CHANGE_ARTICLE_TABS,
-  tabIndex
+  tabIndex,
+  mode
 });
 
 export const fetchInsideArticles = (page = 1) => dispatch => {
@@ -79,11 +85,11 @@ export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
     .fail(errMsg => dispatch(errorGetArticles(errMsg)));
 };
 
-export const fetchAddArticle = article => dispatch => {
+export const fetchAddArticle = article => (dispatch, getState) => {
   dispatch(addingArticle());
   post(`${articleApi.add}`, article)
     .done(data => {
-      dispatch(addedArticle());
+      dispatch(addedArticle(data, getState().articles.lists.items));
       notification({ message: '添加成功' });
     })
     .fail(errMsg => {
@@ -99,10 +105,10 @@ export const loadMarkdownEditor = () => {
     if (typeof $.fn.markdown === 'undefined') {
       notification({ type: 'info', message: 'Loading markdown editor' });
       $.when(
-        loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
-        loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
-        loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
-      )
+          loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
+          loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
+          loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
+        )
         .done(() => {
           notification({ message: 'Markdown editor loaded!' });
           def.resolve();
@@ -121,9 +127,9 @@ export const loadMarkdownEditor = () => {
     if (!window.hasOwnProperty('hljs')) {
       notification({ type: 'info', message: 'Loading highlightjs' });
       $.when(
-        loadScript('/vendor/highlightjs/highlight.js'),
-        loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
-      )
+          loadScript('/vendor/highlightjs/highlight.js'),
+          loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
+        )
         .done(() => {
           notification({ message: 'Highlightjs loaded!' });
           def.resolve();
@@ -142,7 +148,7 @@ export const loadMarkdownEditor = () => {
 };
 
 export const fetchInsideArticle = id => dispatch => {
-  dispatch(changeArticleTabs(1));
+  dispatch(changeArticleTabs(1, 'edit'));
   dispatch(gettingArticle());
   get(`${articleApi.current(id)}`)
     .done(article => dispatch(gotArticle(article)))
@@ -164,7 +170,7 @@ export const fetchDeleteArticle = id => (dispatch, getState) => {
 
 export const fetchEditArticle = article => dispatch => {
   dispatch(editingArticle());
-  post(`${aticleApi.edit(article.id)}`, article)
+  post(`${articleApi.edit(article.id)}`, article)
     .done(() => {
       dispatch(editedArticle(article));
       notification({ message: '编辑成功' });

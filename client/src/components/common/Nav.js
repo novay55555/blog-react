@@ -11,7 +11,7 @@ export default class Nav extends Component {
   }
 
   componentWillReceiveProps(nextState) {
-    if (nextState.activeIndex) this.setState({ activeIndex: nextState.activeIndex });
+    if (typeof nextState.activeIndex === 'number') this.setState({ activeIndex: nextState.activeIndex });
   }
 
   change = activeIndex => this.setState({ activeIndex });

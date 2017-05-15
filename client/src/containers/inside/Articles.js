@@ -8,7 +8,7 @@ import Loading from '../../components/common/Loading'
 import Pagination from '../../components/common/Pagination'
 import Form from '../../components/inside/ArticleForm'
 import { fetchArticleTypes } from '../../actions/articles'
-import { changeArticleTabs, fetchInsideArticles, fetchInsideArticlesByTitle, fetchAddArticle, fetchInsideArticle, fetchDeleteArticle } from '../../actions/inside'
+import { changeArticleTabs, fetchInsideArticles, fetchInsideArticlesByTitle, fetchAddArticle, fetchInsideArticle, fetchDeleteArticle, fetchEditArticle } from '../../actions/inside'
 
 class InsideArticles extends Component {
   componentWillMount() {
@@ -28,7 +28,9 @@ class InsideArticles extends Component {
 
   handleAddArticle = article => this.props.dispatch(fetchAddArticle(article));
 
-  handleEditArticle = id => this.props.dispatch(fetchInsideArticle(id));
+  handleGetArticle = id => this.props.dispatch(fetchInsideArticle(id));
+
+  handEditArticle = article => this.props.dispatch(fetchEditArticle(article));
 
   render() {
     const {
@@ -42,7 +44,9 @@ class InsideArticles extends Component {
       types,
       author,
       article,
-      isFetchingArticle
+      isFetchingArticle,
+      isUpdatingArticle,
+      articleMode
     } = this.props;
     const isEmpty = articles.length === 0;
     return (
@@ -60,7 +64,7 @@ class InsideArticles extends Component {
                     items={articles}
                     isUpdating={isUpdating}
                     onDelete={this.handleDeleteArticle}
-                    onEdit={this.handleEditArticle} />
+                    onEdit={this.handleGetArticle} />
                   <div style={{ textAlign: 'center' }}>
                     <Pagination
                       maxPage={total}
@@ -73,8 +77,9 @@ class InsideArticles extends Component {
               articleTypes={types}
               author={author}
               article={article}
-              onSubmit={this.handleAddArticle}
-              isFetching={isFetchingArticle} />
+              onSubmit={articleMode === 'add' ? this.handleAddArticle : this.handEditArticle}
+              isFetching={isFetchingArticle}
+              isUpdating={isUpdatingArticle} />
         }
       </div>
     )
@@ -90,8 +95,8 @@ const mapStateToProps = state => {
     isUpdating,
     searchTitle
   } = state.articles.lists;
-  const { item: article, isFetching: isFetchingArticle } = state.articles.current;
-  const { activeIndex } = state.inside.articles;
+  const { item: article, isFetching: isFetchingArticle, isUpdating: isUpdatingArticle } = state.articles.current;
+  const { activeIndex, articleMode } = state.inside.articles;
   const { items: types } = state.articles.types;
   const { username: author } = state.account;
   return {
@@ -105,7 +110,9 @@ const mapStateToProps = state => {
     types,
     author,
     article,
-    isFetchingArticle
+    isFetchingArticle,
+    isUpdatingArticle,
+    articleMode
   }
 };
 
