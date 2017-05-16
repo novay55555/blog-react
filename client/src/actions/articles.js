@@ -37,6 +37,7 @@ export const gotArticle = article => ({
   type: actionTypes.GOT_ARTICLE,
   item: {
     ...article,
+    id: article._id,
     date: dateFormatter(article.date)
   }
 });
@@ -54,8 +55,9 @@ export const gettingArticles = () => ({
 export const gotArticles = lists => ({
   type: actionTypes.GOT_ARTICLES,
   items: lists.articles.map(article => {
+    article.id = article._id;
     article.date = dateFormatter(article.date);
-    article.link = `/articles/content/${article._id}`;
+    article.link = `/articles/content/${article.id}`;
     return article;
   }),
   total: Math.ceil(lists.total / 10),
@@ -105,7 +107,7 @@ export const fetchArticleTypes = () => dispatch => {
 };
 
 export const fetchArticle = id => (dispatch, getState) => {
-  const currentId = getState().articles.current.item._id;
+  const currentId = getState().articles.current.item.id;
   if (id == currentId) return Promise.resolve();
   dispatch(gettingArticle());
   if (window.hasOwnProperty('hljs')) {

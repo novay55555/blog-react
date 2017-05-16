@@ -28,9 +28,9 @@ export default class ArticleTable extends Component {
           <span>
             <a href="#" onClick={e => {
               e.preventDefault();
-              this.props.onEdit(record._id);
+              this.props.onEdit(record.id);
             }}>编辑</a>
-            <a href="#" onClick={this.handleDelete(record._id)}>删除</a>
+            <a href="#" onClick={this.handleDelete(record.id)}>删除</a>
           </span>
         )
       }]

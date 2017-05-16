@@ -76,7 +76,7 @@ export default class ArticleForm extends Component {
         articleType,
         content
       };
-      if (this.state._id) submitData.id = this.state._id;
+      if (this.state.id) submitData.id = this.state.id;
       this.props.onSubmit(submitData);
     }
   };

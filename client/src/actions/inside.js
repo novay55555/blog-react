@@ -27,7 +27,7 @@ const editedArticle = (editArticle, articles) => ({
   getNewItems: () => {
     for(let i = 0, l = articles.length; i < l; i++){
       let article = articles[i];
-      if(article._id === editArticle.id) {
+      if(article.id === editArticle.id) {
         articles[i] = Object.assign(article, editArticle);
         break;
       }
@@ -47,7 +47,7 @@ const deleteingArticle = () => ({
 const deletedArticle = (articles, id) => ({
   type: actionTypes.DELETED_ARTICLE,
   getItems: () => {
-    articles.splice(articles.findIndex(article => article._id === id), 1);
+    articles.splice(articles.findIndex(article => article.id === id), 1);
     return articles;
   }
 });

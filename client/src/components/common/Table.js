@@ -17,7 +17,7 @@ export default class Table extends Component {
 				<tbody>
 					{
 						dataSource.map(data => (
-							<tr key={data._id}>
+							<tr key={data.id}>
 								{
 									columns.map(column => (
 										<td key={column.key}>

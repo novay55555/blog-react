@@ -106,6 +106,21 @@ const current = (state = { item: {} }, action) => {
         ...state,
         isUpdating: false
       };
+    case insideActionTypes.EDITING_ARTICLE:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case insideActionTypes.EDITED_ARTICLE:
+      return {
+        ...state,
+        isUpdating: false
+      };
+    case insideActionTypes.ERROR_EDIT_ARTICLE:
+      return {
+        ...state,
+        isUpdating: false
+      };
     case articleActionTypes.GETTING_ARTICLE:
       return {
         ...state,
