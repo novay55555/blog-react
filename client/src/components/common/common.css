@@ -45,6 +45,10 @@ button {
   transition: color .25s ease-in-out, border-color .25s, background .25s ease-in-out;
 }
 
+:global(.nav) li:global(.active) a {
+  pointer-events: none;
+}
+
 :global(.navbar) :global(.navbar-brand) {
   padding: 7px;
   width: 50px;
