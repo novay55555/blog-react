@@ -209,26 +209,20 @@ module.exports = function (app, credenticals, nodemailer) {
 
 	/**
 	 * 文章发表表单处理
-	 * 此处为表单提交
 	 */
 	app.post('/api/article-publish', function (req, res) {
 		for (var x in req.body) {
-			if (req.body[x] == '') {
-				req.session.result = { class: 'danger', msg: '休想绕过前端验证' };
-				return res.redirect(303, '../../admin/ctrl-article');
+			if (!req.body[x]) {
+				return res.json({code: 0, msg: '休想绕过前端验证'})
 			}
 		}
 		req.body.date = (new Date(req.body.date)).getTime();
-		new Article(req.body).save(function (err) {
+		new Article(req.body).save(function (err, newArticle) {
 			if (err) {
-				req.session.result = { class: 'danger', msg: '保存文章时出现了问题TAT' };
-				return res.redirect(303, '../../admin/ctrl-article');
+				console.log(err.message)
+				return res.json({code: 0, msg: '保存文章时出现了问题TAT'})
 			}
-			req.session.result = {
-				class: 'success',
-				msg: '成功发表了一篇文章- 3-'
-			};
-			res.redirect(303, '/admin/ctrl-article');
+			res.json({code: 1, content: newArticle});
 		});
 	});
 
