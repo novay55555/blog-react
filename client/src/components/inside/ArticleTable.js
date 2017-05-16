@@ -11,7 +11,7 @@ export default class ArticleTable extends Component {
       columns: [{
         title: '标题',
         key: 'title',
-        render: (text, record) => (<a href={record.link} target='_blank'>{record.title}</a>)
+        render: (text, record) => (<Link to={record.link}>{record.title}</Link>)
       }, {
         title: '文章类型',
         key: 'articleType'

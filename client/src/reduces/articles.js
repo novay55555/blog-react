@@ -94,12 +94,14 @@ const current = (state = { item: {} }, action) => {
     case insideActionTypes.ADDING_ARTICLE:
       return {
         ...state,
-        isUpdating: true
+        isUpdating: true,
+        item: action.item
       };
     case insideActionTypes.ADDED_ARTICLE:
       return {
         ...state,
-        isUpdating: false
+        isUpdating: false,
+        item: action.item
       };
     case insideActionTypes.ERROR_ADD_ARTICLE:
       return {
@@ -114,7 +116,8 @@ const current = (state = { item: {} }, action) => {
     case insideActionTypes.EDITED_ARTICLE:
       return {
         ...state,
-        isUpdating: false
+        isUpdating: false,
+        item: action.item
       };
     case insideActionTypes.ERROR_EDIT_ARTICLE:
       return {

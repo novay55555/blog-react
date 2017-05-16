@@ -24,16 +24,17 @@ const editingArticle = () => ({
 
 const editedArticle = (editArticle, articles) => ({
   type: actionTypes.EDITED_ARTICLE,
+  item: editArticle,
   getNewItems: () => {
-    for(let i = 0, l = articles.length; i < l; i++){
+    for (let i = 0, l = articles.length; i < l; i++) {
       let article = articles[i];
-      if(article.id === editArticle.id) {
+      if (article.id === editArticle.id) {
         articles[i] = Object.assign(article, editArticle);
         break;
       }
     }
     return articles;
-  } 
+  }
 });
 
 const errorEditArticle = () => ({
@@ -56,12 +57,18 @@ const errorDeleteArticle = () => ({
   type: actionTypes.ERROR_DELETE_ARTICLE
 });
 
-const addingArticle = () => ({
-  type: actionTypes.ADDING_ARTICLE
+const addingArticle = article => ({
+  type: actionTypes.ADDING_ARTICLE,
+  item: article
 });
 
-const addedArticle = () => ({
-  type: actionTypes.ADDED_ARTICLE
+const addedArticle = article => ({
+  type: actionTypes.ADDED_ARTICLE,
+  item: {
+    ...article,
+    id: article._id,
+    date: dateFormatter(article.date)
+  }
 });
 
 const errorAddArticle = () => ({
@@ -90,10 +97,10 @@ export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
 };
 
 export const fetchAddArticle = article => dispatch => {
-  dispatch(addingArticle());
+  dispatch(addingArticle(article));
   post(`${articleApi.add}`, article)
     .done(data => {
-      dispatch(addedArticle());
+      dispatch(addedArticle(data));
       dispatch(fetchInsideArticles());
       notification({ message: '添加成功' });
     })
@@ -110,10 +117,10 @@ export const loadMarkdownEditor = () => {
     if (typeof $.fn.markdown === 'undefined') {
       notification({ type: 'info', message: 'Loading markdown editor' });
       $.when(
-        loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
-        loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
-        loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
-      )
+          loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
+          loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
+          loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
+        )
         .done(() => {
           notification({ message: 'Markdown editor loaded!' });
           def.resolve();
@@ -132,9 +139,9 @@ export const loadMarkdownEditor = () => {
     if (!window.hasOwnProperty('hljs')) {
       notification({ type: 'info', message: 'Loading highlightjs' });
       $.when(
-        loadScript('/vendor/highlightjs/highlight.js'),
-        loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
-      )
+          loadScript('/vendor/highlightjs/highlight.js'),
+          loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
+        )
         .done(() => {
           notification({ message: 'Highlightjs loaded!' });
           def.resolve();

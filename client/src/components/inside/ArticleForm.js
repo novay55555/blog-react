@@ -34,7 +34,7 @@ export default class ArticleForm extends Component {
   componentDidMount() {
     loadMarkdownEditor().done(() => {
       $(this.state.element).find('#markdownEditor').removeAttr('readonly').markdown({
-        onPreview: function (e) {
+        onPreview: function(e) {
           let previewContent;
           if (e.isDirty()) {
             previewContent = marked(e.getContent());
