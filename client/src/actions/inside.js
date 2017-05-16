@@ -1,6 +1,6 @@
 import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common'
 import config from '../lib/config'
-import { gettingArticles, gotArticles, errorGetArticles, gettingArticlesByTitle, gettingArticle, gotArticle, errorGetArticle } from './articles'
+import * as ArticlesActions from './articles'
 
 const { get, post } = Defer($);
 const articleApi = config.api.articles;
@@ -22,9 +22,18 @@ const editingArticle = () => ({
   type: actionTypes.EDITING_ARTICLE
 });
 
-const editedArticle = article => ({
+const editedArticle = (editArticle, articles) => ({
   type: actionTypes.EDITED_ARTICLE,
-  article
+  getNewItems: () => {
+    for(let i = 0, l = articles.length; i < l; i++){
+      let article = articles[i];
+      if(article._id === editArticle.id) {
+        articles[i] = Object.assign(article, editArticle);
+        break;
+      }
+    }
+    return articles;
+  } 
 });
 
 const errorEditArticle = () => ({
@@ -51,13 +60,8 @@ const addingArticle = () => ({
   type: actionTypes.ADDING_ARTICLE
 });
 
-const addedArticle = (newArticle, articles) => ({
-  type: actionTypes.ADDED_ARTICLE,
-  getNewItems: () => {
-    articles.unshift(newArticle);
-    articles.pop();
-    return articles;
-  }
+const addedArticle = () => ({
+  type: actionTypes.ADDED_ARTICLE
 });
 
 const errorAddArticle = () => ({
@@ -71,25 +75,26 @@ export const changeArticleTabs = (tabIndex, mode = 'add') => ({
 });
 
 export const fetchInsideArticles = (page = 1) => dispatch => {
-  dispatch(gettingArticles());
+  dispatch(ArticlesActions.gettingArticles());
   get(`${articleApi.inside(page)}`)
-    .done(articles => dispatch(gotArticles(articles)))
-    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+    .done(articles => dispatch(ArticlesActions.gotArticles(articles)))
+    .fail(errMsg => dispatch(ArticlesActions.errorGetArticles(errMsg)));
 };
 
 export const fetchInsideArticlesByTitle = (title, page = 1) => dispatch => {
   if (title.trim() === '') return dispatch(fetchInsideArticles());
-  dispatch(gettingArticlesByTitle(title));
+  dispatch(ArticlesActions.gettingArticlesByTitle(title));
   get(`${articleApi.insideSearchByTitle(title, page)}`)
-    .done(articles => dispatch(gotArticles(articles)))
-    .fail(errMsg => dispatch(errorGetArticles(errMsg)));
+    .done(articles => dispatch(ArticlesActions.gotArticles(articles)))
+    .fail(errMsg => dispatch(ArticlesActions.errorGetArticles(errMsg)));
 };
 
-export const fetchAddArticle = article => (dispatch, getState) => {
+export const fetchAddArticle = article => dispatch => {
   dispatch(addingArticle());
   post(`${articleApi.add}`, article)
     .done(data => {
-      dispatch(addedArticle(data, getState().articles.lists.items));
+      dispatch(addedArticle());
+      dispatch(fetchInsideArticles());
       notification({ message: '添加成功' });
     })
     .fail(errMsg => {
@@ -105,10 +110,10 @@ export const loadMarkdownEditor = () => {
     if (typeof $.fn.markdown === 'undefined') {
       notification({ type: 'info', message: 'Loading markdown editor' });
       $.when(
-          loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
-          loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
-          loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
-        )
+        loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
+        loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
+        loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
+      )
         .done(() => {
           notification({ message: 'Markdown editor loaded!' });
           def.resolve();
@@ -127,9 +132,9 @@ export const loadMarkdownEditor = () => {
     if (!window.hasOwnProperty('hljs')) {
       notification({ type: 'info', message: 'Loading highlightjs' });
       $.when(
-          loadScript('/vendor/highlightjs/highlight.js'),
-          loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
-        )
+        loadScript('/vendor/highlightjs/highlight.js'),
+        loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
+      )
         .done(() => {
           notification({ message: 'Highlightjs loaded!' });
           def.resolve();
@@ -149,11 +154,11 @@ export const loadMarkdownEditor = () => {
 
 export const fetchInsideArticle = id => dispatch => {
   dispatch(changeArticleTabs(1, 'edit'));
-  dispatch(gettingArticle());
+  dispatch(ArticlesActions.gettingArticle());
   get(`${articleApi.current(id)}`)
-    .done(article => dispatch(gotArticle(article)))
+    .done(article => dispatch(ArticlesActions.gotArticle(article)))
     .fail(errMsg => {
-      dispatch(errorGetArticle());
+      dispatch(ArticlesActions.errorGetArticle());
       notification({ type: 'error', message: errMsg });
     });
 };
@@ -168,11 +173,11 @@ export const fetchDeleteArticle = id => (dispatch, getState) => {
     });
 };
 
-export const fetchEditArticle = article => dispatch => {
+export const fetchEditArticle = article => (dispatch, getState) => {
   dispatch(editingArticle());
   post(`${articleApi.edit(article.id)}`, article)
     .done(() => {
-      dispatch(editedArticle(article));
+      dispatch(editedArticle(article, getState().articles.lists.items));
       notification({ message: '编辑成功' });
     })
     .fail(errMsg => {

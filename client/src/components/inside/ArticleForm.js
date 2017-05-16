@@ -15,7 +15,7 @@ export default class ArticleForm extends Component {
       title: '',
       author: this.props.author || '',
       date: dateFormatter(Date.now()),
-      articleType: '',
+      articleType: this.props.articleTypes[0].text || '',
       description: '',
       content: '',
       titleValidator: null,
@@ -34,7 +34,7 @@ export default class ArticleForm extends Component {
   componentDidMount() {
     loadMarkdownEditor().done(() => {
       $(this.state.element).find('#markdownEditor').removeAttr('readonly').markdown({
-        onPreview: function(e) {
+        onPreview: function (e) {
           let previewContent;
           if (e.isDirty()) {
             previewContent = marked(e.getContent());
@@ -84,8 +84,8 @@ export default class ArticleForm extends Component {
   handleTypeChange = (articleType, currentTypeIndex) => this.setState({ articleType, currentTypeIndex });
 
   render() {
-    const { title, author, date, description, content, currentTypeIndex } = this.state;
-    const { onSubmit, articleTypes, isFetching, isUpdating } = this.props;
+    const { title, author, date, description, content, currentTypeIndex, articleType } = this.state;
+    const { onSubmit, articleTypes, isFetching, isUpdating, mode } = this.props;
     return (
       <form ref={ref => this.state.element = ref}
         className={`form ${insideCss.articleForm}`}
@@ -137,9 +137,12 @@ export default class ArticleForm extends Component {
           <label htmlFor="">文章类型</label>
           <p>
             {
-              articleTypes.map((type, i) =>
-                <button key={i}
+              mode === 'add' ?
+                articleTypes.map((type, i) => <button key={i}
                   className={`btn ${i === currentTypeIndex ? 'btn-primary' : 'btn-default'}`}
+                  onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>) :
+                articleTypes.map((type, i) => <button key={i}
+                  className={`btn ${articleType === type.text ? 'btn-primary' : 'btn-default'}`}
                   onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>)
             }
           </p>

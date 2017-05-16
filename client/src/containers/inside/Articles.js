@@ -77,6 +77,7 @@ class InsideArticles extends Component {
               articleTypes={types}
               author={author}
               article={article}
+              mode={articleMode}
               onSubmit={articleMode === 'add' ? this.handleAddArticle : this.handEditArticle}
               isFetching={isFetchingArticle}
               isUpdating={isUpdatingArticle} />

@@ -55,7 +55,7 @@ const lists = (state = { items: [] }, action) => {
         ...state,
         isUpdating: false
       };
-    case insideActionTypes.ADDED_ARTICLE:
+    case insideActionTypes.EDITED_ARTICLE:
       return {
         ...state,
         items: action.getNewItems()
