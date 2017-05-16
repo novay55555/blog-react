@@ -35,14 +35,8 @@ export default class ArticleForm extends Component {
     loadMarkdownEditor().done(() => {
       $(this.state.element).find('#markdownEditor').removeAttr('readonly').markdown({
         onPreview: function(e) {
-          let previewContent;
-          if (e.isDirty()) {
-            previewContent = marked(e.getContent());
-          } else {
-            previewContent = "You should write something to preiview, right?";
-          }
           setTimeout(() => querySelectors('pre code').forEach(block => hljs.highlightBlock(block)), 50); // TODO: onPreview钩子是没插入到DOM的, hljs没办法高亮, 目前延迟解决该问题
-          return previewContent;
+          return marked(e.getContent() || 'You should write something to preiview, right?');
         }
       });
     })
