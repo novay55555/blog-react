@@ -1,22 +1,49 @@
-var User = require('../models/user.js');
-var Article = require('../models/article.js');
-var ArticleTypes = require('../models/article-types');
-var ObjectId = require('mongoose').Types.ObjectId;
-var Comment = require('../models/comment');
+const express = require('express');
+const Api = express.Router();
+const nodemailer = require('nodemailer');
+
+const User = require('../models/user.js');
+const Article = require('../models/article.js');
+const ArticleTypes = require('../models/article-types');
+const ObjectId = require('mongoose').Types.ObjectId;
+const Comment = require('../models/comment');
+const credenticals = require('../credenticals');
+const config = require('../config');
+const apiStatus = config.api;
+
+/**
+ * @callback 获取文章
+ * 
+ * @param {number} page 页码数
+ * @returns {array} 文章集合
+ */
+Api.get('/api/articles/:page', (req, res) => {
+  const page = parseInt(req.params.page);
+  Article.find((err, articles) => {
+    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+    const data = {
+      total: articles.length, // TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
+      page: page,
+      articles: articles.splice((page - 1) * 10, 10)
+    };
+    res.json({ code: apiStatus.success.code, content: data })
+  }).sort({ date: -1 });
+});
+
 module.exports = function(app, credenticals, nodemailer) {
   /**
    * 获取文章
    */
   app.get('/api/articles/:page', function(req, res) {
-    var page = parseInt(req.params.page);
+    let page = parseInt(req.params.page);
     Article.find(function(err, articles) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      var data = {
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      let data = {
         total: articles.length, // TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
         page: page,
         articles: articles.splice((page - 1) * 10, 10)
       };
-      res.json({ code: 1, content: data })
+      res.json({ code: apiStatus.success.code, content: data })
     }).sort({ date: -1 });
   });
 
@@ -25,8 +52,8 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.get('/api/types/articles', function(req, res) {
     ArticleTypes.find(function(err, types) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      res.json({ code: 1, content: types[0].type });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: types[0].type });
     });
   });
 
@@ -35,8 +62,8 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.get('/api/article/:id', function(req, res) {
     Article.findById(req.params.id, function(err, article) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      res.json({ code: 1, content: article });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: article });
     });
   });
 
@@ -44,16 +71,16 @@ module.exports = function(app, credenticals, nodemailer) {
    * 文章搜索(标题)
    */
   app.get('/api/search/title/:title/:page', function(req, res) {
-    var page = parseInt(req.params.page);
-    var condition = new RegExp(req.params.title, 'i');
+    let page = parseInt(req.params.page);
+    let condition = new RegExp(req.params.title, 'i');
     Article.find({ title: condition }, function(err, articles) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      var data = {
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      let data = {
         total: articles.length,
         page: page,
         articles: articles.splice((page - 1) * 10, 10)
       };
-      res.json({ code: 1, content: data });
+      res.json({ code: apiStatus.success.code, content: data });
     }).sort({ date: -1 });
   });
 
@@ -61,16 +88,16 @@ module.exports = function(app, credenticals, nodemailer) {
    * 文章搜索(类型)
    */
   app.get('/api/search/type/:type/:page', function(req, res) {
-    var page = parseInt(req.params.page);
-    var condition = new RegExp(req.params.type, 'i');
+    let page = parseInt(req.params.page);
+    let condition = new RegExp(req.params.type, 'i');
     Article.find({ articleType: condition }, function(err, articles) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      var data = {
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      let data = {
         total: articles.length,
         page: page,
         articles: articles.splice((page - 1) * 10, 10)
       };
-      res.json({ code: 1, content: data });
+      res.json({ code: apiStatus.success.code, content: data });
     }).sort({ date: -1 });
   });
 
@@ -81,13 +108,13 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.post('/api/login', function(req, res) {
     User.find({ name: req.body.name, password: req.body.password }, function(err, user) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
       if (!user.length) return res.json({ code: 0, msg: '用户名或密码错误' });
       user[0].role == 0 ? req.session.isAdmin = true : req.session.isAdmin = false;
       req.session.isLogin = true;
       req.session.username = user[0]['name'];
       res.json({
-        code: 1,
+        code: apiStatus.success.code,
         content: {
           username: req.session.username,
           isAdmin: req.session.isAdmin,
@@ -103,7 +130,7 @@ module.exports = function(app, credenticals, nodemailer) {
   app.get('/api/signout', function(req, res) {
     delete req.session.isLogin;
     delete req.session.isAdmin;
-    res.json({ code: 1, content: {} });
+    res.json({ code: apiStatus.success.code, content: {} });
   });
 
   /**
@@ -111,7 +138,7 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.get('/api/checkout', (req, res) => {
     req.session.isLogin ? res.json({
-      code: 1,
+      code: apiStatus.success.code,
       content: {
         username: req.session.username,
         isAdmin: req.session.isAdmin,
@@ -131,14 +158,14 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.post('/api/register', function(req, res) {
     User.find({ name: req.body.name }, function(err, user) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
       if (user.length) return res.json({ code: 0, msg: '用户名已存在' });
       req.body.role = 1;
       new User(req.body).save(function(err, user) {
         if (err) return res.json({ code: 0, msg: '数据库添加失败' });
         // 如果提交了邮箱, 则发送一封邮件
         if (req.body.email) {
-          var mailTransport = nodemailer.createTransport({
+          let mailTransport = nodemailer.createTransport({
             host: 'smtp.qq.com',
             secureConnection: true,
             port: 465,
@@ -164,7 +191,7 @@ module.exports = function(app, credenticals, nodemailer) {
         }
         req.session.isLogin = true;
         req.session.username = req.body.name;
-        res.json({ code: 1, userId: user._id });
+        res.json({ code: apiStatus.success.code, userId: user._id });
       });
     });
   });
@@ -176,13 +203,13 @@ module.exports = function(app, credenticals, nodemailer) {
     checkAdmin(req.session).then(() => {
       const page = parseInt(req.params.page);
       Article.find(function(err, articles) {
-        if (err) return res.json({ code: 0, msg: '数据库查询失败' });
+        if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
         const data = {
           total: articles.length, // TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
           page: page,
           articles: articles.splice((page - 1) * 10, 10)
         };
-        res.json({ code: 1, content: data })
+        res.json({ code: apiStatus.success.code, content: data })
       }).sort({ date: -1 });
     }).catch(err => res.json(err));
   });
@@ -192,16 +219,16 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.get('/api/inside/search/title/:title/:page', function(req, res) {
     checkAdmin(req.session).then(() => {
-      var page = parseInt(req.params.page);
-      var condition = new RegExp(req.params.title, 'i');
+      let page = parseInt(req.params.page);
+      let condition = new RegExp(req.params.title, 'i');
       Article.find({ title: condition }, function(err, articles) {
-        if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-        var data = {
+        if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        let data = {
           total: articles.length,
           page: page,
           articles: articles.splice((page - 1) * 10, 10)
         };
-        res.json({ code: 1, content: data });
+        res.json({ code: apiStatus.success.code, content: data });
       }).sort({ date: -1 });
     }).catch(err => res.json(err));
 
@@ -211,7 +238,7 @@ module.exports = function(app, credenticals, nodemailer) {
    * 文章发表表单处理
    */
   app.post('/api/article-publish', function(req, res) {
-    for (var x in req.body) {
+    for (let x in req.body) {
       if (!req.body[x]) {
         return res.json({ code: 0, msg: '休想绕过前端验证' })
       }
@@ -222,7 +249,7 @@ module.exports = function(app, credenticals, nodemailer) {
         console.log(err.message)
         return res.json({ code: 0, msg: '保存文章时出现了问题TAT' })
       }
-      res.json({ code: 1, content: newArticle });
+      res.json({ code: apiStatus.success.code, content: newArticle });
     });
   });
 
@@ -255,7 +282,7 @@ module.exports = function(app, credenticals, nodemailer) {
   app.get('/api/article-delete/:id', function(req, res) {
     Article.remove({ _id: req.params.id }, function(err) {
       if (err) return res.json({ code: 0, msg: '数据库删除失败' });
-      res.json({ code: 1 });
+      res.json({ code: apiStatus.success.code });
     });
   });
 
@@ -266,13 +293,13 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String}  email      邮箱
    */
   app.post('/api/user-edit', function(req, res) {
-    var fn = function() {
+    let fn = function() {
       User.update({ _id: req.body.id }, {
         password: req.body.password,
         email: req.body.email
       }, function(err) {
         if (err) return res.json({ code: 0, msg: '数据库保存失败' });
-        res.json({ code: 1 });
+        res.json({ code: apiStatus.success.code });
       });
     };
     checkIdentity(req, res, fn);
@@ -283,10 +310,10 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {Number}  id  用户id
    */
   app.get('/api/user-delete/:id', function(req, res) {
-    var fn = function() {
+    let fn = function() {
       User.remove({ _id: req.params.id }, function(err) {
         if (err) return res.json({ code: 0, msg: '数据库删除失败' });
-        res.json({ code: 1 });
+        res.json({ code: apiStatus.success.code });
       });
     };
     checkIdentity(req, res, fn);
@@ -298,8 +325,8 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.get('/api/load-more-article/:times', function(req, res) {
     Article.find(function(err, articles) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      res.json({ code: 1, content: articles });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: articles });
     }).sort({ date: -1 }).limit(10).skip(10 * req.params.times + 1);
   });
 
@@ -310,19 +337,19 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {Number}  times          点击加载的次数
    */
   app.get('/api/load-more-article/:type/:typeContent/:times', function(req, res) {
-    var type = req.params.type,
+    let type = req.params.type,
       typeContent = req.params.typeContent,
       times = req.params.times,
       condition = new RegExp(typeContent, 'i');
     if (type == 'title') {
       Article.find({ title: condition }, function(err, articles) {
-        if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-        res.json({ code: 1, content: articles });
+        if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        res.json({ code: apiStatus.success.code, content: articles });
       }).sort({ date: -1 }).limit(10).skip(10 * times + 1);
     } else {
       Article.find({ articleType: condition }, function(err, articles) {
-        if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-        res.json({ code: 1, content: articles });
+        if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        res.json({ code: apiStatus.success.code, content: articles });
       }).sort({ date: -1 }).limit(10).skip(10 * times + 1);
     }
   });
@@ -333,8 +360,8 @@ module.exports = function(app, credenticals, nodemailer) {
    */
   app.get('/api/load-more-user/:times', function(req, res) {
     User.find(function(err, articles) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      res.json({ code: 1, content: articles });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: articles });
     }).limit(10).skip(10 * req.params.times + 1);
   });
 
@@ -343,10 +370,10 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String}  name   用户名
    */
   app.get('/api/search-user/:name', function(req, res) {
-    var condition = new RegExp(req.params.name, 'i');
+    let condition = new RegExp(req.params.name, 'i');
     User.find({ name: condition }, function(err, users) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      res.json({ code: 1, content: users });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: users });
     });
   });
 
@@ -355,10 +382,10 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} name 文章名
    */
   app.get('/api/search-article/:name', function(req, res) {
-    var condition = new RegExp(req.params.name, 'i');
+    let condition = new RegExp(req.params.name, 'i');
     Article.find({ title: condition }, function(err, articles) {
-      if (err) return res.json({ code: 0, msg: '数据库查询失败' });
-      res.json({ code: 1, content: articles });
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: articles });
     });
   });
 
@@ -367,14 +394,14 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} name 帐号名
    */
   app.get('/api/change-admin-account/:name', function(req, res) {
-    var fn = function() {
-      var newAccount = req.params.name;
+    let fn = function() {
+      let newAccount = req.params.name;
       User.findOneAndUpdate({ role: 0 }, { name: newAccount }, function(err, doc) {
         if (err) return res.json({ code: 0, msg: '数据库更新失败' });
         req.session.username = newAccount;
         Article.update({ author: doc.name }, { author: newAccount }, { multi: true }, function(err) {
           if (err) return res.json({ code: 0, msg: '数据库更新失败' });
-          res.json({ code: 1 });
+          res.json({ code: apiStatus.success.code });
         });
       });
     };
@@ -386,10 +413,10 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} password md5后的密码
    */
   app.post('/api/change-admin-password/', function(req, res) {
-    var fn = function() {
+    let fn = function() {
       User.update({ role: 0 }, { password: req.body.password }, function(err) {
         if (err) return res.json({ code: 0, msg: '数据库更新失败' });
-        res.json({ code: 1 });
+        res.json({ code: apiStatus.success.code });
       });
     };
     checkIdentity(req, res, fn);
@@ -401,10 +428,10 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} name 文章类型名
    */
   app.get('/api/add-article-type/:id/:name', function(req, res) {
-    var fn = function() {
+    let fn = function() {
       ArticleTypes.findOneAndUpdate({ _id: ObjectId(req.params.id) }, { $push: { type: req.params.name } }, { new: true }, function(err, doc) {
         if (err) return res.json({ code: 0, msg: '数据库更新失败' });
-        res.json({ code: 1, content: doc.type });
+        res.json({ code: apiStatus.success.code, content: doc.type });
       });
     };
     checkIdentity(req, res, fn);
@@ -416,10 +443,10 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} name 文章类型名
    */
   app.get('/api/del-article-type/:id/:name', function(req, res) {
-    var fn = function() {
+    let fn = function() {
       ArticleTypes.findOneAndUpdate({ _id: ObjectId(req.params.id) }, { $pull: { type: req.params.name } }, { new: true }, function(err, doc) {
         if (err) return res.json({ code: 0, msg: '数据库删除失败' });
-        res.json({ code: 1, content: doc.type });
+        res.json({ code: apiStatus.success.code, content: doc.type });
       });
     };
     checkIdentity(req, res, fn);
@@ -430,7 +457,7 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} id 文章id
    */
   app.post('/api/reply/:id', function(req, res) {
-    var userId = req.body.userId,
+    let userId = req.body.userId,
       content = req.body.reply;
     // 对用户提交的信息进行验证
     if (userId != req.session.user._id || content.trim() === '' || content.length > 150) {
@@ -438,7 +465,7 @@ module.exports = function(app, credenticals, nodemailer) {
     }
     Article.findById(req.params.id, function(err, article) {
       if (err) return res.send(500, 'database error');
-      var newComment = new Comment({
+      let newComment = new Comment({
         _article: req.params.id,
         replyUserId: userId,
         content: content,
@@ -456,7 +483,7 @@ module.exports = function(app, credenticals, nodemailer) {
    * @param {String} id 留言者留言的id
    */
   app.post('/api/reply-someone/:id', function(req, res) {
-    var userId = req.body.fromUser,
+    let userId = req.body.fromUser,
       content = req.body.content,
       articleId = req.body.articleId;
     if (userId != req.session.user._id || content.trim() === '' || content.length > 150) {
