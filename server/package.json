@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "database": "mongod --dbpath f:\\mongodb\\db\\ --logpath f:\\mongodb\\log\\mongodb.log --auth",
+    "gulp": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
