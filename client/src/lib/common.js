@@ -165,3 +165,16 @@ export const notification = (options = {}) => {
  * @param {DOM} context 原生DOM 
  */
 export const querySelectors = (selector, context = document) => Array.prototype.slice.call(context.querySelectorAll(selector));
+
+/**
+ * 节流函数
+ * @param {function} func 执行的函数
+ * @param {number} wait 触发执行函数的间隔
+ */
+export const throttleFunc = (func, wait) => {
+  let timer;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(func, wait);
+  }
+};

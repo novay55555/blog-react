@@ -32,6 +32,7 @@ html {
 
 body {
   position: relative;
+  padding-top: 73px;
   padding-bottom: 125px;
   min-height: 100%;
   font-size: 16px;
@@ -68,6 +69,16 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  opacity: .95;
+  z-index: 998;
+  overflow: hidden;
+  animation: navbar-slide 1s ease-in-out;
 }
 
 .footer {
@@ -132,5 +143,14 @@ button {
   }
   .header :global(.username) {
     width: 100%;
+  }
+}
+
+@keyframes navbar-slide {
+  from {
+    height: 0;
+  }
+  to {
+    height: 52px;
   }
 }
