@@ -4,7 +4,7 @@ import Blog from '../containers/Blog'
 import Article from '../containers/articles/Article'
 import ArticleLists from '../containers/articles/Lists'
 import ArticleContent from '../containers/articles/Content'
-import Error from '../components/common/Error'
+import NonePage from '../components/common/404'
 import Inside from '../containers/Inside'
 import InsideArticles from '../containers/inside/Articles'
 
@@ -27,7 +27,7 @@ const routes = (
       <Route path='users'></Route>
     </Route>
     <Route component={Blog}>
-      <Route path='*' component={Error}></Route>
+      <Route path='*' component={NonePage}></Route>
     </Route>
   </Route>
 );

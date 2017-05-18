@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Lists from '../../components/articles/List'
 import Loading from '../../components/common/Loading'
+import Error from '../../components/common/Error'
 import Pagination from '../../components/common/Pagination'
 import { fetchArticles, fetchArticlesByTitle, fetchArticlesByType } from '../../actions/articles'
 import articlesCss from '../../components/articles/articles.css'
@@ -32,31 +33,34 @@ class ArticleLists extends Component {
   }
 
   render() {
-    const { articles, page, total, isFetching, location } = this.props;
+    const { articles, page, total, isFetching, errMsg, location } = this.props;
     const baseURL = location.pathname.slice(0, location.pathname.lastIndexOf('/'));
     const isEmpty = articles.length === 0;
     return (
-      isFetching ? <Loading /> :
-      (
-        isEmpty ? <div>没有更多了啦(= =##)</div> :
-        <div>
-              <Lists className={articlesCss.list} articles={articles} />
-              <div style={{ textAlign: 'center' }}>
-                <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
+      errMsg ? <Error msg={errMsg} /> : (
+        isFetching ? <Loading /> :
+          (
+            isEmpty ? <div>没有更多了啦(= =##)</div> :
+              <div>
+                <Lists className={articlesCss.list} articles={articles} />
+                <div style={{ textAlign: 'center' }}>
+                  <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
+                </div>
               </div>
-            </div>
+          )
       )
     )
   }
 }
 
 const mapStateToProps = state => {
-  const { items: articles, page, total, isFetching } = state.articles.lists;
+  const { items: articles, page, total, isFetching, errMsg } = state.articles.lists;
   return {
     articles,
     page,
     total,
-    isFetching
+    isFetching,
+    errMsg
   }
 };
 

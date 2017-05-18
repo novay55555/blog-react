@@ -9,7 +9,8 @@ const lists = (state = { items: [] }, action) => {
         ...state,
         isFetching: true,
         searchTitle: '',
-        searchType: ''
+        searchType: '',
+        errMsg: ''
       };
     case articleActionTypes.GOT_ARTICLES:
       return {
@@ -127,7 +128,8 @@ const current = (state = { item: {} }, action) => {
     case articleActionTypes.GETTING_ARTICLE:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
+        errMsg: ''
       };
     case articleActionTypes.GOT_ARTICLE:
       return {

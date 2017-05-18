@@ -5,6 +5,7 @@ import Table from '../../components/inside/ArticleTable'
 import Nav from '../../components/inside/ArticleNav'
 import Search from '../../components/inside/ArticleSearch'
 import Loading from '../../components/common/Loading'
+import Error from '../../components/common/Error'
 import Pagination from '../../components/common/Pagination'
 import Form from '../../components/inside/ArticleForm'
 import { fetchArticleTypes } from '../../actions/articles'
@@ -46,43 +47,45 @@ class InsideArticles extends Component {
       article,
       isFetchingArticle,
       isUpdatingArticle,
-      articleMode
+      articleMode,
+      errMsg
     } = this.props;
     const isEmpty = articles.length === 0;
     return (
-      <div>
-        <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
-        {
-          activeIndex === 0 ? <Search onSearch={this.handleSearch} /> : ''
-        }
-        {
-          activeIndex === 0 ?
-            (isEmpty ? <div>没有更多了啦(= =##)</div> :
-              (isFetching ? <Loading /> :
-                <div>
-                  <Table
-                    items={articles}
-                    isUpdating={isUpdating}
-                    onDelete={this.handleDeleteArticle}
-                    onEdit={this.handleGetArticle} />
-                  <div style={{ textAlign: 'center' }}>
-                    <Pagination
-                      maxPage={total}
-                      currentPage={page}
-                      onClick={page => searchTitle ? this.handleSearch(searchTitle, page) : this.handleClick(page)} />
-                  </div>
-                </div>)
-            ) :
-            <Form
-              articleTypes={types}
-              author={author}
-              article={article}
-              mode={articleMode}
-              onSubmit={articleMode === 'add' ? this.handleAddArticle : this.handEditArticle}
-              isFetching={isFetchingArticle}
-              isUpdating={isUpdatingArticle} />
-        }
-      </div>
+      errMsg ? <Error msg={errMsg} /> :
+        <div>
+          <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
+          {
+            activeIndex === 0 ? <Search onSearch={this.handleSearch} /> : ''
+          }
+          {
+            activeIndex === 0 ?
+              (isEmpty ? <div>没有更多了啦(= =##)</div> :
+                (isFetching ? <Loading /> :
+                  <div>
+                    <Table
+                      items={articles}
+                      isUpdating={isUpdating}
+                      onDelete={this.handleDeleteArticle}
+                      onEdit={this.handleGetArticle} />
+                    <div style={{ textAlign: 'center' }}>
+                      <Pagination
+                        maxPage={total}
+                        currentPage={page}
+                        onClick={page => searchTitle ? this.handleSearch(searchTitle, page) : this.handleClick(page)} />
+                    </div>
+                  </div>)
+              ) :
+              <Form
+                articleTypes={types}
+                author={author}
+                article={article}
+                mode={articleMode}
+                onSubmit={articleMode === 'add' ? this.handleAddArticle : this.handEditArticle}
+                isFetching={isFetchingArticle}
+                isUpdating={isUpdatingArticle} />
+          }
+        </div>
     )
   }
 }
@@ -94,7 +97,8 @@ const mapStateToProps = state => {
     total,
     isFetching,
     isUpdating,
-    searchTitle
+    searchTitle,
+    errMsg
   } = state.articles.lists;
   const { item: article, isFetching: isFetchingArticle, isUpdating: isUpdatingArticle } = state.articles.current;
   const { activeIndex, articleMode } = state.inside.articles;
@@ -113,7 +117,8 @@ const mapStateToProps = state => {
     article,
     isFetchingArticle,
     isUpdatingArticle,
-    articleMode
+    articleMode,
+    errMsg
   }
 };
 

@@ -28,7 +28,7 @@ export default class ArticleForm extends Component {
   }
 
   componentWillReceiveProps(nextState) {
-    if (Object.keys(nextState.article).length > 0) this.setState(nextState.article);
+    if (nextState.mode === 'edit') this.setState(nextState.article);
   }
 
   componentDidMount() {
