@@ -14,7 +14,7 @@ export default class ArticleContent extends Component {
     const { className, article } = this.props;
     const html = marked(article.content || '');
     return (
-      <div className={`${articleCss.content} ${className || ''}`}>
+      <div className={`animated fadeIn ${articleCss.content} ${className || ''}`}>
         <h2>{article.title}</h2>
         <p>
           <span>作者: {article.author}</span>

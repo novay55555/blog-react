@@ -78,7 +78,7 @@ button {
   opacity: .95;
   z-index: 998;
   overflow: hidden;
-  animation: navbar-slide 1s ease-in-out;
+  animation: navbar-slide .5s ease-in-out;
 }
 
 .footer {

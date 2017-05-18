@@ -10,7 +10,7 @@ export default class ArticleLists extends Component {
         {
           articles.map((article, i) => (
             <li key={i}>
-              <Link to={article.link} className="list-group-item">
+              <Link to={article.link} className={`list-group-item animated fadeInDown`}>
                 <h3>{article.title}</h3>
                 <p>
                   <span>作者: {article.author}</span>
