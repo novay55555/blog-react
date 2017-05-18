@@ -76,7 +76,7 @@ button {
   top: 0;
   width: 100%;
   opacity: .95;
-  z-index: 998;
+  z-index: 9998;
   overflow: hidden;
   animation: navbar-slide .5s ease-in-out;
 }
