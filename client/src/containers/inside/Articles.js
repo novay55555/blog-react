@@ -53,7 +53,7 @@ class InsideArticles extends Component {
     const isEmpty = articles.length === 0;
     return (
       errMsg ? <Error msg={errMsg} /> :
-        <div>
+      <div>
           <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
           {
             activeIndex === 0 ? <Search onSearch={this.handleSearch} /> : ''
