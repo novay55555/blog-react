@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const mocha = require('gulp-mocha');
 const prettify = require('gulp-jsbeautifier');
 
 gulp.task('default', ['prettify'], () => {});
@@ -12,4 +13,12 @@ gulp.task('jsprettify', () =>
     'brace_style': ',preserve-inline'
   }))
   .pipe(gulp.dest(file => file.base))
+);
+
+gulp.task('api-test', () => 
+  gulp.src('./qa/test-api.js', {read: false})
+    .pipe(mocha({
+      ui: 'tdd',
+      timeout: 5000
+    }))
 );

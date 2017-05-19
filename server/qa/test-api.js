@@ -1,48 +1,71 @@
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var http = require('http');
-var rest = require('restler');
-var assert = chai.assert;
-chai.use(chaiHttp);
-var baseUrl = 'http://localhost:10086';
-var md5 = require('blueimp-md5');
-var adminData = {
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const rest = require('restler');
+const rp = require('request-promise');
+
+const assert = chai.assert;
+
+const rpHandler = (rp => {
+  const get = (url, options = {}) => {
+    const opts = Object.assign({ uri: url }, options);
+    return rp(opts).then(data => Promise.resolve(data)).catch(err => Promise.reject(err));
+  };
+  const post = (url, options = {}) => {
+    const opts = Object.assign({ method: 'POST', uri: url, json: true }, options);
+    return rp(opts).then(data => Promise.resolve(data)).catch(err => Promise.reject(err));
+  }
+  return {
+    get: get,
+    post: post,
+    put: null,
+    delete: null
+  };
+})(rp);
+
+
+const baseUrl = 'http://localhost:3000';
+const md5 = require('blueimp-md5');
+const adminData = {
   name: 'admin',
   password: md5('123456')
 };
-suite('Api Tests', function() {
-  this.timeout(5000); // 设置测试超时时间, 默认2秒
 
-  // test('should be able to register an account', function (done) {
-  //    var regData = {
-  //        name: 'user' + Math.ceil(Math.random() * 100000),
-  //        password: md5('123456'),
-  //        email: ''
-  //    };
-  //    rest.post(baseUrl + '/api/register', {data: regData}).on('success', function (data) {
-  //        assert(data.code === 1, 'register success');
-  //        done();
-  //    });
-  // });
 
-  //test('should be able to sign in', function (done) {
-  //    var userName = 'user' + Math.ceil(Math.random() * 100000);
-  //    var userData = {
-  //        name: userName,
-  //        password: md5('123456')
-  //    };
-  //    var regData = {
-  //        name: userName,
-  //        password: md5('123456'),
-  //        email: ''
-  //    };
-  //    rest.post(baseUrl + '/api/register', {data: regData}).on('success', function (data) {
-  //        rest.post(baseUrl + '/api/login', {data: userData}).on('success', function (data) {
-  //            assert(data.code === 1, 'login success');
-  //            done();
-  //        });
-  //    });
-  //});
+chai.use(chaiHttp);
+
+suite('Api Tests', () => {
+
+  test('should be able to register an account', done => {
+    const regData = {
+      name: `user${Math.ceil(Math.random() * 100000)}`,
+      password: md5('123456'),
+      email: '174777723@qq.com'
+    };
+    rpHandler.post(baseUrl + '/api/register', { body: regData })
+      .then(data => {
+        assert(data.code === 1, 'Register success!');
+        done();
+      });
+  });
+
+  test('should be able to sign in', done => {
+    const userName = 'user' + Math.ceil(Math.random() * 100000);
+    const userData = {
+      name: userName,
+      password: md5('123456')
+    };
+    const regData = {
+      name: userName,
+      password: md5('123456'),
+      email: ''
+    };
+    rpHandler.post(baseUrl + '/api/register', { body: regData, method: 'POST' })
+      .then(() => rpHandler.post(baseUrl + '/api/login', { body: userData }))
+      .then(data => {
+        assert(data.code === 1, 'login success');
+        done();
+      });
+  });
 
   // test('should be able to sign up', function (done) {
   //    var userName = 'user' + Math.ceil(Math.random() * 100000);
@@ -222,11 +245,11 @@ suite('Api Tests', function() {
   //     });
   // });
 
-  test('should be abled to change admin\'s password', function(done) {
-    rest.post(baseUrl + '/api/change-admin-password/', { data: { password: md5('111111') } }).on('success', function(data) {
-      assert(data.code === 1, 'change admin\s password successfulluy');
-      done();
-    });
-  });
+  // test('should be abled to change admin\'s password', function (done) {
+  //   rest.post(baseUrl + '/api/change-admin-password/', { data: { password: md5('111111') } }).on('success', function (data) {
+  //     assert(data.code === 1, 'change admin\s password successfulluy');
+  //     done();
+  //   });
+  // });
 
 });

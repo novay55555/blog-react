@@ -143,31 +143,31 @@ Api.post('/api/register', (req, res) => {
     new User(req.body).save((err, user) => {
       if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
       // 如果提交了邮箱, 则发送一封邮件
-      if (req.body.email) {
-        const mailTransport = nodemailer.createTransport({
-          host: 'smtp.qq.com',
-          secureConnection: true,
-          port: 465,
-          auth: {
-            user: credenticals.email.qq.user,
-            pass: credenticals.email.qq.password
-          }
-          //logger: true,
-          //debug: true
-        });
-        mailTransport.sendMail({
-          from: '174777723@qq.com',
-          to: req.body.email,
-          subject: 'Thank you to register my blog!',
-          text: 'hello world!'
-        }, (err, info) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log(info.response);
-          }
-        });
-      }
+      // if (req.body.email) {
+      //   const mailTransport = nodemailer.createTransport({
+      //     host: 'smtp.qq.com',
+      //     secureConnection: true,
+      //     port: 465,
+      //     auth: {
+      //       user: credenticals.email.qq.user,
+      //       pass: credenticals.email.qq.password
+      //     }
+      //     //logger: true,
+      //     //debug: true
+      //   });
+      //   mailTransport.sendMail({
+      //     from: '174777723@qq.com',
+      //     to: req.body.email,
+      //     subject: 'Thank you to register my blog!',
+      //     text: 'hello world!'
+      //   }, (err, info) => {
+      //     if (err) {
+      //       console.error(err);
+      //     } else {
+      //       console.log(info.response);
+      //     }
+      //   });
+      // }
       req.session.isLogin = true;
       req.session.username = req.body.name;
       res.json({
