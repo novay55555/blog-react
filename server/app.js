@@ -1,10 +1,12 @@
-var express = require('express');
-var credenticals = require('./credenticals.js');
-var nodemailer = require('nodemailer');
-var staticRes = require('./lib/static');
+const express = require('express');
+const credenticals = require('./credenticals.js');
+const nodemailer = require('nodemailer');
+const staticRes = require('./lib/static');
 
-var app = express();
-var mongodb = require('./lib/mongodb.js')(app, credenticals);
+const app = express();
+const mongodb = require('./lib/mongodb.js')(app, credenticals);
+const apiRouter = require('./api');
+
 app.set('port', process.env.PORT || 3000);
 
 app.use(require('body-parser')());
@@ -17,16 +19,7 @@ app.use(require('express-session')({
 
 app.use(express.static(__dirname + '/vendor'));
 
-require('./api/api.js')(app, credenticals, nodemailer);
-app.use(function(req, res, next) {
-  res.status(404);
-  res.render('404', { layout: null });
-});
-app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500);
-  res.render('500', { layout: null });
-});
+app.use(apiRouter);
 
 // 注册一个服务器
 app.listen(app.get('port'), function() {
