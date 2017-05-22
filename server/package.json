@@ -19,13 +19,13 @@
     "nodemailer": "^2.3.0"
   },
   "devDependencies": {
+    "bluebird": "^3.5.0",
     "blueimp-md5": "^2.7.0",
     "chai": "^3.5.0",
-    "chai-http": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-jsbeautifier": "^2.1.0",
     "gulp-mocha": "^4.3.1",
-    "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "mocha-clean": "^1.0.0",
+    "request": "^2.81.0"
   }
 }

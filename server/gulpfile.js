@@ -15,10 +15,11 @@ gulp.task('jsprettify', () =>
   .pipe(gulp.dest(file => file.base))
 );
 
-gulp.task('api-test', () => 
-  gulp.src('./qa/test-api.js', {read: false})
-    .pipe(mocha({
-      ui: 'tdd',
-      timeout: 5000
-    }))
+gulp.task('api-test', () =>
+  gulp.src('./qa/test-api.js', { read: false })
+  .pipe(mocha({
+    ui: 'tdd',
+    timeout: 5000,
+    require: ['mocha-clean']
+  }))
 );
