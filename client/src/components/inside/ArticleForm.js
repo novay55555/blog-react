@@ -15,7 +15,7 @@ export default class ArticleForm extends Component {
       title: '',
       author: this.props.author || '',
       date: dateFormatter(Date.now()),
-      articleType: this.props.articleTypes[0].text || '',
+      articleType: '',
       description: '',
       content: '',
       titleValidator: null,
@@ -131,13 +131,15 @@ export default class ArticleForm extends Component {
           <label htmlFor="">文章类型</label>
           <p>
             {
-              mode === 'add' ?
-                articleTypes.map((type, i) => <button key={i}
-                  className={`btn ${i === currentTypeIndex ? 'btn-primary' : 'btn-default'}`}
-                  onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>) :
-                articleTypes.map((type, i) => <button key={i}
-                  className={`btn ${articleType === type.text ? 'btn-primary' : 'btn-default'}`}
-                  onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>)
+              articleTypes.length > 0 ?
+                (mode === 'add' ?
+                  articleTypes.map((type, i) => <button key={i}
+                    className={`btn ${i === currentTypeIndex ? 'btn-primary' : 'btn-default'}`}
+                    onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>) :
+                  articleTypes.map((type, i) => <button key={i}
+                    className={`btn ${articleType === type.text ? 'btn-primary' : 'btn-default'}`}
+                    onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>))
+                : ''
             }
           </p>
         </div>
@@ -166,6 +168,12 @@ export default class ArticleForm extends Component {
 }
 
 ArticleForm.PropTypes = {
-  articleTypes: PropTypes.array.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  articleTypes: PropTypes.arrayOf({
+    text: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired
+  }).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  isUpdating: PropTypes.bool.isRequired,
+  mode: PropTypes.string.isRequired
 };
