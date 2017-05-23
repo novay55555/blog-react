@@ -15,8 +15,13 @@ export const actionTypes = {
   ERROR_DELETE_ARTICLE: 'ERROR_DELETE_ARTICLE',
   EDITING_ARTICLE: 'EDITING_ARTICLE',
   EDITED_ARTICLE: 'EDITED_ARTICLE',
-  ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE'
+  ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE',
+  ENTERED_INSIDE: 'ENTERED_INSIDE' // 给定进入过里世界的标识, 以后再从博客进入无需在拉取数据 
 };
+
+const enteredInside = () => ({
+  type: actionTypes.ENTERED_INSIDE
+});
 
 const editingArticle = () => ({
   type: actionTypes.EDITING_ARTICLE
@@ -81,10 +86,13 @@ export const changeArticleTabs = (tabIndex, mode = 'add') => ({
   mode
 });
 
-export const fetchInsideArticles = (page = 1) => dispatch => {
+export const fetchInsideArticles = (page = 1) => (dispatch, getState) => {
   dispatch(ArticlesActions.gettingArticles());
   get(`${articleApi.inside(page)}`)
-    .done(articles => dispatch(ArticlesActions.gotArticles(articles)))
+    .done(articles => {
+      dispatch(ArticlesActions.gotArticles(articles));
+      !getState().inside.admin.hasEntered && dispatch(enteredInside());
+    })
     .fail(errMsg => dispatch(ArticlesActions.errorGetArticles(errMsg)));
 };
 

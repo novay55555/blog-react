@@ -14,6 +14,19 @@ const articles = (state = { activeIndex: 0, articleMode: 'add' }, action) => {
   }
 };
 
+const admin = (state = { hasEntered: false }, action) => {
+  switch (action.type) {
+    case actionTypes.ENTERED_INSIDE:
+      return {
+        ...state,
+        hasEntered: true
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
-  articles
+  articles,
+  admin
 });

@@ -13,9 +13,9 @@ import { changeArticleTabs, fetchInsideArticles, fetchInsideArticlesByTitle, fet
 
 class InsideArticles extends Component {
   componentWillMount() {
-    const { dispatch, types } = this.props;
+    const { dispatch, types, hasEntered } = this.props;
     if (types.length === 0) dispatch(fetchArticleTypes());
-    dispatch(fetchInsideArticles());
+    !hasEntered && dispatch(fetchInsideArticles());
     dispatch(changeArticleTabs(0));
   }
 
@@ -102,6 +102,7 @@ const mapStateToProps = state => {
   } = state.articles.lists;
   const { item: article, isFetching: isFetchingArticle, isUpdating: isUpdatingArticle } = state.articles.current;
   const { activeIndex, articleMode } = state.inside.articles;
+  const { hasEntered } = state.inside.admin;
   const { items: types } = state.articles.types;
   const { username: author } = state.account;
   return {
@@ -118,7 +119,8 @@ const mapStateToProps = state => {
     isFetchingArticle,
     isUpdatingArticle,
     articleMode,
-    errMsg
+    errMsg,
+    hasEntered
   }
 };
 

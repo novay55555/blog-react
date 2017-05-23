@@ -31,14 +31,16 @@ const lists = (state = { items: [] }, action) => {
         ...state,
         isFetching: true,
         searchTitle: action.searchTitle,
-        searchType: ''
+        searchType: '',
+        errMsg: ''
       };
     case articleActionTypes.GETTING_ARTICLES_BY_TYPE:
       return {
         ...state,
         isFetching: true,
         searchTitle: '',
-        searchType: action.searchType
+        searchType: action.searchType,
+        errMsg: ''
       };
     case insideActionTypes.DELETING_ARTICLE:
       return {
