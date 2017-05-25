@@ -10,12 +10,12 @@ export default class ArticleSearch extends Component {
   blur = dom => $(dom).removeClass('active');
 
   render() {
-    const { onSearch } = this.props;
+    const { onSearch, placeholder } = this.props;
     return (
       <div style={{textAlign: 'right', marginBottom: 20}}>
         <Search 
           className={insideCss.search} 
-          placeholder='Search some articles' 
+          placeholder={placeholder || 'Search something...'} 
           onSearch={onSearch} 
           onKeyUp={e => e.keyCode === 13 && onSearch(e.target.value)}
           onFocus={e => this.focus(e.target.parentNode)}

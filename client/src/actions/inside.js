@@ -4,6 +4,7 @@ import * as ArticlesActions from './articles'
 
 const { get, post } = Defer($);
 const articleApi = config.api.articles;
+const userApi = config.api.users;
 
 export const actionTypes = {
   CHANGE_ARTICLE_TABS: 'CHANGE_ARTICLE_TABS',
@@ -16,8 +17,74 @@ export const actionTypes = {
   EDITING_ARTICLE: 'EDITING_ARTICLE',
   EDITED_ARTICLE: 'EDITED_ARTICLE',
   ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE',
-  ENTERED_INSIDE: 'ENTERED_INSIDE' // 给定进入过里世界的标识, 以后再从博客进入无需在拉取数据 
+  ENTERED_INSIDE: 'ENTERED_INSIDE', // 给定进入过里世界的标识, 以后再从博客进入无需在拉取数据 
+  GETTING_USERS: 'GETTING_USERS',
+  GOT_USERS: 'GOT_USERS',
+  ERROR_GET_USERS: 'ERROR_GET_USERS',
+  EDITTING_USER: 'EDITTING_USER',
+  EDITED_USER: 'EDITED_USER',
+  ERROR_EDIT_USER: 'ERROR_EDIT_USER',
+  DELETING_USER: 'DELETING_USER',
+  DELETED_USER: 'DELETED_USER',
+  ERROR_DELETE_USER: 'ERROR_DELETE_USER'
 };
+
+const deletingUser = () => ({
+  type: actionTypes.DELETING_USER
+});
+
+const deletedUser = (users, id) => ({
+  type: actionTypes.DELETED_USER,
+  updateItems: () => {
+    users.splice(users.findIndex(user => user.id === id), 1)
+    return users;
+  }
+});
+
+const errorDeleteUser = () => ({
+  type: actionTypes.ERROR_DELETE_USER
+});
+
+const edittingUser = () => ({
+  type: actionTypes.EDITTING_USER
+});
+
+const editedUser = (users, editUser) => ({
+  type: actionTypes.EDITED_USER,
+  updateItems: () => {
+    for (let i = 0, l = users.length; i < l; i++) {
+      const user = users[i];
+      if (user.id === editUser.id) {
+        users[i] = Object.assign(user, editedUser);
+        break;
+      }
+    }
+    return users;
+  }
+});
+
+const errorEditUser = () => ({
+  type: actionTypes.ERROR_EDIT_USER
+});
+
+const gettingUsers = () => ({
+  type: actionTypes.GETTING_USERS
+});
+
+const gotUsers = lists => ({
+  type: actionTypes.GOT_USERS,
+  items: lists.users.map(user => {
+    user.id = user._id;
+    return user;
+  }),
+  page: lists.page,
+  total: Math.ceil(lists.total / 10)
+});
+
+const errorGetUsers = errMsg => ({
+  type: actionTypes.ERROR_GET_USERS,
+  errMsg
+});
 
 const enteredInside = () => ({
   type: actionTypes.ENTERED_INSIDE
@@ -199,4 +266,11 @@ export const fetchEditArticle = article => (dispatch, getState) => {
       dispatch(errorEditArticle());
       notification({ type: 'error', message: errMsg });
     });
+};
+
+export const fetchUsers = (page = 1) => dispatch => {
+  dispatch(gettingUsers());
+  get(`${userApi.lists(page)}`)
+    .done(data => dispatch(gotUsers(data)))
+    .fail(errMsg => dispatch(errorGetUsers(errMsg)));
 };

@@ -18,6 +18,9 @@ const config = {
       delete: id => `/api/article-delete/${id}`,
       add: `/api/article-publish`,
       edit: id => `/api/article-update/${id}`
+    },
+    users: {
+      lists: page => `/api/inside/users/${page}`
     }
   }
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Nav from '../../components/inside/ArticleNav'
-import Search from '../../components/inside/ArticleSearch'
+import Search from '../../components/inside/Search'
 import Loading from '../../components/common/Loading'
 import Error from '../../components/common/Error'
 import TableContainer from './ArticlesTable'
@@ -26,7 +26,7 @@ class InsideArticles extends Component {
       <div>
           <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
           {
-            activeIndex === 0 ? <Search onSearch={this.handleSearch} /> : ''
+            activeIndex === 0 ? <Search onSearch={this.handleSearch} placeholder='Search articles...' /> : ''
           }
           {
             activeIndex === 0 ? <TableContainer /> : <FormContainer />

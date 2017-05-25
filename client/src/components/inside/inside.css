@@ -3,7 +3,9 @@
 }
 
 .articles>tbody>tr>td,
-.articles>thead>tr>th {
+.articles>thead>tr>th,
+.user-table>tbody>tr>td,
+.user-table>thead>tr>th {
   padding-top: 15px;
   padding-bottom: 15px;
   text-align: center;
@@ -52,6 +54,14 @@
 
 .articles td:last-child a:nth-child(2) {
   float: right;
+}
+
+.user-table th {
+  width: 33%;
+}
+
+.user-table td:last-child a:nth-child(1) {
+  margin-right: 5%;
 }
 
 .search {

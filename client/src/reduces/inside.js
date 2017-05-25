@@ -26,7 +26,67 @@ const admin = (state = { hasEntered: false }, action) => {
   }
 };
 
+const users = (state = { items: [], page: 1, total: 0 }, action) => {
+  switch (action.type) {
+    case actionTypes.GETTING_USERS:
+      return {
+        ...state,
+        isFetching: true,
+        errMsg: ''
+      };
+    case actionTypes.GOT_USERS:
+      return {
+        ...state,
+        isFetching: false,
+        items: action.items,
+        page: action.page,
+        total: action.total
+      };
+    case actionTypes.ERROR_GET_USERS:
+      return {
+        ...state,
+        isFetching: false,
+        errMsg: action.errMsg
+      };
+    case actionTypes.EDITTING_USER:
+      return {
+        ...state,
+        isEditing: true
+      };
+    case actionTypes.EDITED_USER:
+      return {
+        ...state,
+        isEditing: false,
+        items: action.updateItems()
+      };
+    case actionTypes.ERROR_DELETE_USER:
+      return {
+        ...state,
+        isEditing: false
+      };
+    case actionTypes.DELETING_USER:
+      return {
+        ...state,
+        isDeleting: true
+      };
+    case actionTypes.DELETED_USER:
+      return {
+        ...state,
+        isDeleting: false,
+        items: action.updateItems()
+      };
+    case actionTypes.ERROR_DELETE_USER:
+      return {
+        ...state,
+        isDeleting: false
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   articles,
-  admin
+  admin,
+  users
 });

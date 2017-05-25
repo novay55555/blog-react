@@ -24,8 +24,8 @@ class ArticleTable extends Component {
     return (
       <div>
         {
-          isEmpty ? <div>没有更多了啦(= =##)</div> :
-            (isFetching ? <Loading /> :
+           isFetching ? <Loading /> :
+            (isEmpty ? <div>没有更多了啦(= =##)</div> :
               <div>
                 <Table
                   items={articles}
