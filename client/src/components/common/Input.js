@@ -30,6 +30,7 @@ export default class Input extends Component {
     if (this.props.validates) {
       this.initValidator(this.props.validates);
       this.props.getValidator && this.props.getValidator.call(this.props.getValidator, this.state.validator);
+      this.props.onReset && this.props.onReset.call(this.props.onReset, () => this.setState({ status: '', errMsg: '' }));
     }
   }
 
@@ -57,7 +58,7 @@ export default class Input extends Component {
           });
           return false;
         } else {
-          self.setState({ status: '' });
+          self.setState({ status: '', errMsg: '' });
         }
       }
       return true;
@@ -71,7 +72,7 @@ export default class Input extends Component {
     const { className, label, name, type, validates, onChange, getValidator, ...props } = this.props;
     return (
       <div className={`form-group ${className || ''} ${status}`}>
-        <label className="control-label" htmlFor={name || ''}>{status === 'has-error' ? errMsg : label}</label>
+        <label className="control-label" htmlFor={name || ''}>{errMsg || label}</label>
         <input
           ref={input => this.state.element = input}
           className="form-control"

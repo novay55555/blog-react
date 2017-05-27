@@ -26,13 +26,14 @@ const admin = (state = { hasEntered: false }, action) => {
   }
 };
 
-const users = (state = { items: [], page: 1, total: 0 }, action) => {
+const users = (state = { items: [], page: 1, total: 0, current: {} }, action) => {
   switch (action.type) {
     case actionTypes.GETTING_USERS:
       return {
         ...state,
         isFetching: true,
-        errMsg: ''
+        errMsg: '',
+        searchName: ''
       };
     case actionTypes.GOT_USERS:
       return {
@@ -80,6 +81,18 @@ const users = (state = { items: [], page: 1, total: 0 }, action) => {
         ...state,
         isDeleting: false
       };
+    case actionTypes.GETTING_USERS_BY_NAME:
+      return {
+        ...state,
+        isFetching: true,
+        searchName: action.searchName,
+        errMsg: ''
+      };
+    case actionTypes.GET_EDITED_USER:
+      return {
+        ...state,
+        current: action.user
+      }
     default:
       return state;
   }

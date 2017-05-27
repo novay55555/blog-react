@@ -20,7 +20,9 @@ const config = {
       edit: id => `/api/article-update/${id}`
     },
     users: {
-      lists: page => `/api/inside/users/${page}`
+      lists: page => `/api/inside/users/${page}`,
+      searchByName: (name, page) => `/api/inside/users/search/${name}/${page}`,
+      edit: `/api/user-edit`
     }
   }
 };

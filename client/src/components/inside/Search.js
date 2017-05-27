@@ -26,5 +26,6 @@ export default class ArticleSearch extends Component {
 }
 
 ArticleSearch.PropTypes = {
-  onSearch: PropTypes.func.isRequired
+  onSearch: PropTypes.func.isRequired,
+  placeholder: PropTypes.string
 };

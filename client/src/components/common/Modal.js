@@ -32,7 +32,7 @@ export default class Modal extends Component {
   render() {
     const { className, title, size, onOk, okText, cancelText, loading } = this.props;
     return (
-      <div ref={modal => this.container = modal} className={`modal fade ${className}`} tabIndex="-1">
+      <div ref={modal => this.container = modal} className={`modal fade ${className || ''}`} tabIndex="-1">
         <div className={`modal-dialog ${size ? this.state.sizeClass[size] : ''}`}>
           <div className="modal-content">
             {

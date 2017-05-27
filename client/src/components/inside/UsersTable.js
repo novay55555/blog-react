@@ -19,7 +19,10 @@ export default class UsersTable extends Component {
         key: 'operate',
         render: (text, record) => (
           <span>
-            <a href="#">编辑</a>
+            <a href="#" onClick={e => {
+              e.preventDefault();
+              this.props.onEdit('userEditModal', record.id);
+              }}>编辑</a>
             <a href="#">删除</a>
           </span>
         )

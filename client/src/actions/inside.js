@@ -1,4 +1,5 @@
 import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common'
+import md5 from 'blueimp-md5'
 import config from '../lib/config'
 import * as ArticlesActions from './articles'
 
@@ -26,8 +27,20 @@ export const actionTypes = {
   ERROR_EDIT_USER: 'ERROR_EDIT_USER',
   DELETING_USER: 'DELETING_USER',
   DELETED_USER: 'DELETED_USER',
-  ERROR_DELETE_USER: 'ERROR_DELETE_USER'
+  ERROR_DELETE_USER: 'ERROR_DELETE_USER',
+  GETTING_USERS_BY_NAME: 'GETTING_USERS_BY_NAME',
+  GET_EDITED_USER: 'GET_EDITED_USER'
 };
+
+const getEditedUser = user => ({
+  type: actionTypes.GET_EDITED_USER,
+  user
+});
+
+const gettingUserByName = name => ({
+  type: actionTypes.GETTING_USERS_BY_NAME,
+  searchName: name
+});
 
 const deletingUser = () => ({
   type: actionTypes.DELETING_USER
@@ -49,12 +62,12 @@ const edittingUser = () => ({
   type: actionTypes.EDITTING_USER
 });
 
-const editedUser = (users, editUser) => ({
+const editedUser = (users, editedUser) => ({
   type: actionTypes.EDITED_USER,
   updateItems: () => {
     for (let i = 0, l = users.length; i < l; i++) {
       const user = users[i];
-      if (user.id === editUser.id) {
+      if (user.id === editedUser.id) {
         users[i] = Object.assign(user, editedUser);
         break;
       }
@@ -273,4 +286,34 @@ export const fetchUsers = (page = 1) => dispatch => {
   get(`${userApi.lists(page)}`)
     .done(data => dispatch(gotUsers(data)))
     .fail(errMsg => dispatch(errorGetUsers(errMsg)));
+};
+
+export const fetchUsersByName = (name, page = 1) => dispatch => {
+  if (name.trim() === '') return dispatch(fetchUsers());
+  dispatch(gettingUserByName(name));
+  get(`${userApi.searchByName(name, page)}`)
+    .done(data => dispatch(gotUsers(data)))
+    .fail(errMsg => dispatch(errorGetUsers(errMsg)));
+};
+
+export const getEditUserData = id => (dispatch, getState) => {
+  const users = getState().inside.users.items;
+  for (let i = 0, l = users.length; i < l; i++) {
+    const user = users[i];
+    if (user.id === id) return dispatch(getEditedUser(user));
+  }
+};
+
+export const fetchEditUser = (id, password, email, callback) => (dispatch, getState) => {
+  const users = getState().inside.users.items;
+  dispatch(edittingUser());
+  post(`${userApi.edit}`, { id, password: md5(password), email })
+    .done(data => {
+      dispatch(editedUser(users, { id, password: md5(password), email }));
+      callback && callback();
+    })
+    .fail(errMsg => {
+      dispatch(errorEditUser());
+      notification({ type: 'error', message: errMsg });
+    });
 };
