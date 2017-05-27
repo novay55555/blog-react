@@ -48,7 +48,7 @@ class Users extends Component {
           user={editUser}
           onHideModal={this.handleHideModal}
           onEdit={this.handleEditUser}
-          Loading={isEditing} />
+          loading={isEditing} />
       </div>
     )
   }

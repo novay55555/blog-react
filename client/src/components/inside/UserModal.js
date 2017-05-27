@@ -18,16 +18,19 @@ export default class UserModal extends Component {
   }
 
   componentWillReceiveProps(nextState) {
-    if (nextState.visiable) {
+    if (nextState.visiable && !nextState.loading) {
       this.setState({
         id: nextState.user.id,
         email: nextState.user.email,
         password: ''
       })
-    } else {
+    } 
+    
+    if(!nextState.visiable){
       this.state.resetEmailComponent && this.state.resetEmailComponent();
       this.state.resetPasswordComponent && this.state.resetPasswordComponent();
     }
+
   }
 
   handleEditUser = () => {
