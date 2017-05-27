@@ -24,9 +24,9 @@ export default class UserModal extends Component {
         email: nextState.user.email,
         password: ''
       })
-    } 
-    
-    if(!nextState.visiable){
+    }
+
+    if (!nextState.visiable) {
       this.state.resetEmailComponent && this.state.resetEmailComponent();
       this.state.resetPasswordComponent && this.state.resetPasswordComponent();
     }

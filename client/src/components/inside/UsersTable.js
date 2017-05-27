@@ -22,16 +22,54 @@ export default class UsersTable extends Component {
             <a href="#" onClick={e => {
               e.preventDefault();
               this.props.onEdit('userEditModal', record.id);
-              }}>编辑</a>
-            <a href="#">删除</a>
+            }}>编辑</a>
+            <a href="#" onClick={this.handleDelete(record.id)}>删除</a>
           </span>
         )
       }]
     }
   }
+
+  handleDelete = id => {
+    let _clickTime = 0,
+      _target = null,
+      _timer;
+    return e => {
+      e.preventDefault();
+      if (!_target) _target = $(e.target).popover({
+        placement: 'top',
+        content: '再次点击确认删除',
+        trigger: 'manual'
+      });
+      if (_clickTime++ === 0) {
+        _target.popover('show');
+        _timer = setTimeout(() => {
+          _target.popover('hide');
+          _clickTime = 0;
+        }, 3000);
+      } else {
+        this.props.onDelete(id);
+        _target.popover('hide');
+        clearTimeout(_timer);
+      }
+    }
+  };
+
   render() {
+    const { isUpdating, users } = this.props;
     return (
-      <Table className={insideCss.userTable} columns={this.state.columns} dataSource={this.props.users} />
+      <Table 
+        style={isUpdating ? {opacity: .5, pointEvent: 'none'} : {}}
+        className={insideCss.userTable} 
+        columns={this.state.columns} 
+        dataSource={users} />
     )
   }
 }
+
+UsersTable.PropTypes = {
+  users: PropTypes.array.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  isUpdating: PropTypes.bool.isRequired
+};

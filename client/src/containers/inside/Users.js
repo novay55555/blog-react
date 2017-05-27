@@ -7,7 +7,7 @@ import Error from '../../components/common/Error'
 import Loading from '../../components/common/Loading'
 import Pagination from '../../components/common/Pagination'
 import Modal from '../../components/inside/UserModal'
-import { fetchUsers, fetchUsersByName, getEditUserData, fetchEditUser } from '../../actions/inside'
+import { fetchUsers, fetchUsersByName, getEditUserData, fetchEditUser, fetchDeleteUser } from '../../actions/inside'
 import { showModal, hideModal } from '../../actions/account'
 
 class Users extends Component {
@@ -28,6 +28,8 @@ class Users extends Component {
 
   handleEditUser = (id, password, email) => this.props.dispatch(fetchEditUser(id, password, email, this.handleHideModal));
 
+  handleDeleteUser = id => this.props.dispatch(fetchDeleteUser(id));
+
   render() {
     const { items, page, total, isFetching, isEditing, isDeleting, errMsg, searchName, activeModal, editUser } = this.props;
     return (
@@ -37,7 +39,7 @@ class Users extends Component {
           errMsg ? <Error msg={errMsg} />
             : (isFetching ? <Loading /> :
               <div>
-                <Table users={items} onEdit={this.handleShowModal} />
+                <Table users={items} onEdit={this.handleShowModal} onDelete={this.handleDeleteUser} isUpdating={isDeleting} />
                 <div style={{ textAlign: 'center' }}>
                   <Pagination maxPage={total} currentPage={page} onClick={page => searchName ? this.handleGetUsersByName(searchName, page) : this.handleGetUsers(page)} />
                 </div>

@@ -317,3 +317,14 @@ export const fetchEditUser = (id, password, email, callback) => (dispatch, getSt
       notification({ type: 'error', message: errMsg });
     });
 };
+
+export const fetchDeleteUser = id => (dispatch, getState) => {
+  const users = getState().inside.users.items;
+  dispatch(deletingUser());
+  get(`${userApi.delete(id)}`)
+    .done(data => dispatch(deletedUser(users, id)))
+    .fail(errMsg => {
+      dispatch(errorDeleteUser());
+      notification({ type: 'error', message: errMsg });
+    });
+};

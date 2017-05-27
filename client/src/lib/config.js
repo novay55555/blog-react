@@ -22,7 +22,8 @@ const config = {
     users: {
       lists: page => `/api/inside/users/${page}`,
       searchByName: (name, page) => `/api/inside/users/search/${name}/${page}`,
-      edit: `/api/user-edit`
+      edit: `/api/user-edit`,
+      delete: id => `/api/user-delete/${id}`
     }
   }
 };

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 export default class Table extends Component {
   render() {
-    const { columns, dataSource, className } = this.props;
+    const { columns, dataSource, className, ...props } = this.props;
     return (
-      <table className={`table ${className}`}>
+      <table className={`table ${className}`} {...props}>
 				<thead>
 					<tr>
 						{
