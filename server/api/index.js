@@ -40,6 +40,13 @@ Api.get('/api/types/articles', (req, res) => {
   });
 });
 
+Api.get('/api/article/:id', function (req, res) {
+  Article.findById(req.params.id, function (err, article) {
+    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+    res.json({ code: apiStatus.success.code, content: article });
+  });
+});
+
 /**
  * @callback 文章搜索(标题)
  * 
@@ -295,6 +302,26 @@ Api.get('/api/article-delete/:id', (req, res) => {
 });
 
 /**
+ * @callback 获取用户列表
+ * 
+ * @param {number} page 分页页码
+ */
+Api.get('/api/inside/users/:page', (req, res) => {
+  checkAdmin(req.session).then(() => {
+    const page = parseInt(req.params.page);
+    User.find((err, users) => {
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      const data = {
+        total: users.length,
+        page: page,
+        users: users.splice((page - 1) * 10, 10)
+      };
+      res.json({ code: apiStatus.success.code, content: data });
+    });
+  }).catch(err => res.json(err));
+});
+
+/**
  * @callback 编辑用户密码, 邮箱
  * 
  * @param {number}  id         用户id
@@ -330,13 +357,21 @@ Api.get('/api/user-delete/:id', (req, res) => {
 /**
  * @callback 搜索用户
  * 
- * @param {string}  name   用户名
+ * @param {string} name   用户名
+ * @param {number} page   分页页码
  */
-Api.get('/api/search-user/:name', (req, res) => {
+Api.get('/api/inside/users/search/:name/:page', (req, res) => {
   checkAdmin(req.session).then(() => {
+    const page = parseInt(req.params.page);
+    const condition = new RegExp(req.params.name, 'i');
     User.find({ name: condition }, (err, users) => {
       if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      res.json({ code: apiStatus.success.code, content: users });
+      const data = {
+        page: page,
+        total: users.length,
+        users: users.splice((page - 1) * 10, 10)
+      };
+      res.json({ code: apiStatus.success.code, content: data });
     });
   }).catch(err => res.json(err));
 });
