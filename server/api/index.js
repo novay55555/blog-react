@@ -31,12 +31,24 @@ Api.get('/api/articles/:page', (req, res) => {
 
 /**
  * @callback 获取文章类型
- * 
  */
 Api.get('/api/types/articles', (req, res) => {
   ArticleTypes.find((err, types) => {
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
     res.json({ code: apiStatus.success.code, content: types[0].type });
+  });
+});
+
+
+/**
+ * @callback 获取文章内容
+ * 
+ * @param {number} id 文章id
+ */
+Api.get('/api/article/:id', function (req, res) {
+  Article.findById(req.params.id, function (err, article) {
+    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+    res.json({ code: apiStatus.success.code, content: article });
   });
 });
 
