@@ -39,7 +39,6 @@ Api.get('/api/types/articles', (req, res) => {
   });
 });
 
-
 /**
  * @callback 获取文章内容
  * 
@@ -307,6 +306,26 @@ Api.get('/api/article-delete/:id', (req, res) => {
 });
 
 /**
+ * @callback 获取用户列表
+ * 
+ * @param {number} page 分页页码
+ */
+Api.get('/api/inside/users/:page', (req, res) => {
+  checkAdmin(req.session).then(() => {
+    const page = parseInt(req.params.page);
+    User.find((err, users) => {
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      const data = {
+        total: users.length,
+        page: page,
+        users: users.splice((page - 1) * 10, 10)
+      };
+      res.json({ code: apiStatus.success.code, content: data });
+    });
+  }).catch(err => res.json(err));
+});
+
+/**
  * @callback 编辑用户密码, 邮箱
  * 
  * @param {number}  id         用户id
@@ -342,80 +361,51 @@ Api.get('/api/user-delete/:id', (req, res) => {
 /**
  * @callback 搜索用户
  * 
- * @param {string}  name   用户名
+ * @param {string} name   用户名
+ * @param {number} page   分页页码
  */
-Api.get('/api/search-user/:name', (req, res) => {
+Api.get('/api/inside/users/search/:name/:page', (req, res) => {
   checkAdmin(req.session).then(() => {
+    const page = parseInt(req.params.page);
+    const condition = new RegExp(req.params.name, 'i');
     User.find({ name: condition }, (err, users) => {
       if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      res.json({ code: apiStatus.success.code, content: users });
+      const data = {
+        page: page,
+        total: users.length,
+        users: users.splice((page - 1) * 10, 10)
+      };
+      res.json({ code: apiStatus.success.code, content: data });
     });
   }).catch(err => res.json(err));
 });
 
-/**
- * @callback 修改管理员帐号
- * 
- * @param {string} name 帐号名
- */
-Api.get('/api/change-admin-account/:name', (req, res) => {
+Api.post('/api/inside/blog', (req, res) => {
   checkAdmin(req.session).then(() => {
-    const newAccount = req.params.name;
-    User.findOneAndUpdate({ role: 0 }, { name: newAccount }, (err, doc) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      req.session.username = newAccount;
-      Article.update({ author: doc.name }, { author: newAccount }, { multi: true }, (err) => {
-        if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-        res.json({ code: apiStatus.success.code, content: { username: req.session.username } });
+    const {admin, types} = req.params;
+    let adminInfo = { name: admin.name, email: admin.email };
+    if (admin.password) adminInfo.password = admin.password;
+    const adminUpdate = new Promise((resolve, reject) => {
+      User.findOneAndUpdate({ role: 0 }, adminInfo, (err, doc) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        req.session.username = adminInfo.name;
+        resolve(doc);
+      });
+    }).then(doc => {
+      Article.update({ author: doc.name }, { author: adminInfo.name }, { multi: true }, err => {
+        if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        return Promise.resolve({ code: apiStatus.success.code, content: { username: adminInfo.name } });
       });
     });
-  }).catch(err => res.json(err));
-});
-
-/**
- * @callback 修改管理员密码
- * 
- * @param {string} password md5后的密码
- */
-Api.post('/api/change-admin-password/', (req, res) => {
-  checkAdmin(req.session).then(() => {
-    User.update({ role: 0 }, { password: req.body.password }, (err) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      res.json({ code: apiStatus.success.code });
+    const typesUpdate = new Promise((resolve, reject) => {
+      ArticleTypes.findOneAndUpdate({ _id: ObjectId(types.id) }, { type: types.data }, err => {
+        if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        return Promise.resolve({ code: apiStatus.success.code, content: doc.type });
+      });
     });
+    Promise.all(adminUpdate(), typesUpdate()).then((adminData, typesData) => res.json({code: apiStatus.success.code, content: ''}));
   }).catch(err => res.json(err));
-});
-
-/**
- * @callback 新增文章类型
- * 
- * @param {string} id 保存所有文章类型数据的id
- * @param {string} name 文章类型名
- */
-Api.get('/api/add-article-type/:id/:name', (req, res) => {
-  checkAdmin(req.session).then(() => {
-    ArticleTypes.findOneAndUpdate({ _id: ObjectId(req.params.id) }, { $push: { type: req.params.name } }, { new: true }, (err, doc) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      res.json({ code: apiStatus.success.code, content: doc.type });
-    });
-  }).catch(err => res.json(err));
-});
-
-/**
- * @callback 删除文章类型
- * 
- * @param {string} id 保存所有文章类型数据的id
- * @param {string} name 文章类型名
- */
-Api.get('/api/del-article-type/:id/:name', (req, res) => {
-  checkAdmin(req.session).then(() => {
-    ArticleTypes.findOneAndUpdate({ _id: ObjectId(req.params.id) }, { $pull: { type: req.params.name } }, { new: true }, (err, doc) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      res.json({ code: apiStatus.success.code, content: doc.type });
-    });
-  }).catch(err => res.json(err));
-});
-
+})
 
 Api.use((req, res) => {
   res.status(404).send(apiStatus.notFount.msg);
@@ -423,7 +413,7 @@ Api.use((req, res) => {
 
 Api.use((err, req, res) => {
   console.error(err.stack);
-  res.status(500).json(apiStatus.error.msg);
+  res.status(500).send(apiStatus.error.msg);
 });
 
 module.exports = Api;
