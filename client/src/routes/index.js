@@ -8,6 +8,7 @@ import NonePage from '../components/common/404'
 import Inside from '../containers/Inside'
 import InsideArticles from '../containers/inside/Articles'
 import InsideUsers from '../containers/inside/Users'
+import InsideAdmin from '../containers/inside/Admin'
 
 const routes = (
   <Route path='/'>
@@ -26,6 +27,7 @@ const routes = (
       <IndexRedirect to='/inside-world/articles' />
       <Route path='articles' component={InsideArticles}></Route>
       <Route path='users' component={InsideUsers}></Route>
+      <Route path='admin' component={InsideAdmin}></Route>
     </Route>
     <Route component={Blog}>
       <Route path='*' component={NonePage}></Route>

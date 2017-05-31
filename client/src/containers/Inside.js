@@ -18,6 +18,10 @@ export default class Inside extends Component {
             {
               text: '用户管理',
               path: '/inside-world/users'
+            },
+            {
+              text: '博客管理',
+              path: '/inside-world/admin'
             }
           ]} />
         <main>

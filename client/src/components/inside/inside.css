@@ -133,6 +133,49 @@
   font-size: 26px;
 }
 
+.admin-form :global(.label){
+  margin-right: 5px;
+  font-size: 14px;
+  color: #5bc0de;
+  border: 1px solid #5bc0de;
+}
+.admin-form :global(.label)>a{
+  top: 0;
+  margin-left: 5px;
+  vertical-align: middle;
+  color: #5bc0de;
+}
+.admin-form :global(.label)>a:hover{
+  color: #d9534f;
+}
+.admin-form :global(.form-group):last-of-type{
+  text-align: right;
+}
+.admin-form :global(.types-add){
+  position: relative;
+  margin-bottom: 0;
+  width: 64px;
+  height: 34px;
+  float: right;
+  overflow: hidden;
+  text-align: right;
+  transition: width .25s ease-in-out;
+}
+.admin-form :global(.types-add.active){
+  width: 269px;
+}
+.admin-form :global(.types-add)>a{
+  display: inline-block;
+  line-height: 34px;
+}
+.admin-form :global(.types-add)>input{
+  position: absolute;
+  top: 0;
+  right: 69px;
+  display: inline-block;
+  max-width: 200px;
+}
+
 @media (max-width: 480px) {
   .articles>tbody>tr>td:nth-child(2),
   .articles>tbody>tr>td:nth-child(3),

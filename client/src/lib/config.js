@@ -24,7 +24,8 @@ const config = {
       searchByName: (name, page) => `/api/inside/users/search/${name}/${page}`,
       edit: `/api/user-edit`,
       delete: id => `/api/user-delete/${id}`
-    }
+    },
+    blog: () => `/api/inside/blog`
   }
 };
 

@@ -328,3 +328,14 @@ export const fetchDeleteUser = id => (dispatch, getState) => {
       notification({ type: 'error', message: errMsg });
     });
 };
+
+// TODO: 更新博客api
+// export const fetchUpdateBlog = (admin, types) => dispatch => {
+//   if(!admin.password.trim())  admin.password = md5(admin.password);
+//   const data = {};
+//   data.admin = admin;
+//   data.types = types;
+//   post(`${config.api.blog}`, data)
+//     .done(() => notification({message: '更新成功'}))
+//     .fail(errMsg => notification({type: 'error', message: errMsg}));
+// };
