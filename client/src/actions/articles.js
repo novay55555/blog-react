@@ -74,12 +74,13 @@ const gettingArticleTypes = () => ({
   type: actionTypes.GETTING_ARTICLE_TYPES
 });
 
-const gotArticleTypes = types => ({
+const gotArticleTypes = typeItem => ({
   type: actionTypes.GOT_ARTICLE_TYPES,
-  items: types.map(type => ({
+  items: typeItem.type.map(type => ({
     link: `/articles/${type}/1`,
     text: type
-  }))
+  })),
+  id: typeItem._id
 });
 
 const errGetArticleTypes = errMsg => ({

@@ -79,7 +79,8 @@ const types = (state = { items: [] }, action) => {
       return {
         ...state,
         isFetching: false,
-        items: action.items
+        items: action.items,
+        id: action.id
       };
     case articleActionTypes.ERROR_GET_ARTICLE_TYPES:
       return {

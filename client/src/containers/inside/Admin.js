@@ -15,20 +15,21 @@ class Admin extends Component {
   handleSubmit = updateData => this.props.dispatch(fetchUpdateBlog(updateData));
 
   render() {
-    const { admin, types, typesIsFetching } = this.props;
+    const { admin, types, typesIsFetching, typesId } = this.props;
     return (
-      <Form account={admin.name} email={admin.email} types={types} isFetching={typesIsFetching} onSubmit={this.handleSubmit} />
+      <Form account={admin.name} email={admin.email} types={types} typesId={typesId} isFetching={typesIsFetching} onSubmit={this.handleSubmit} />
     )
   }
 }
 
 const mapStateToProps = state => {
   const { item: admin } = state.inside.admin;
-  const { items: types, isFetching: typesIsFetching } = state.articles.types;
+  const { items: types, isFetching: typesIsFetching, id: typesId } = state.articles.types;
   return {
     admin,
     types: types.map(type => type.text),
-    typesIsFetching
+    typesIsFetching,
+    typesId
   };
 };
 

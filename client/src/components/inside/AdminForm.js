@@ -14,7 +14,8 @@ export default class AdminForm extends Component {
       accountValidator: null,
       emailValidator: null,
       types: props.types || [],
-      typeValue: ''
+      typeValue: '',
+      typesId: props.typesId || ''
     };
   }
 
@@ -46,7 +47,7 @@ export default class AdminForm extends Component {
   };
 
   handleSubmit = () => {
-    const { account, password, email, accountValidator, emailValidator, types } = this.state;
+    const { account, password, email, accountValidator, emailValidator, types, typesId } = this.state;
     const [accountIsPass, emailIsPass] = [accountValidator.start(), emailValidator.start()];
     if (accountIsPass && emailIsPass) {
       this.props.onSubmit({
@@ -56,7 +57,7 @@ export default class AdminForm extends Component {
           email
         },
         types: {
-          id: '56f47bda86cc773ceb4f0301', // TODO: 后台需要返回types的id
+          id: typesId, 
           data: types
         }
       })
