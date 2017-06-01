@@ -14,7 +14,7 @@ export default class ArticleContent extends Component {
     const { className, article } = this.props;
     const html = marked(article.content || '');
     return (
-      <div className={`animated fadeIn ${articleCss.content} ${className || ''}`}>
+      <div className={`animated fadeIn ${articleCss.content}`}>
         <h2>{article.title}</h2>
         <p>
           <span>作者: {article.author}</span>
@@ -26,3 +26,13 @@ export default class ArticleContent extends Component {
     )
   }
 }
+
+ArticleContent.PropTypes = {
+  article: PropTypes.objectOf({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    articleType: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired
+  }).isRequired
+};

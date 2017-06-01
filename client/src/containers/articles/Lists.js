@@ -41,7 +41,7 @@ class ArticleLists extends Component {
           (
             isEmpty ? <div>没有更多了啦(= =##)</div> :
               <div>
-                <Lists className={articlesCss.list} articles={articles} />
+                <Lists articles={articles} />
                 <div style={{ textAlign: 'center' }}>
                   <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
                 </div>

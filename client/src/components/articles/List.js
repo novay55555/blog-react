@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router'
+import articleCss from './articles.css'
 
 export default class ArticleLists extends Component {
   render() {
-    const { className, articles } = this.props;
+    const { articles } = this.props;
     return (
-      <ul className={`list-group ${className || ''}`}>
+      <ul className={`list-group ${articleCss.list}`}>
         {
           articles.map((article, i) => (
             <li key={i}>
@@ -28,7 +29,6 @@ export default class ArticleLists extends Component {
 }
 
 ArticleLists.PropTypes = {
-  className: PropTypes.string,
   articles: PropTypes.arrayOf({
     link: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,

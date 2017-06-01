@@ -35,5 +35,6 @@ export default connect(mapStateToProps)(ArticleContent)
 
 ArticleContent.PropTypes = {
   item: PropTypes.object.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  isFetching: PropTypes.bool.isRequired,
+  errMsg: PropTypes.string
 };
