@@ -12,6 +12,16 @@ const config = require('../lib/config');
 const apiStatus = config.api;
 
 /**
+ * @callback 获取文章类型
+ */
+Api.get('/api/articles/types', (req, res) => {
+  ArticleTypes.find((err, types) => {
+    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+    res.json({ code: apiStatus.success.code, content: types[0] });
+  });
+});
+
+/**
  * @callback 获取文章
  * 
  * @param {number} page 页码数
@@ -40,15 +50,6 @@ Api.get('/api/articles/:page', (req, res) => {
   }).catch(reason => res.json({ code: apiStatus.databaseError.code, msg: reason }));
 });
 
-/**
- * @callback 获取文章类型
- */
-Api.get('/api/types/articles', (req, res) => {
-  ArticleTypes.find((err, types) => {
-    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-    res.json({ code: apiStatus.success.code, content: types[0] });
-  });
-});
 
 /**
  * @callback 获取文章内容
@@ -68,7 +69,7 @@ Api.get('/api/article/:id', function (req, res) {
  * @param {string} title 搜索的标题
  * @param {number} page 分页页码
  */
-Api.get('/api/search/title/:title/:page', (req, res) => {
+Api.get('/api/articles/search/title/:title/:page', (req, res) => {
   const page = parseInt(req.params.page);
   const condition = new RegExp(req.params.title, 'i');
   const articlesPromise = new Promise((resolve, reject) => {
@@ -99,7 +100,7 @@ Api.get('/api/search/title/:title/:page', (req, res) => {
  * @param {string} type 搜索的类型
  * @param {number} page 分页页码
  */
-Api.get('/api/search/type/:type/:page', (req, res) => {
+Api.get('/api/articles/search/type/:type/:page', (req, res) => {
   const page = parseInt(req.params.page);
   const condition = new RegExp(req.params.type, 'i');
   const articlesPromise = new Promise((resolve, reject) => {
@@ -266,7 +267,7 @@ Api.get('/api/inside/articles/:page', (req, res) => {
  * @param {string} title 搜索的标题
  * @param {number} page 分页页码
  */
-Api.get('/api/inside/search/title/:title/:page', (req, res) => {
+Api.get('/api/inside/articles/search/title/:title/:page', (req, res) => {
   const page = parseInt(req.params.page);
   checkAdmin(req.session).then(() => {
     const condition = new RegExp(req.params.title, 'i');
@@ -307,7 +308,7 @@ Api.get('/api/inside/search/title/:title/:page', (req, res) => {
  * @param {string} req.body.articleType 文章类型
  * @param {string} req.body.content 文章内容
  */
-Api.post('/api/article-publish', (req, res) => {
+Api.post('/api/inside/article/publish', (req, res) => {
   for (let x in req.body) {
     if (!req.body[x]) {
       return res.json({ code: apiStatus.paramsRequired.code, msg: apiStatus.paramsRequired.msg })
@@ -334,7 +335,7 @@ Api.post('/api/article-publish', (req, res) => {
  * @param {string} req.body.articleType 文章类型
  * @param {string} req.body.content 文章内容
  */
-Api.post('/api/article-update/:id', (req, res) => {
+Api.post('/api/inside/article/update/:id', (req, res) => {
   checkAdmin(req.session).then(() => {
     Article.update({ _id: req.params.id }, {
       title: req.body.title,
@@ -356,7 +357,7 @@ Api.post('/api/article-update/:id', (req, res) => {
  * 
  * @param {number}  id  文章id
  */
-Api.get('/api/article-delete/:id', (req, res) => {
+Api.get('/api/inside/article/delete/:id', (req, res) => {
   checkAdmin(req.session).then(() => {
     Article.remove({ _id: req.params.id }, (err) => {
       if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
@@ -405,7 +406,7 @@ Api.get('/api/inside/users/:page', (req, res) => {
  * @param {string}  password   密码
  * @param {string}  email      邮箱
  */
-Api.post('/api/user-edit', (req, res) => {
+Api.post('/api/inside/user/edit', (req, res) => {
   checkAdmin(req.session).then(() => {
     User.update({ _id: req.body.id }, {
       password: req.body.password,
@@ -422,7 +423,7 @@ Api.post('/api/user-edit', (req, res) => {
  * 
  * @param {number}  id  用户id
  */
-Api.get('/api/user-delete/:id', (req, res) => {
+Api.get('/api/inside/user/delete/:id', (req, res) => {
   checkAdmin(req.session).then(() => {
     User.remove({ _id: req.params.id }, err => {
       if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
