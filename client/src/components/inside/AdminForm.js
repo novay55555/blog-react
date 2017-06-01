@@ -46,16 +46,19 @@ export default class AdminForm extends Component {
   };
 
   handleSubmit = () => {
-    const {account, password, email, accountValidator, emailValidator, types } = this.state;
+    const { account, password, email, accountValidator, emailValidator, types } = this.state;
     const [accountIsPass, emailIsPass] = [accountValidator.start(), emailValidator.start()];
     if (accountIsPass && emailIsPass) {
       this.props.onSubmit({
-        name: account,
-        password,
-        email
-      }, {
-        id: '999',
-        data: types
+        admin: {
+          name: account,
+          password,
+          email
+        },
+        types: {
+          id: '56f47bda86cc773ceb4f0301',
+          data: types
+        }
       })
     }
   }
@@ -67,6 +70,7 @@ export default class AdminForm extends Component {
         <Input
           label='管理员帐号'
           placeholder='管理员帐号'
+          value={account}
           validates={
             [
               {
@@ -75,15 +79,18 @@ export default class AdminForm extends Component {
               }
             ]
           }
-          getValidator={accountValidator => this.setState({ accountValidator })} />
+          getValidator={accountValidator => this.setState({ accountValidator })}
+          onChange={account => this.setState({ account })} />
         <Input
           label='管理员密码'
           type='password'
           placeholder='管理员密码'
-          maxLength='12' />
+          maxLength='12'
+          onChange={password => this.setState({ password })} />
         <Input
           label='管理员邮箱'
           placeholder='管理员邮箱'
+          value={email}
           validates={
             [
               {
@@ -96,7 +103,8 @@ export default class AdminForm extends Component {
               }
             ]
           }
-          getValidator={emailValidator => this.setState({ emailValidator })} />
+          getValidator={emailValidator => this.setState({ emailValidator })}
+          onChange={email => this.setState({ email })} />
         <div className="form-group">
           <label htmlFor="">文章类型</label>
           <p className="types-add">
@@ -122,7 +130,7 @@ export default class AdminForm extends Component {
           </p>
         </div>
         <div className='form-group'>
-          <button className='btn btn-primary' onClick={this.handleSubmit}>Submit</button>
+          <button className='btn btn-info' onClick={this.handleSubmit}>Submit</button>
         </div>
       </form>
     )

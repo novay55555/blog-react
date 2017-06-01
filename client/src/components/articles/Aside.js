@@ -9,7 +9,7 @@ export default class Aside extends Component {
   render() {
     const { lists } = this.props;
     return (
-      <Panel className={articlesCss.types} title='文章分类' type='info'>
+      <Panel className={articlesCss.types} title='文章分类'>
         <ArticleTypeList lists={lists} />
       </Panel>
     )

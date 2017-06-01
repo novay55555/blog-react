@@ -1,30 +1,30 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import Form from '../../components/inside/AdminForm'
-import {fetchArticleTypes} from '../../actions/articles'
-import {fetchUpdateBlog} from '../../actions/inside'
+import { fetchArticleTypes } from '../../actions/articles'
+import { fetchUpdateBlog } from '../../actions/inside'
 
-class Admin extends Component{
-  componentWillMount(){
-    const {username, types, dispatch} = this.props;
+class Admin extends Component {
+  componentWillMount() {
+    const { username, types, dispatch } = this.props;
     // if(!username) dispatch();
-    if(types.length === 0) dispatch(fetchArticleTypes());
+    if (types.length === 0) dispatch(fetchArticleTypes());
   }
 
-  handleSubmit = (adminData, typesData) => this.props.dispatch(fetchUpdateBlog(adminData, typesData));
+  handleSubmit = updateData => this.props.dispatch(fetchUpdateBlog(updateData));
 
-  render(){
-    const {username, types, typesIsFetching} = this.props;
-    return(
-      <Form account={username} email={'blala'} types={types} isFetching={typesIsFetching} onSubmit={this.handleSubmit} />
+  render() {
+    const { username, types, typesIsFetching } = this.props;
+    return (
+      <Form account={username} email='123@qq.com' types={types} isFetching={typesIsFetching} onSubmit={this.handleSubmit} />
     )
   }
 }
 
 const mapStateToProps = state => {
-  const {username} = state.account;
-  const {items: types, isFetching: typesIsFetching} = state.articles.types;
+  const { username } = state.account;
+  const { items: types, isFetching: typesIsFetching } = state.articles.types;
   return {
     username,
     types: types.map(type => type.text),
