@@ -380,11 +380,22 @@ Api.get('/api/inside/users/search/:name/:page', (req, res) => {
   }).catch(err => res.json(err));
 });
 
+/**
+ * @callback 更新博客
+ * 
+ * @param {object} req.body 博客更新的数据
+ * @param {object} req.body.admin 管理员帐号数据
+ * @param {string} req.body.admin.name 帐号
+ * @param {string} req.body.admin.password 密码(可选)
+ * @param {string} req.body.admin.email 邮箱
+ * @param {object} req.body.types 文章类型数据
+ * @param {string} req.body.types.id 文章类型的ObjectId
+ * @param {array} req.body.types.data 文章类型集合
+ */
 Api.post('/api/inside/blog', (req, res) => {
   checkAdmin(req.session).then(() => {
-    const {admin, types} = req.params;
+    const { admin, types } = req.body;
     let adminInfo = { name: admin.name, email: admin.email };
-    if (admin.password) adminInfo.password = admin.password;
     const adminUpdate = new Promise((resolve, reject) => {
       User.findOneAndUpdate({ role: 0 }, adminInfo, (err, doc) => {
         if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
@@ -394,17 +405,19 @@ Api.post('/api/inside/blog', (req, res) => {
     }).then(doc => {
       Article.update({ author: doc.name }, { author: adminInfo.name }, { multi: true }, err => {
         if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-        return Promise.resolve({ code: apiStatus.success.code, content: { username: adminInfo.name } });
+        return Promise.resolve();
       });
     });
     const typesUpdate = new Promise((resolve, reject) => {
       ArticleTypes.findOneAndUpdate({ _id: ObjectId(types.id) }, { type: types.data }, err => {
-        if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-        return Promise.resolve({ code: apiStatus.success.code, content: doc.type });
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve();
       });
     });
-    Promise.all(adminUpdate(), typesUpdate()).then((adminData, typesData) => res.json({code: apiStatus.success.code, content: ''}));
-  }).catch(err => res.json(err));
+    return Promise.all([adminUpdate, typesUpdate]);
+  })
+    .then(() => res.json({ code: apiStatus.success.code, content: {} }))
+    .catch(err => res.json(err));
 })
 
 Api.use((req, res) => {
