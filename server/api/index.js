@@ -8,7 +8,7 @@ const ArticleTypes = require('../models/article-types');
 const ObjectId = require('mongoose').Types.ObjectId;
 const Comment = require('../models/comment');
 const credenticals = require('../credenticals');
-const config = require('../config');
+const config = require('../lib/config');
 const apiStatus = config.api;
 
 /**
@@ -34,7 +34,6 @@ Api.get('/api/articles/:page', (req, res) => {
  */
 Api.get('/api/types/articles', (req, res) => {
   ArticleTypes.find((err, types) => {
-    console.log(types)
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
     res.json({ code: apiStatus.success.code, content: types[0] });
   });

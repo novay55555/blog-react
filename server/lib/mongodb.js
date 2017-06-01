@@ -1,6 +1,8 @@
-var mongoose = require('mongoose');
-module.exports = function(app, credenticals) {
-  var mongooseOpt = {
+const mongoose = require('mongoose');
+const credenticals = require('../credenticals');
+
+module.exports = function(app) {
+  const mongooseOpt = {
     server: {
       socketOptions: { keepAlive: 1 }
     }
