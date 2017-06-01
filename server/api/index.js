@@ -18,15 +18,26 @@ const apiStatus = config.api;
  */
 Api.get('/api/articles/:page', (req, res) => {
   const page = parseInt(req.params.page);
-  Article.find((err, articles) => {
-    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-    const data = {
-      total: articles.length, // TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
+  const articlesPromise = new Promise((resolve, reject) => {
+    Article.find((err, articles) => {
+      if (err) return reject(apiStatus.databaseError.msg);
+      resolve(articles);
+    }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
+  });
+  const countPromise = new Promise((resolve, reject) => {
+    Article.count({}, (err, count) => {
+      if (err) return reject(apiStatus.databaseError.msg);
+      resolve(count);
+    });
+  });
+  Promise.all([articlesPromise, countPromise]).then(data => {
+    const result = {
+      total: data[1],
       page: page,
-      articles: articles.splice((page - 1) * 10, 10)
+      articles: data[0]
     };
-    res.json({ code: apiStatus.success.code, content: data })
-  }).sort({ date: -1 });
+    res.json({ code: apiStatus.success.code, content: result });
+  }).catch(reason => res.json({ code: apiStatus.databaseError.code, msg: reason }));
 });
 
 /**
@@ -44,8 +55,8 @@ Api.get('/api/types/articles', (req, res) => {
  * 
  * @param {number} id 文章id
  */
-Api.get('/api/article/:id', function(req, res) {
-  Article.findById(req.params.id, function(err, article) {
+Api.get('/api/article/:id', function (req, res) {
+  Article.findById(req.params.id, function (err, article) {
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
     res.json({ code: apiStatus.success.code, content: article });
   });
@@ -60,15 +71,26 @@ Api.get('/api/article/:id', function(req, res) {
 Api.get('/api/search/title/:title/:page', (req, res) => {
   const page = parseInt(req.params.page);
   const condition = new RegExp(req.params.title, 'i');
-  Article.find({ title: condition }, (err, articles) => {
-    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-    const data = {
-      total: articles.length,
+  const articlesPromise = new Promise((resolve, reject) => {
+    Article.find({ title: condition }, (err, articles) => {
+      if (err) return reject(apiStatus.databaseError.msg);
+      resolve(articles);
+    }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
+  });
+  const countPromise = new Promise((resolve, reject) => {
+    Article.count({ title: condition }, (err, count) => {
+      if (err) return reject(apiStatus.databaseError.msg);
+      resolve(count);
+    });
+  });
+  Promise.all([articlesPromise, countPromise]).then(data => {
+    const result = {
+      total: data[1],
       page: page,
-      articles: articles.splice((page - 1) * 10, 10)
+      articles: data[0]
     };
-    res.json({ code: apiStatus.success.code, content: data });
-  }).sort({ date: -1 });
+    res.json({ code: apiStatus.success.code, content: result });
+  }).catch(reason => res.json({ code: apiStatus.databaseError.code, msg: reason }));
 });
 
 /**
@@ -80,15 +102,26 @@ Api.get('/api/search/title/:title/:page', (req, res) => {
 Api.get('/api/search/type/:type/:page', (req, res) => {
   const page = parseInt(req.params.page);
   const condition = new RegExp(req.params.type, 'i');
-  Article.find({ articleType: condition }, (err, articles) => {
-    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-    const data = {
-      total: articles.length,
+  const articlesPromise = new Promise((resolve, reject) => {
+    Article.find({ articleType: condition }, (err, articles) => {
+      if (err) return reject(apiStatus.databaseError.msg);
+      resolve(articles);
+    }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
+  });
+  const countPromise = new Promise((resolve, reject) => {
+    Article.count({ articleType: condition }, (err, count) => {
+      if (err) return reject(apiStatus.databaseError.msg);
+      resolve(count);
+    });
+  });
+  Promise.all([articlesPromise, countPromise]).then(data => {
+    const result = {
+      total: data[1],
       page: page,
-      articles: articles.splice((page - 1) * 10, 10)
+      articles: data[0]
     };
-    res.json({ code: apiStatus.success.code, content: data });
-  }).sort({ date: -1 });
+    res.json({ code: apiStatus.success.code, content: result });
+  }).catch(reason => res.json({ code: apiStatus.databaseError.code, msg: reason }));
 });
 
 /**
@@ -199,18 +232,32 @@ Api.post('/api/register', (req, res) => {
  * @param {number} page 分页页码
  */
 Api.get('/api/inside/articles/:page', (req, res) => {
+  const page = parseInt(req.params.page);
   checkAdmin(req.session).then(() => {
-    const page = parseInt(req.params.page);
-    Article.find((err, articles) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      const data = {
-        total: articles.length, // TODO: 这种总数量的取值性能绝对差, 以后要优化, 搜索接口同理
+    const articlesPromise = new Promise((resolve, reject) => {
+      Article.find((err, articles) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(articles);
+      }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
+    });
+    const countPromise = new Promise((resolve, reject) => {
+      Article.count({}, (err, count) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(count);
+      });
+    });
+    return Promise.all([articlesPromise, countPromise]);
+  })
+    .then(data => {
+      const result = {
+        total: data[1],
         page: page,
-        articles: articles.splice((page - 1) * 10, 10)
+        articles: data[0]
       };
-      res.json({ code: apiStatus.success.code, content: data })
-    }).sort({ date: -1 });
-  }).catch(err => res.json(err));
+      res.json({ code: apiStatus.success.code, content: result });
+    })
+    .catch(err =>
+      res.json(err));
 });
 
 /**
@@ -220,21 +267,34 @@ Api.get('/api/inside/articles/:page', (req, res) => {
  * @param {number} page 分页页码
  */
 Api.get('/api/inside/search/title/:title/:page', (req, res) => {
+  const page = parseInt(req.params.page);
   checkAdmin(req.session).then(() => {
-    const page = parseInt(req.params.page);
     const condition = new RegExp(req.params.title, 'i');
-    Article.find({ title: condition }, (err, articles) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      const data = {
-        total: articles.length,
+    const articlesPromise = new Promise((resolve, reject) => {
+      Article.find({ title: condition }, (err, articles) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(articles);
+      }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
+    });
+    const countPromise = new Promise((resolve, reject) => {
+      Article.count({ title: condition }, (err, count) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(count);
+      });
+    });
+    return Promise.all([articlesPromise, countPromise]);
+  })
+    .then(data => {
+      const result = {
+        total: data[1],
         page: page,
-        articles: articles.splice((page - 1) * 10, 10)
+        articles: data[0]
       };
-      res.json({ code: apiStatus.success.code, content: data });
-    }).sort({ date: -1 });
-  }).catch(err => res.json(err));
+      res.json({ code: apiStatus.success.code, content: result });
+    })
+    .catch(err =>
+      res.json(err));
 });
-
 
 /**
  * @callback 文章发表
@@ -311,18 +371,31 @@ Api.get('/api/article-delete/:id', (req, res) => {
  * @param {number} page 分页页码
  */
 Api.get('/api/inside/users/:page', (req, res) => {
+  const page = parseInt(req.params.page);
   checkAdmin(req.session).then(() => {
-    const page = parseInt(req.params.page);
-    User.find((err, users) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      const data = {
-        total: users.length,
-        page: page,
-        users: users.splice((page - 1) * 10, 10)
-      };
-      res.json({ code: apiStatus.success.code, content: data });
+    const usersPromise = new Promise((resolve, reject) => {
+      User.find({role: 1}, (err, articles) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(articles);
+      }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
     });
-  }).catch(err => res.json(err));
+    const countPromise = new Promise((resolve, reject) => {
+      User.count({role: 1}, (err, count) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(count);
+      });
+    });
+    return Promise.all([usersPromise, countPromise]);
+  })
+    .then(data => {
+      const result = {
+        total: data[1],
+        page: page,
+        users: data[0]
+      };
+      res.json({ code: apiStatus.success.code, content: result });
+    })
+    .catch(err => res.json(err));
 });
 
 /**
@@ -365,19 +438,32 @@ Api.get('/api/user-delete/:id', (req, res) => {
  * @param {number} page   分页页码
  */
 Api.get('/api/inside/users/search/:name/:page', (req, res) => {
+  const page = parseInt(req.params.page);
   checkAdmin(req.session).then(() => {
-    const page = parseInt(req.params.page);
     const condition = new RegExp(req.params.name, 'i');
-    User.find({ name: condition }, (err, users) => {
-      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-      const data = {
-        page: page,
-        total: users.length,
-        users: users.splice((page - 1) * 10, 10)
-      };
-      res.json({ code: apiStatus.success.code, content: data });
+    const usersPromise = new Promise((resolve, reject) => {
+      User.find({ name: condition, role: 1 }, (err, articles) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(articles);
+      }).sort({ date: -1 }).limit(10).skip((page - 1) * 10);
     });
-  }).catch(err => res.json(err));
+    const countPromise = new Promise((resolve, reject) => {
+      User.count({ name: condition, role: 1 }, (err, count) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve(count);
+      });
+    });
+    return Promise.all([usersPromise, countPromise]);
+  })
+    .then(data => {
+      const result = {
+        total: data[1],
+        page: page,
+        users: data[0]
+      };
+      res.json({ code: apiStatus.success.code, content: result });
+    })
+    .catch(err => res.json(err));
 });
 
 /**
@@ -394,27 +480,27 @@ Api.get('/api/inside/users/search/:name/:page', (req, res) => {
  */
 Api.post('/api/inside/blog', (req, res) => {
   checkAdmin(req.session).then(() => {
-      const { admin, types } = req.body;
-      const adminUpdate = new Promise((resolve, reject) => {
-        User.findOneAndUpdate({ role: 0 }, admin, (err, doc) => {
-          if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-          req.session.username = admin.name;
-          resolve(doc);
-        });
-      }).then(doc => {
-        Article.update({ author: doc.name }, { author: admin.name }, { multi: true }, err => {
-          if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-          return Promise.resolve();
-        });
+    const { admin, types } = req.body;
+    const adminUpdate = new Promise((resolve, reject) => {
+      User.findOneAndUpdate({ role: 0 }, admin, (err, doc) => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        req.session.username = admin.name;
+        resolve(doc);
       });
-      const typesUpdate = new Promise((resolve, reject) => {
-        ArticleTypes.findOneAndUpdate({ _id: ObjectId(types.id) }, { type: types.data }, err => {
-          if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-          resolve();
-        });
+    }).then(doc => {
+      Article.update({ author: doc.name }, { author: admin.name }, { multi: true }, err => {
+        if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        return Promise.resolve();
       });
-      return Promise.all([adminUpdate, typesUpdate]);
-    })
+    });
+    const typesUpdate = new Promise((resolve, reject) => {
+      ArticleTypes.findOneAndUpdate({ _id: ObjectId(types.id) }, { type: types.data }, err => {
+        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+        resolve();
+      });
+    });
+    return Promise.all([adminUpdate, typesUpdate]);
+  })
     .then(() => res.json({ code: apiStatus.success.code, content: {} }))
     .catch(err => res.json(err));
 });
