@@ -26,6 +26,22 @@ const admin = (state = { item: {}, hasEntered: false }, action) => {
         ...state,
         item: action.getItem()
       };
+    case actionTypes.EDITTING_BLOG:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case actionTypes.EDITED_BLOG:
+      return {
+        ...state,
+        isUpdating: false,
+        item: action.admin
+      };
+    case actionTypes.ERROR_EDIT_BLOG:
+      return {
+        ...state,
+        isUpdating: false
+      };
     default:
       return state;
   }

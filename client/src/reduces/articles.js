@@ -88,6 +88,11 @@ const types = (state = { items: [] }, action) => {
         isFetching: false,
         errMsg: action.errMsg
       }
+    case insideActionTypes.EDITED_BLOG:
+      return {
+        ...state,
+        items: action.types
+      };
     default:
       return state;
   }

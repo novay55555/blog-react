@@ -30,8 +30,28 @@ export const actionTypes = {
   ERROR_DELETE_USER: 'ERROR_DELETE_USER',
   GETTING_USERS_BY_NAME: 'GETTING_USERS_BY_NAME',
   GET_EDITED_USER: 'GET_EDITED_USER',
-  GET_ADMIN: 'GET_ADMIN'
+  GET_ADMIN: 'GET_ADMIN',
+  EDITTING_BLOG: 'EDITTING_BLOG',
+  EDITED_BLOG: 'EDITED_BLOG',
+  ERROR_EDIT_BLOG: 'ERROR_EDIT_BLOG'
 };
+
+const edittingBlog = () => ({
+  type: actionTypes.EDITTING_BLOG
+});
+
+const editedBlog = updateData => ({
+  type: actionTypes.EDITED_BLOG,
+  admin: updateData.admin,
+  types: updateData.types.data.map(type => ({
+    link: `/articles/${type}/1`,
+    text: type
+  }))
+});
+
+const errorEditBlog = () => ({
+  type: actionTypes.ERROR_EDIT_BLOG
+});
 
 const getAdmin = admin => ({
   type: actionTypes.GET_ADMIN,
@@ -344,9 +364,16 @@ export const fetchUpdateBlog = updateData => dispatch => {
   } else {
     delete updateData.admin.password;
   }
+  dispatch(edittingBlog());
   post(`${config.api.blog}`, updateData)
-    .done(() => notification({ message: '更新成功' }))
-    .fail(errMsg => notification({ type: 'error', message: errMsg }));
+    .done(() => {
+      dispatch(editedBlog(updateData));
+      notification({ message: '更新成功' });
+    })
+    .fail(errMsg => {
+      dispatch(errorEditBlog());
+      notification({ type: 'error', message: errMsg })
+    });
 };
 
 export const fetchAdmin = () => dispatch => {

@@ -24,7 +24,8 @@ export default class AdminForm extends Component {
       this.setState({
         account: nextState.account,
         email: nextState.email,
-        types: nextState.types
+        types: nextState.types,
+        typesId: nextState.typesId
       });
     }
   }
@@ -57,7 +58,7 @@ export default class AdminForm extends Component {
           email
         },
         types: {
-          id: typesId, 
+          id: typesId,
           data: types
         }
       })
@@ -65,14 +66,14 @@ export default class AdminForm extends Component {
   }
 
   render() {
-    const { account, password, email, types, typeValue, isFetching } = this.state;
+    const { account, password, email, types, typeValue } = this.state;
+    const { isFetching, isUpdating } = this.props;
     return (
       <form
         style={isFetching ? { opacity: .5, pointerEvents: 'none' } : {}}
         className={insideCss.adminForm}
         onSubmit={e => e.preventDefault()}
-        onKeyDown={e => e.keyCode === 13 && e.preventDefault()}
-        >
+        onKeyDown={e => e.keyCode === 13 && e.preventDefault()} >
         <Input
           label='管理员帐号'
           placeholder='管理员帐号'
@@ -136,7 +137,12 @@ export default class AdminForm extends Component {
           </p>
         </div>
         <div className='form-group'>
-          <button className='btn btn-info' onClick={this.handleSubmit}>Submit</button>
+          <button
+            style={isUpdating ? { opacity: .5, pointerEvents: 'none' } : {}}
+            className='btn btn-info'
+            onClick={this.handleSubmit}>
+            {isUpdating ? 'Submitting...' : 'Submit'}
+          </button>
         </div>
       </form>
     )
