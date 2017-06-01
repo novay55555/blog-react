@@ -34,8 +34,9 @@ Api.get('/api/articles/:page', (req, res) => {
  */
 Api.get('/api/types/articles', (req, res) => {
   ArticleTypes.find((err, types) => {
+    console.log(types)
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-    res.json({ code: apiStatus.success.code, content: types[0].type });
+    res.json({ code: apiStatus.success.code, content: types[0] });
   });
 });
 
@@ -417,7 +418,19 @@ Api.post('/api/inside/blog', (req, res) => {
     })
     .then(() => res.json({ code: apiStatus.success.code, content: {} }))
     .catch(err => res.json(err));
-})
+});
+
+/**
+ * @callback 获取管理员的相关信息
+ */
+Api.get('/api/inside/admin', (req, res) => {
+  checkAdmin(req.session).then(() => {
+    User.findOne({ role: 0 }, (err, admin) => {
+      if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+      res.json({ code: apiStatus.success.code, content: admin });
+    });
+  }).catch(err => res.json(err));
+});
 
 Api.use((req, res) => {
   res.status(404).send(apiStatus.notFount.msg);
