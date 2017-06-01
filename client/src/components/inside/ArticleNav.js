@@ -17,3 +17,8 @@ export default class ArticleNav extends Component {
     )
   }
 }
+
+ArticleNav.PropTypes = {
+  onClick: PropTypes.func.isRequired,
+  activeIndex: PropTypes.number.isRequired
+};

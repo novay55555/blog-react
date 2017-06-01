@@ -153,5 +153,6 @@ AdminForm.PropTypes = {
   account: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   types: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  typesId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired
 };

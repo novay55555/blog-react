@@ -28,7 +28,7 @@ export default class ArticleForm extends Component {
   }
 
   componentWillReceiveProps(nextState) {
-    if (nextState.mode === 'edit') return this.setState(nextState.article);
+    if (nextState.mode === 'edit' && (this.props.mode !== nextState.mode)) return this.setState(nextState.article);
     if (nextState.mode === 'add' && !this.props.author) return this.setState({ author: nextState.author })
   }
 
@@ -36,7 +36,7 @@ export default class ArticleForm extends Component {
     loadMarkdownEditor().done(() => {
       $(this.state.element).find('#markdownEditor').removeAttr('readonly').attr('spellcheck', false).markdown({
         onPreview: function(e) {
-          setTimeout(() => querySelectors('pre code').forEach(block => hljs.highlightBlock(block)), 50); // TODO: onPreview钩子是没插入到DOM的, hljs没办法高亮, 目前延迟解决该问题
+          setTimeout(() => querySelectors('pre code').forEach(block => hljs.highlightBlock(block)), 50); // onPreview钩子是没插入到DOM的, hljs没办法高亮, 目前延迟解决该问题
           return marked(e.getContent() || 'You should write something to preiview, right?');
         }
       });
@@ -176,5 +176,14 @@ ArticleForm.PropTypes = {
   onSubmit: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isUpdating: PropTypes.bool.isRequired,
-  mode: PropTypes.string.isRequired
+  mode: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  article: PropTypes.objectOf({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    articleType: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired
+  })
 };

@@ -27,8 +27,7 @@ class ArticleLists extends Component {
       return this.props.dispatch(fetchArticlesByType(searchType, page));
     }
     if (!searchTitle && !searchType) {
-      if (this.props.params.page !== page) return this.props.dispatch(fetchArticles(page));
-      if (this.props.params.searchTitle !== searchTitle || this.props.params.searchType !== searchType) return this.props.dispatch(fetchArticles(page));
+      if (this.props.params.page !== page || this.props.params.searchTitle !== searchTitle || this.props.params.searchType !== searchType) return this.props.dispatch(fetchArticles(page));
     }
   }
 
@@ -39,15 +38,15 @@ class ArticleLists extends Component {
     return (
       errMsg ? <Error msg={errMsg} /> : (
         isFetching ? <Loading /> :
-        (
-          isEmpty ? <div>没有更多了啦(= =##)</div> :
-          <div>
+          (
+            isEmpty ? <div>没有更多了啦(= =##)</div> :
+              <div>
                 <Lists className={articlesCss.list} articles={articles} />
                 <div style={{ textAlign: 'center' }}>
                   <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
                 </div>
               </div>
-        )
+          )
       )
     )
   }
@@ -70,5 +69,6 @@ ArticleLists.PropTypes = {
   articles: PropTypes.array.isRequired,
   page: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  isFetching: PropTypes.bool.isRequired,
+  errMsg: PropTypes.string
 };
