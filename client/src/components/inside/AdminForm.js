@@ -66,7 +66,12 @@ export default class AdminForm extends Component {
   render() {
     const { account, password, email, types, typeValue, isFetching } = this.state;
     return (
-      <form style={isFetching ? { opacity: .5, pointerEvents: 'none' } : {}} className={insideCss.adminForm} onSubmit={e => e.preventDefault()}>
+      <form
+        style={isFetching ? { opacity: .5, pointerEvents: 'none' } : {}}
+        className={insideCss.adminForm}
+        onSubmit={e => e.preventDefault()}
+        onKeyDown={e => e.keyCode === 13 && e.preventDefault()}
+        >
         <Input
           label='管理员帐号'
           placeholder='管理员帐号'
