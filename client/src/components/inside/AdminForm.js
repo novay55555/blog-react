@@ -56,7 +56,7 @@ export default class AdminForm extends Component {
           email
         },
         types: {
-          id: '56f47bda86cc773ceb4f0301',
+          id: '56f47bda86cc773ceb4f0301', // TODO: 后台需要返回types的id
           data: types
         }
       })

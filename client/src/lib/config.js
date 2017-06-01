@@ -25,7 +25,8 @@ const config = {
       edit: `/api/user-edit`,
       delete: id => `/api/user-delete/${id}`
     },
-    blog: `/api/inside/blog`
+    blog: `/api/inside/blog`,
+    admin: `/api/inside/admin`
   }
 };
 

@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Form from '../../components/inside/ArticleForm'
 import { fetchArticleTypes } from '../../actions/articles'
-import { fetchAddArticle, fetchEditArticle } from '../../actions/inside'
+import { fetchAddArticle, fetchEditArticle, fetchAdmin } from '../../actions/inside'
 
 class ArticleForm extends Component {
   componentWillMount() {
     if (this.props.types.length === 0) this.props.dispatch(fetchArticleTypes());
+    if (!this.props.author) this.props.dispatch(fetchAdmin());
   }
 
   handleAddArticle = article => this.props.dispatch(fetchAddArticle(article));
@@ -31,7 +32,7 @@ class ArticleForm extends Component {
 
 const mapStateToProps = state => {
   const { items: types } = state.articles.types;
-  const { username: author } = state.account;
+  const { name: author } = state.inside.admin.item;
   const { activeIndex, articleMode } = state.inside.articles;
   const { item: article, isFetching, isUpdating } = state.articles.current;
   return {

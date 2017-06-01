@@ -29,8 +29,17 @@ export const actionTypes = {
   DELETED_USER: 'DELETED_USER',
   ERROR_DELETE_USER: 'ERROR_DELETE_USER',
   GETTING_USERS_BY_NAME: 'GETTING_USERS_BY_NAME',
-  GET_EDITED_USER: 'GET_EDITED_USER'
+  GET_EDITED_USER: 'GET_EDITED_USER',
+  GET_ADMIN: 'GET_ADMIN'
 };
+
+const getAdmin = admin => ({
+  type: actionTypes.GET_ADMIN,
+  getItem: () => {
+    admin.id = admin._id;
+    return admin;
+  }
+});
 
 const getEditedUser = user => ({
   type: actionTypes.GET_EDITED_USER,
@@ -337,5 +346,11 @@ export const fetchUpdateBlog = updateData => dispatch => {
   }
   post(`${config.api.blog}`, updateData)
     .done(() => notification({ message: '更新成功' }))
+    .fail(errMsg => notification({ type: 'error', message: errMsg }));
+};
+
+export const fetchAdmin = () => dispatch => {
+  get(`${config.api.admin}`)
+    .done(data => dispatch(getAdmin(data)))
     .fail(errMsg => notification({ type: 'error', message: errMsg }));
 };

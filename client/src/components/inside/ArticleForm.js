@@ -13,7 +13,7 @@ export default class ArticleForm extends Component {
     this.state = {
       element: null,
       title: '',
-      author: this.props.author || '',
+      author: props.author || '',
       date: dateFormatter(Date.now()),
       articleType: '',
       description: '',
@@ -28,7 +28,8 @@ export default class ArticleForm extends Component {
   }
 
   componentWillReceiveProps(nextState) {
-    if (nextState.mode === 'edit') this.setState(nextState.article);
+    if (nextState.mode === 'edit') return this.setState(nextState.article);
+    if (nextState.mode === 'add' && !this.props.author) return this.setState({ author: nextState.author })
   }
 
   componentDidMount() {

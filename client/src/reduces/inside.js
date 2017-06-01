@@ -14,12 +14,17 @@ const articles = (state = { activeIndex: 0, articleMode: 'add' }, action) => {
   }
 };
 
-const admin = (state = { hasEntered: false }, action) => {
+const admin = (state = { item: {}, hasEntered: false }, action) => {
   switch (action.type) {
     case actionTypes.ENTERED_INSIDE:
       return {
         ...state,
         hasEntered: true
+      };
+    case actionTypes.GET_ADMIN:
+      return {
+        ...state,
+        item: action.getItem()
       };
     default:
       return state;
