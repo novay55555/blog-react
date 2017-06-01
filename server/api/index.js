@@ -44,8 +44,8 @@ Api.get('/api/types/articles', (req, res) => {
  * 
  * @param {number} id 文章id
  */
-Api.get('/api/article/:id', function (req, res) {
-  Article.findById(req.params.id, function (err, article) {
+Api.get('/api/article/:id', function(req, res) {
+  Article.findById(req.params.id, function(err, article) {
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
     res.json({ code: apiStatus.success.code, content: article });
   });
@@ -394,28 +394,27 @@ Api.get('/api/inside/users/search/:name/:page', (req, res) => {
  */
 Api.post('/api/inside/blog', (req, res) => {
   checkAdmin(req.session).then(() => {
-    const { admin, types } = req.body;
-    let adminInfo = { name: admin.name, email: admin.email };
-    const adminUpdate = new Promise((resolve, reject) => {
-      User.findOneAndUpdate({ role: 0 }, adminInfo, (err, doc) => {
-        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-        req.session.username = adminInfo.name;
-        resolve(doc);
+      const { admin, types } = req.body;
+      const adminUpdate = new Promise((resolve, reject) => {
+        User.findOneAndUpdate({ role: 0 }, admin, (err, doc) => {
+          if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+          req.session.username = admin.name;
+          resolve(doc);
+        });
+      }).then(doc => {
+        Article.update({ author: doc.name }, { author: admin.name }, { multi: true }, err => {
+          if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+          return Promise.resolve();
+        });
       });
-    }).then(doc => {
-      Article.update({ author: doc.name }, { author: adminInfo.name }, { multi: true }, err => {
-        if (err) return Promise.reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-        return Promise.resolve();
+      const typesUpdate = new Promise((resolve, reject) => {
+        ArticleTypes.findOneAndUpdate({ _id: ObjectId(types.id) }, { type: types.data }, err => {
+          if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+          resolve();
+        });
       });
-    });
-    const typesUpdate = new Promise((resolve, reject) => {
-      ArticleTypes.findOneAndUpdate({ _id: ObjectId(types.id) }, { type: types.data }, err => {
-        if (err) return reject({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
-        resolve();
-      });
-    });
-    return Promise.all([adminUpdate, typesUpdate]);
-  })
+      return Promise.all([adminUpdate, typesUpdate]);
+    })
     .then(() => res.json({ code: apiStatus.success.code, content: {} }))
     .catch(err => res.json(err));
 })
