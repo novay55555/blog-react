@@ -9,27 +9,26 @@ export default class Table extends Component {
         <thead>
           <tr>
             {
-							columns.map(column => <th key={column.key}>{column.title}</th>)
-						}
+              columns.map(column => <th key={column.key}>{column.title}</th>)
+            }
           </tr>
         </thead>
-
         <tbody>
           {
-						dataSource.map(data => (
-  <tr key={data.id}>
-    {
-									columns.map(column => (
-  <td key={column.key}>
-    {
-												column.render ? column.render(data[column.key], data) : data[column.key]
-											}
-  </td>
-									))
-								}
-  </tr>
-						))
-					}
+            dataSource.map(data => (
+              <tr key={data.id}>
+                {
+                  columns.map(column => (
+                    <td key={column.key}>
+                      {
+                        column.render ? column.render(data[column.key], data) : data[column.key]
+                      }
+                    </td>
+                  ))
+                }
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     );

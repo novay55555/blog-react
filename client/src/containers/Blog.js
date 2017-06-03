@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Header from '../components/common/HeaderBlog'
-import Footer from '../components/common/Footer'
-import { NotificationContainer } from 'react-notifications'
-import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal, fetchSession } from '../actions/account'
-import { linkToSearchPath } from '../actions/articles'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Header from '../components/common/HeaderBlog';
+import Footer from '../components/common/Footer';
+import { NotificationContainer } from 'react-notifications';
+import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal, fetchSession } from '../actions/account';
+import { linkToSearchPath } from '../actions/articles';
 
 class Blog extends Component {
-
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(fetchSession());
   }
 
@@ -25,15 +24,15 @@ class Blog extends Component {
 
   handleSearch = title => linkToSearchPath(title);
 
-  render() {
+  render () {
     const { accountInfo, activeModal, isFetching } = this.props;
     return (
       <div>
         <Header
           logo='/build/img/kato.jpg'
           navs={
-            accountInfo.isAdmin ?
-              [
+            accountInfo.isAdmin
+              ? [
                 {
                   text: '博客',
                   path: '/'
@@ -64,14 +63,14 @@ class Blog extends Component {
           onSearch={this.handleSearch}
           activeModal={activeModal}
           accountInfo={accountInfo}
-          isFetching={isFetching}/>
+          isFetching={isFetching} />
         <main>
           {this.props.children}
         </main>
         <Footer />
         <NotificationContainer />
       </div>
-    )
+    );
   }
 }
 
@@ -88,7 +87,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Blog)
+export default connect(mapStateToProps)(Blog);
 
 Blog.PropTypes = {
   accountInfo: {

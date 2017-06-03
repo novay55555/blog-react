@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Search from '../../components/inside/Search'
-import Table from '../../components/inside/UsersTable'
-import Error from '../../components/common/Error'
-import Loading from '../../components/common/Loading'
-import Pagination from '../../components/common/Pagination'
-import Modal from '../../components/inside/UserModal'
-import { fetchUsers, fetchUsersByName, getEditUserData, fetchEditUser, fetchDeleteUser } from '../../actions/inside'
-import { showModal, hideModal } from '../../actions/account'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Search from '../../components/inside/Search';
+import Table from '../../components/inside/UsersTable';
+import Error from '../../components/common/Error';
+import Loading from '../../components/common/Loading';
+import Pagination from '../../components/common/Pagination';
+import Modal from '../../components/inside/UserModal';
+import { fetchUsers, fetchUsersByName, getEditUserData, fetchEditUser, fetchDeleteUser } from '../../actions/inside';
+import { showModal, hideModal } from '../../actions/account';
 
 class Users extends Component {
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(fetchUsers());
   }
 
@@ -30,15 +30,15 @@ class Users extends Component {
 
   handleDeleteUser = id => this.props.dispatch(fetchDeleteUser(id));
 
-  render() {
+  render () {
     const { items, page, total, isFetching, isEditing, isDeleting, errMsg, searchName, activeModal, editUser } = this.props;
     return (
       <div>
         <Search placeholder='Search users...' onSearch={name => this.handleGetUsersByName(name)} />
         {
           errMsg ? <Error msg={errMsg} />
-            : (isFetching ? <Loading /> :
-              <div>
+            : (isFetching ? <Loading />
+              : <div>
                 <Table users={items} onEdit={this.handleShowModal} onDelete={this.handleDeleteUser} isUpdating={isDeleting} />
                 <div style={{ textAlign: 'center' }}>
                   <Pagination maxPage={total} currentPage={page} onClick={page => searchName ? this.handleGetUsersByName(searchName, page) : this.handleGetUsers(page)} />
@@ -52,7 +52,7 @@ class Users extends Component {
           onEdit={this.handleEditUser}
           loading={isEditing} />
       </div>
-    )
+    );
   }
 }
 
@@ -73,4 +73,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Users)
+export default connect(mapStateToProps)(Users);

@@ -101,7 +101,7 @@ export const fetchRegister = (username, password, email, callback) => dispatch =
     })
     .fail(errMsg => {
       notification({ type: 'error', message: errMsg, timeout: 3000 });
-      dispatch(errorPostSignin());
+      dispatch(errorPostRegister());
     });
 };
 

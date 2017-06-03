@@ -1,9 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 
 export default class Pagination extends Component {
-
   selectPage = pageObj => {
     const { i, maxPage, currentPage } = pageObj;
     let { btn } = pageObj;
@@ -33,7 +32,7 @@ export default class Pagination extends Component {
   };
 
   getCurrentPage = pageObj => {
-    const { i, maxPage, currentPage, baseURL } = pageObj;
+    const { i, maxPage, currentPage } = pageObj;
     let { btn } = pageObj;
     if (typeof btn !== 'number') {
       if (i === 1) {
@@ -45,7 +44,7 @@ export default class Pagination extends Component {
     return btn;
   };
 
-  createButtons(maxPage) {
+  createButtons (maxPage) {
     const { currentPage } = this.props;
     let arr = [];
     if (maxPage <= 1) {
@@ -56,7 +55,7 @@ export default class Pagination extends Component {
       }
     } else {
       if (currentPage < 5) {
-        arr.push(1, 2, 3, 4, 5, '...', maxPage)
+        arr.push(1, 2, 3, 4, 5, '...', maxPage);
       } else if (currentPage >= 5 && currentPage <= maxPage - 4) {
         arr.push(1, '...', currentPage - 2, currentPage - 1, currentPage, currentPage + 1, currentPage + 2, '...', maxPage);
       } else {
@@ -66,27 +65,27 @@ export default class Pagination extends Component {
     return arr;
   }
 
-  render() {
+  render () {
     const { maxPage, currentPage, onClick, baseURL, ...props } = this.props;
     const btnArray = this.createButtons(maxPage);
     return (
-      <ul className="pagination" {...props}>
+      <ul className='pagination' {...props}>
         {btnArray.map((btn, i) => {
           const pageObj = { btn, i, maxPage, currentPage, baseURL };
           const currentURL = baseURL ? this.getCurrentURL(pageObj) : '';
-          return btn === currentPage ?
-            <li key={'page' + i} className="active"><span>{btn}<span
-              className="sr-only">(current)</span></span>
-            </li> :
-            <li key={'page' + i}><Link to={currentURL || '#'} onClick={e => {
+          return btn === currentPage
+            ? <li key={'page' + i} className='active'><span>{btn}<span
+              className='sr-only'>(current)</span></span>
+            </li>
+            : <li key={'page' + i}><Link to={currentURL || '#'} onClick={e => {
               onClick && e.preventDefault();
               onClick && onClick.call(onClick, this.getCurrentPage(pageObj));
               e.target.blur();
               this.selectPage(pageObj);
-            }}>{btn}</Link></li>
+            }}>{btn}</Link></li>;
         })}
       </ul>
-    )
+    );
   }
 }
 

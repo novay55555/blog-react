@@ -81,7 +81,7 @@ const users = (state = { items: [], page: 1, total: 0, current: {} }, action) =>
         isEditing: false,
         items: action.updateItems()
       };
-    case actionTypes.ERROR_DELETE_USER:
+    case actionTypes.ERROR_EDIT_USER:
       return {
         ...state,
         isEditing: false

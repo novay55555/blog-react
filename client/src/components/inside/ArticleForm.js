@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import marked from 'marked'
-import Input from '../common/Input'
-import Textarea from '../common/Textarea'
-import { dateFormatter, querySelectors } from '../../lib/common'
-import insideCss from './inside.css'
-import { loadMarkdownEditor } from '../../actions/inside'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import marked from 'marked';
+import Input from '../common/Input';
+import Textarea from '../common/Textarea';
+import { dateFormatter, querySelectors } from '../../lib/common';
+import insideCss from './inside.css';
+import { loadMarkdownEditor } from '../../actions/inside';
 
 export default class ArticleForm extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       element: null,
@@ -27,20 +27,20 @@ export default class ArticleForm extends Component {
     };
   }
 
-  componentWillReceiveProps(nextState) {
+  componentWillReceiveProps (nextState) {
     if (nextState.mode === 'edit') return this.setState(nextState.article);
-    if (nextState.mode === 'add' && !this.props.author) return this.setState({ author: nextState.author })
+    if (nextState.mode === 'add' && !this.props.author) return this.setState({ author: nextState.author });
   }
 
-  componentDidMount() {
+  componentDidMount () {
     loadMarkdownEditor().done(() => {
       $(this.state.element).find('#markdownEditor').removeAttr('readonly').attr('spellcheck', false).markdown({
-        onPreview: function(e) {
+        onPreview: function (e) {
           setTimeout(() => querySelectors('pre code').forEach(block => hljs.highlightBlock(block)), 50); // onPreview钩子是没插入到DOM的, hljs没办法高亮, 目前延迟解决该问题
           return marked(e.getContent() || 'You should write something to preiview, right?');
         }
       });
-    })
+    });
   }
 
   handleSubmit = () => {
@@ -78,15 +78,15 @@ export default class ArticleForm extends Component {
 
   handleTypeChange = (articleType, currentTypeIndex) => this.setState({ articleType, currentTypeIndex });
 
-  render() {
+  render () {
     const { title, author, date, description, content, currentTypeIndex, articleType } = this.state;
-    const { onSubmit, articleTypes, isFetching, isUpdating, mode } = this.props;
+    const { articleTypes, isFetching, isUpdating, mode } = this.props;
     return (
-      <form ref={ref => this.state.element = ref}
+      <form ref={ref => { this.state.element = ref; }}
         className={`form ${insideCss.articleForm}`}
         onSubmit={e => e.preventDefault()}>
         {
-          isFetching ? <div className="loading"></div> : ''
+          isFetching ? <div className='loading' /> : ''
         }
         <Input
           label='文章标题'
@@ -128,16 +128,16 @@ export default class ArticleForm extends Component {
           value={description}
           getValidator={descriptionValidator => this.setState({ descriptionValidator })}
           onChange={description => this.setState({ description })} />
-        <div className="form-group articles-type">
-          <label htmlFor="">文章类型</label>
+        <div className='form-group articles-type'>
+          <label htmlFor=''>文章类型</label>
           <p>
             {
-              articleTypes.length > 0 ?
-                (mode === 'add' ?
-                  articleTypes.map((type, i) => <button key={i}
+              articleTypes.length > 0
+                ? (mode === 'add'
+                  ? articleTypes.map((type, i) => <button key={i}
                     className={`btn ${i === currentTypeIndex ? 'btn-primary' : 'btn-default'}`}
-                    onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>) :
-                  articleTypes.map((type, i) => <button key={i}
+                    onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>)
+                  : articleTypes.map((type, i) => <button key={i}
                     className={`btn ${articleType === type.text ? 'btn-primary' : 'btn-default'}`}
                     onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>))
                 : ''
@@ -156,15 +156,15 @@ export default class ArticleForm extends Component {
           }]}
           onChange={content => this.setState({ content })}
           getValidator={contentValidator => this.setState({ contentValidator })} />
-        <div className="form-group">
+        <div className='form-group'>
           <button
             className='btn btn-info'
             onClick={this.handleSubmit}
-            style={isUpdating ? { opacity: .5, pointerEvents: 'none' } : {}}>
+            style={isUpdating ? { opacity: 0.5, pointerEvents: 'none' } : {}}>
             {isUpdating ? 'Submitting...' : 'Submit!'}</button>
         </div>
       </form>
-    )
+    );
   }
 }
 

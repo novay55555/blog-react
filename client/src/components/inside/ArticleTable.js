@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
-import Table from '../../components/common/Table'
-import insideCss from './inside.css'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
+import Table from '../../components/common/Table';
+import insideCss from './inside.css';
 
 export default class ArticleTable extends Component {
-  constructor() {
+  constructor () {
     super();
     this.state = {
       columns: [{
@@ -26,15 +26,15 @@ export default class ArticleTable extends Component {
         key: 'operate',
         render: (text, record) => (
           <span>
-            <a href="#" onClick={e => {
+            <a href='#' onClick={e => {
               e.preventDefault();
               this.props.onEdit(record.id);
             }}>编辑</a>
-            <a href="#" onClick={this.handleDelete(record.id)}>删除</a>
+            <a href='#' onClick={this.handleDelete(record.id)}>删除</a>
           </span>
         )
       }]
-    }
+    };
   }
 
   handleDelete = id => {
@@ -43,11 +43,13 @@ export default class ArticleTable extends Component {
     let _timer;
     return e => {
       e.preventDefault();
-      if (!_target) _target = $(e.target).popover({
-        placement: 'top',
-        content: '再次点击确认删除',
-        trigger: 'manual'
-      });
+      if (!_target) {
+        _target = $(e.target).popover({
+          placement: 'top',
+          content: '再次点击确认删除',
+          trigger: 'manual'
+        });
+      }
       if (_clickTime++ === 0) {
         _target.popover('show');
         _timer = setTimeout(() => {
@@ -59,16 +61,16 @@ export default class ArticleTable extends Component {
         _target.popover('hide');
         clearTimeout(_timer);
       }
-    }
+    };
   };
 
-  render() {
+  render () {
     const { items, isUpdating } = this.props;
     return (
-      <div style={isUpdating ? { opacity: .5, pointerEvents: 'none' } : {}}>
+      <div style={isUpdating ? { opacity: 0.5, pointerEvents: 'none' } : {}}>
         <Table className={insideCss.articles} columns={this.state.columns} dataSource={items} />
       </div>
-    )
+    );
   }
 }
 

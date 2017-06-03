@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Modal from '../../components/common/Modal'
-import Input from '../../components/common/Input'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Modal from '../../components/common/Modal';
+import Input from '../../components/common/Input';
 
 export default class UserModal extends Component {
-  constructor() {
+  constructor () {
     super();
     this.state = {
       id: '',
@@ -17,20 +17,19 @@ export default class UserModal extends Component {
     };
   }
 
-  componentWillReceiveProps(nextState) {
+  componentWillReceiveProps (nextState) {
     if (nextState.visiable && !nextState.loading) {
       this.setState({
         id: nextState.user.id,
         email: nextState.user.email,
         password: ''
-      })
+      });
     }
 
     if (!nextState.visiable) {
       this.state.resetEmailComponent && this.state.resetEmailComponent();
       this.state.resetPasswordComponent && this.state.resetPasswordComponent();
     }
-
   }
 
   handleEditUser = () => {
@@ -40,7 +39,7 @@ export default class UserModal extends Component {
     if (passwordPass && emailPass) this.props.onEdit(id, password, email);
   };
 
-  render() {
+  render () {
     const { password, email } = this.state;
     const { visiable, loading, onHideModal } = this.props;
     return (
@@ -69,7 +68,7 @@ export default class UserModal extends Component {
               errMsg: '密码长度不少于6个'
             }
           ]}
-          getValidator={passwordValidator => { this.setState({ passwordValidator }) }} />
+          getValidator={passwordValidator => { this.setState({ passwordValidator }); }} />
         <Input
           label='邮箱'
           placeholder='请输入用户邮箱'
@@ -87,9 +86,9 @@ export default class UserModal extends Component {
               errMsg: '请输入正确的邮箱格式'
             }
           ]}
-          getValidator={emailValidator => { this.setState({ emailValidator }) }} />
+          getValidator={emailValidator => { this.setState({ emailValidator }); }} />
       </Modal>
-    )
+    );
   }
 }
 

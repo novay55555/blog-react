@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Modal from './Modal'
-import Input from './Input'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Modal from './Modal';
+import Input from './Input';
 
 export default class RegisterModal extends Component {
-  constructor() {
+  constructor () {
     super();
     this.state = {
       username: '',
@@ -28,11 +28,11 @@ export default class RegisterModal extends Component {
     const usernamePass = usernameValidator.start();
     const passwordPass = passwordValidator.start();
     const emailPass = emailValidator.start();
-    if (usernamePass && passwordPass && emailPass) onRegister(username, password, email)
+    if (usernamePass && passwordPass && emailPass) onRegister(username, password, email);
   };
 
-  render() {
-    const { onRegister, visiable, onCancel, isFetching } = this.props;
+  render () {
+    const { visiable, onCancel, isFetching } = this.props;
     return (
       <Modal
         title='注册'
@@ -51,10 +51,10 @@ export default class RegisterModal extends Component {
             getValidator={this.getUsernameValidator}
             onKeyUp={e => e.keyCode === 13 && this.handleRegister()}
             validates={
-              [{
-                rule: 'isNotEmpty',
-                errMsg: '用户名不能为空'
-              }]
+            [{
+              rule: 'isNotEmpty',
+              errMsg: '用户名不能为空'
+            }]
             }
             onChange={username => this.setState({ username })}
             maxLength='12'
@@ -67,13 +67,13 @@ export default class RegisterModal extends Component {
             getValidator={this.getPasswordValidator}
             onKeyUp={e => e.keyCode === 13 && this.handleRegister()}
             validates={
-              [{
-                rule: 'isNotEmpty',
-                errMsg: '密码不能为空'
-              }, {
-                rule: 'minLength:6',
-                errMsg: '密码长度不少于6个'
-              }]
+            [{
+              rule: 'isNotEmpty',
+              errMsg: '密码不能为空'
+            }, {
+              rule: 'minLength:6',
+              errMsg: '密码长度不少于6个'
+            }]
             }
             onChange={password => this.setState({ password })}
             maxLength='16'
@@ -86,19 +86,19 @@ export default class RegisterModal extends Component {
             getValidator={this.getEmailValidator}
             onKeyUp={e => e.keyCode === 13 && this.handleRegister()}
             validates={
-              [{
-                rule: 'isNotEmpty',
-                errMsg: '邮箱地址不能为空喔~'
-              }, {
-                rule: 'isEmail',
-                errMsg: '邮箱地址格式有误喔~'
-              }]
+            [{
+              rule: 'isNotEmpty',
+              errMsg: '邮箱地址不能为空喔~'
+            }, {
+              rule: 'isEmail',
+              errMsg: '邮箱地址格式有误喔~'
+            }]
             }
             onChange={email => this.setState({ email })}
           />
         </form>
       </Modal>
-    )
+    );
   }
 }
 

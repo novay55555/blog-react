@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Textarea extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       element: null,
@@ -23,7 +23,7 @@ export default class Textarea extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.validates) {
       this.initValidator(this.props.validates);
       this.props.getValidator && this.props.getValidator.call(this.props.getValidator, this.state.validator);
@@ -36,16 +36,17 @@ export default class Textarea extends Component {
     const _cache = [];
     validates.forEach(validate => {
       _cache.push(() => {
-        let textarea = self.state.element,
-          args = validate.rule.split(':'),
-          validateRule = args.shift();
+        let textarea = self.state.element;
+        let args = validate.rule.split(':');
+        let validateRule = args.shift();
         args.push(validate.errMsg);
         args.unshift(textarea.value);
         return self.state.rules[validateRule].apply(textarea, args);
       });
     });
     validator.start = () => {
-      for (let i = 0, validateFn; validateFn = _cache[i++];) {
+      for (let i = 0; i < _cache.length; i++) {
+        let validateFn = _cache[i];
         let errMsg = validateFn();
         if (errMsg) {
           self.setState({
@@ -63,21 +64,21 @@ export default class Textarea extends Component {
 
   change = e => this.props.onChange && this.props.onChange.call(this.props.onChange, e.target.value, this.state.validator.start());
 
-  render() {
+  render () {
     const { status, errMsg } = this.state;
     const { className, label, name, validates, onChange, getValidator, ...props } = this.props;
     return (
       <div className={`form-group ${className || ''} ${status}`}>
-        <label className="control-label" htmlFor={name || ''}>{status === 'has-error' ? errMsg : label}</label>
+        <label className='control-label' htmlFor={name || ''}>{status === 'has-error' ? errMsg : label}</label>
         <textarea
-          ref={ref => this.state.element = ref}
-          className="form-control"
+          ref={ref => { this.state.element = ref; }}
+          className='form-control'
           name={name || ''}
           onChange={this.change}
           {...props}
         />
       </div>
-    )
+    );
   }
 }
 

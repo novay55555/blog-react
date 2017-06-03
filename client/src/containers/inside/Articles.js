@@ -1,17 +1,15 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Nav from '../../components/inside/ArticleNav'
-import Search from '../../components/inside/Search'
-import Loading from '../../components/common/Loading'
-import Error from '../../components/common/Error'
-import TableContainer from './ArticlesTable'
-import FormContainer from './ArticleForm'
-import { changeArticleTabs } from '../../actions/inside'
-import { fetchInsideArticlesByTitle } from '../../actions/inside'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Nav from '../../components/inside/ArticleNav';
+import Search from '../../components/inside/Search';
+import Error from '../../components/common/Error';
+import TableContainer from './ArticlesTable';
+import FormContainer from './ArticleForm';
+import { changeArticleTabs, fetchInsideArticlesByTitle } from '../../actions/inside';
 
 class InsideArticles extends Component {
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(changeArticleTabs(0));
   }
 
@@ -19,20 +17,20 @@ class InsideArticles extends Component {
 
   handleSearch = (title, page) => this.props.dispatch(fetchInsideArticlesByTitle(title, page));
 
-  render() {
+  render () {
     const { errMsg, activeIndex } = this.props;
     return (
-      errMsg ? <Error msg={errMsg} /> :
-      <div>
-          <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
-          {
+      errMsg ? <Error msg={errMsg} />
+      : <div>
+        <Nav onClick={this.handleTabChange} activeIndex={activeIndex} />
+        {
             activeIndex === 0 ? <Search onSearch={this.handleSearch} placeholder='Search articles...' /> : ''
           }
-          {
+        {
             activeIndex === 0 ? <TableContainer /> : <FormContainer />
           }
-        </div>
-    )
+      </div>
+    );
   }
 }
 
@@ -42,10 +40,10 @@ const mapStateToProps = state => {
   return {
     errMsg,
     activeIndex
-  }
+  };
 };
 
-export default connect(mapStateToProps)(InsideArticles)
+export default connect(mapStateToProps)(InsideArticles);
 
 InsideArticles.PropTypes = {
   errMsg: PropTypes.bool.isRequired,

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Modal from './Modal'
-import Input from './Input'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Modal from './Modal';
+import Input from './Input';
 
 export default class SigninModal extends Component {
-  constructor() {
+  constructor () {
     super();
     this.state = {
       username: '',
@@ -26,7 +26,7 @@ export default class SigninModal extends Component {
     if (usernamePass && passwordPass) onSignin(username, password);
   };
 
-  render() {
+  render () {
     const { visiable, onCancel, isFetching } = this.props;
     return (
       <Modal
@@ -46,10 +46,10 @@ export default class SigninModal extends Component {
             onKeyUp={e => e.keyCode === 13 && this.handleSignin()}
             getValidator={this.getUsernameValidator}
             validates={
-              [{
-                rule: 'isNotEmpty',
-                errMsg: '用户名不能为空'
-              }]
+            [{
+              rule: 'isNotEmpty',
+              errMsg: '用户名不能为空'
+            }]
             }
             maxLength='12'
           />
@@ -62,19 +62,19 @@ export default class SigninModal extends Component {
             onKeyUp={e => e.keyCode === 13 && this.handleSignin()}
             getValidator={this.getPasswordValidator}
             validates={
-              [{
-                rule: 'isNotEmpty',
-                errMsg: '密码不能为空'
-              }, {
-                rule: 'minLength:6',
-                errMsg: '密码长度不少于6个'
-              }]
+            [{
+              rule: 'isNotEmpty',
+              errMsg: '密码不能为空'
+            }, {
+              rule: 'minLength:6',
+              errMsg: '密码长度不少于6个'
+            }]
             }
             maxLength='16'
           />
         </form>
       </Modal>
-    )
+    );
   }
 }
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import Panel from '../common/Panel';
 import ArticleTypeList from '../common/ListGroupLink';
 import articlesCss from './articles.css';

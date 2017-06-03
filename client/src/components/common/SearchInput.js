@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import commonClass from './common.css'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import commonClass from './common.css';
 
 export default class SearchInput extends Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       value: this.props.value || ''
@@ -13,24 +12,24 @@ export default class SearchInput extends Component {
 
   change = e => this.setState({ value: e.target.value });
 
-  render() {
+  render () {
     const { className, icon, onSearch, type, ...props } = this.props;
     const { value } = this.state;
     return (
       <div className={`form-group ${commonClass.search} ${className || ''}`}>
         <input
-          className="form-control"
+          className='form-control'
           type={type || 'text'}
           value={value}
           onChange={this.change}
           {...props} />
-        <a href="#" className={`glyphicon ${icon || 'glyphicon-search'}`}
+        <a href='#' className={`glyphicon ${icon || 'glyphicon-search'}`}
           onClick={e => {
             e.preventDefault();
             return onSearch.call(onSearch, value);
-          }}></a>
+          }} />
       </div>
-    )
+    );
   }
 }
 

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Input from '../common/Input'
-import insideCss from './inside.css'
-import { notification } from '../../lib/common'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Input from '../common/Input';
+import insideCss from './inside.css';
+import { notification } from '../../lib/common';
 
 export default class AdminForm extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       account: props.account || '',
@@ -19,7 +19,7 @@ export default class AdminForm extends Component {
     };
   }
 
-  componentWillReceiveProps(nextState) {
+  componentWillReceiveProps (nextState) {
     if (nextState.account || nextState.types.length > 0) {
       this.setState({
         account: nextState.account,
@@ -61,16 +61,16 @@ export default class AdminForm extends Component {
           id: typesId,
           data: types
         }
-      })
+      });
     }
   }
 
-  render() {
-    const { account, password, email, types, typeValue } = this.state;
+  render () {
+    const { account, email, types, typeValue } = this.state;
     const { isFetching, isUpdating } = this.props;
     return (
       <form
-        style={isFetching ? { opacity: .5, pointerEvents: 'none' } : {}}
+        style={isFetching ? { opacity: 0.5, pointerEvents: 'none' } : {}}
         className={insideCss.adminForm}
         onSubmit={e => e.preventDefault()}
         onKeyDown={e => e.keyCode === 13 && e.preventDefault()} >
@@ -79,12 +79,12 @@ export default class AdminForm extends Component {
           placeholder='管理员帐号'
           value={account}
           validates={
-            [
-              {
-                rule: 'isNotEmpty',
-                errMsg: '管理员帐号不能为空'
-              }
-            ]
+          [
+            {
+              rule: 'isNotEmpty',
+              errMsg: '管理员帐号不能为空'
+            }
+          ]
           }
           getValidator={accountValidator => this.setState({ accountValidator })}
           onChange={account => this.setState({ account })} />
@@ -99,23 +99,23 @@ export default class AdminForm extends Component {
           placeholder='管理员邮箱'
           value={email}
           validates={
-            [
-              {
-                rule: 'isNotEmpty',
-                errMsg: '管理员邮箱不能为空'
-              },
-              {
-                rule: 'isEmail',
-                errMsg: '邮箱格式不正确'
-              }
-            ]
+          [
+            {
+              rule: 'isNotEmpty',
+              errMsg: '管理员邮箱不能为空'
+            },
+            {
+              rule: 'isEmail',
+              errMsg: '邮箱格式不正确'
+            }
+          ]
           }
           getValidator={emailValidator => this.setState({ emailValidator })}
           onChange={email => this.setState({ email })} />
-        <div className="form-group">
-          <label htmlFor="">文章类型</label>
-          <p className="types-add">
-            <input type="text" className='form-control' placeholder='输入文章类型, 回车以保存' value={typeValue}
+        <div className='form-group'>
+          <label htmlFor=''>文章类型</label>
+          <p className='types-add'>
+            <input type='text' className='form-control' placeholder='输入文章类型, 回车以保存' value={typeValue}
               onChange={e => this.setState({ typeValue: e.target.value })}
               onKeyUp={e => {
                 if (e.keyCode === 13) {
@@ -125,11 +125,11 @@ export default class AdminForm extends Component {
                   this.setState({ typeValue: '' });
                 }
               }} />
-            <a href="#" onClick={this.handleAddClick}>新增类型</a>
+            <a href='#' onClick={this.handleAddClick}>新增类型</a>
           </p>
           <p>
             {
-              types.map((type, i) => <span className='label' key={i}>{type}<a className='glyphicon glyphicon-remove' href="#" onClick={e => {
+              types.map((type, i) => <span className='label' key={i}>{type}<a className='glyphicon glyphicon-remove' href='#' onClick={e => {
                 e.preventDefault();
                 this.deleteType(type);
               }} /></span>)
@@ -138,14 +138,14 @@ export default class AdminForm extends Component {
         </div>
         <div className='form-group'>
           <button
-            style={isUpdating ? { opacity: .5, pointerEvents: 'none' } : {}}
+            style={isUpdating ? { opacity: 0.5, pointerEvents: 'none' } : {}}
             className='btn btn-info'
             onClick={this.handleSubmit}>
             {isUpdating ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       </form>
-    )
+    );
   }
 }
 

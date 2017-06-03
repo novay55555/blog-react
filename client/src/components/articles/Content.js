@@ -10,7 +10,7 @@ export default class ArticleContent extends Component {
   }
 
   render () {
-    const { className, article } = this.props;
+    const { article } = this.props;
     const html = marked(article.content || '');
     return (
       <div className={`animated fadeIn ${articleCss.content}`}>

@@ -6,7 +6,6 @@ import Loading from '../../components/common/Loading';
 import Error from '../../components/common/Error';
 import Pagination from '../../components/common/Pagination';
 import { fetchArticles, fetchArticlesByTitle, fetchArticlesByType } from '../../actions/articles';
-import articlesCss from '../../components/articles/articles.css';
 
 class ArticleLists extends Component {
   componentWillMount () {
@@ -37,15 +36,15 @@ class ArticleLists extends Component {
     return (
       errMsg ? <Error msg={errMsg} /> : (
         isFetching ? <Loading />
-          : (
-            isEmpty ? <div>没有更多了啦(= =##)</div>
-              : <div>
-                <Lists articles={articles} />
-                <div style={{ textAlign: 'center' }}>
-                  <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
-                </div>
-              </div>
-          )
+        : (
+          isEmpty ? <div>没有更多了啦(= =##)</div>
+          : <div>
+            <Lists articles={articles} />
+            <div style={{ textAlign: 'center' }}>
+              <Pagination maxPage={total} currentPage={page} baseURL={baseURL} />
+            </div>
+          </div>
+        )
       )
     );
   }

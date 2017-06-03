@@ -1,9 +1,8 @@
 import { browserHistory } from 'react-router';
-import { Defer, dateFormatter, notification } from '../lib/common';
+import { Defer, dateFormatter, loadScript, loadStylesheet } from '../lib/common';
 import config from '../lib/config';
-import { loadScript, loadStylesheet } from '../lib/common';
 const articleApi = config.api.articles;
-const { get, post } = Defer($);
+const { get } = Defer($);
 
 export const actionTypes = {
   GETTING_ARTICLES: 'GETTING_ARTICLES',
@@ -93,7 +92,7 @@ export const fetchArticles = (page = 1) => (dispatch, getState) => {
   const lists = getState().articles.lists;
   const { searchTitle, searchType } = lists;
   const currentPage = lists.page;
-  if ((!searchTitle && !searchType) && page == currentPage) return Promise.resolve();
+  if ((!searchTitle && !searchType) && page === currentPage) return Promise.resolve();
   dispatch(gettingArticles());
   get(`${articleApi.lists(page)}`)
     .done(lists => dispatch(gotArticles(lists)))
@@ -109,7 +108,7 @@ export const fetchArticleTypes = () => dispatch => {
 
 export const fetchArticle = id => (dispatch, getState) => {
   const currentId = getState().articles.current.item.id;
-  if (id == currentId) return Promise.resolve();
+  if (id === currentId) return Promise.resolve();
   dispatch(gettingArticle());
   if (window.hasOwnProperty('hljs')) {
     get(`${articleApi.current(id)}`)
@@ -124,7 +123,7 @@ export const fetchArticle = id => (dispatch, getState) => {
 
 export const fetchArticlesByTitle = (title, page = 1) => (dispatch, getState) => {
   const lists = getState().articles.lists;
-  if (title === lists.searchTitle && page == lists.page) return Promise.resolve();
+  if (title === lists.searchTitle && page === lists.page) return Promise.resolve();
   dispatch(gettingArticlesByTitle(title));
   get(`${articleApi.searchByTitle(title, page)}`)
     .done(articles => dispatch(gotArticles(articles)))
@@ -133,7 +132,7 @@ export const fetchArticlesByTitle = (title, page = 1) => (dispatch, getState) =>
 
 export const fetchArticlesByType = (type, page = 1) => (dispatch, getState) => {
   const lists = getState().articles.lists;
-  if (type === lists.searchType && page == lists.page) return Promise.resolve();
+  if (type === lists.searchType && page === lists.page) return Promise.resolve();
   dispatch(gettingArticlesByType(type));
   get(`${articleApi.searchByType(type, page)}`)
     .done(articles => dispatch(gotArticles(articles)))

@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Table from '../../components/inside/ArticleTable'
-import Pagination from '../../components/common/Pagination'
-import Loading from '../../components/common/Loading'
-import { fetchInsideArticles, fetchInsideArticlesByTitle, fetchInsideArticle, fetchDeleteArticle, fetchEditArticle } from '../../actions/inside'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Table from '../../components/inside/ArticleTable';
+import Pagination from '../../components/common/Pagination';
+import Loading from '../../components/common/Loading';
+import { fetchInsideArticles, fetchInsideArticlesByTitle, fetchInsideArticle, fetchDeleteArticle } from '../../actions/inside';
 class ArticleTable extends Component {
-  componentWillMount() {
+  componentWillMount () {
     !this.props.hasEntered && this.props.dispatch(fetchInsideArticles());
   }
 
@@ -18,15 +18,15 @@ class ArticleTable extends Component {
 
   handleSearch = (title, page) => this.props.dispatch(fetchInsideArticlesByTitle(title, page));
 
-  render() {
-    const { articles, isFetching, isUpdating, total, page, searchTitle, hasEntered, errMsg } = this.props;
+  render () {
+    const { articles, isFetching, isUpdating, total, page, searchTitle } = this.props;
     const isEmpty = articles.length === 0;
     return (
       <div>
         {
-           isFetching ? <Loading /> :
-            (isEmpty ? <div>没有更多了啦(= =##)</div> :
-              <div>
+           isFetching ? <Loading />
+            : (isEmpty ? <div>没有更多了啦(= =##)</div>
+              : <div>
                 <Table
                   items={articles}
                   isUpdating={isUpdating}
@@ -41,7 +41,7 @@ class ArticleTable extends Component {
               </div>)
         }
       </div>
-    )
+    );
   }
 }
 
@@ -65,10 +65,10 @@ const mapStateToProps = state => {
     searchTitle,
     errMsg,
     hasEntered
-  }
+  };
 };
 
-export default connect(mapStateToProps)(ArticleTable)
+export default connect(mapStateToProps)(ArticleTable);
 
 ArticleTable.PropTypes = {
   articles: PropTypes.array.isRequired,

@@ -15,8 +15,8 @@ export const Defer = $ => {
    * @param {object} options 底层ajax的选项
    */
   const get = (url, options = {}) => {
-    let def = $.Deferred();
-    let opts = $.extend({
+    const def = $.Deferred();
+    const opts = $.extend({
       type: 'GET',
       url: url,
       dataType: 'json',
@@ -41,8 +41,8 @@ export const Defer = $ => {
    * @param {object} options 底层ajax的选项
    */
   const post = (url, data = {}, options = {}) => {
-    let def = $.Deferred();
-    let opts = $.extend({
+    const def = $.Deferred();
+    const opts = $.extend({
       type: 'POST',
       url: url,
       data: data,
@@ -74,8 +74,8 @@ export const Defer = $ => {
  */
 export const loadScript = url => {
   if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
-  let def = $.Deferred(),
-    script = document.createElement('script');
+  let def = $.Deferred();
+  let script = document.createElement('script');
   script.src = url;
   script.addEventListener('load', () => def.resolve());
   document.body.appendChild(script);
@@ -100,8 +100,8 @@ export const loadScripts = urls => {
  */
 export const loadStylesheet = url => {
   if (typeof $ !== 'function') throw new Error('Method loadScript depended on jQuery!');
-  let def = $.Deferred(),
-    stylesheet = document.createElement('link');
+  let def = $.Deferred();
+  let stylesheet = document.createElement('link');
   stylesheet.href = url;
   stylesheet.rel = 'stylesheet';
   stylesheet.addEventListener('load', () => def.resolve());
@@ -132,9 +132,9 @@ export const dateFormatter = (timestamp, formatStyle) => {
   const year = formatDate.getFullYear();
   const month = fixNumber(formatDate.getMonth() + 1);
   const date = fixNumber(formatDate.getDate());
-  const hour = fixNumber(formatDate.getHours());
-  const minute = fixNumber(formatDate.getMinutes());
-  const seconds = fixNumber(formatDate.getSeconds());
+  // const hour = fixNumber(formatDate.getHours());
+  // const minute = fixNumber(formatDate.getMinutes());
+  // const seconds = fixNumber(formatDate.getSeconds());
   switch (formatStyle) {
     case 'yyyy/MM/dd':
       return year + '/' + month + '/' + date;

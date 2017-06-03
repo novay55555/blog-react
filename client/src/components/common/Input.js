@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Input extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       element: null,
@@ -20,13 +20,13 @@ export default class Input extends Component {
           if (value.length > length) return errMsg;
         },
         isEmail: (value, errMsg) => {
-          if (!/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) return errMsg;
+          if (!/^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) return errMsg;
         }
       }
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     if (this.props.validates) {
       this.initValidator(this.props.validates);
       this.props.getValidator && this.props.getValidator.call(this.props.getValidator, this.state.validator);
@@ -40,16 +40,17 @@ export default class Input extends Component {
     const _cache = [];
     validates.forEach(validate => {
       _cache.push(() => {
-        let input = self.state.element,
-          args = validate.rule.split(':'),
-          validateRule = args.shift();
+        let input = self.state.element;
+        let args = validate.rule.split(':');
+        let validateRule = args.shift();
         args.push(validate.errMsg);
         args.unshift(input.value);
         return self.state.rules[validateRule].apply(input, args);
       });
     });
     validator.start = () => {
-      for (let i = 0, validateFn; validateFn = _cache[i++];) {
+      for (let i = 0; i < _cache.length; i++) {
+        let validateFn = _cache[i];
         let errMsg = validateFn();
         if (errMsg) {
           self.setState({
@@ -70,22 +71,22 @@ export default class Input extends Component {
     this.props.onChange && this.props.onChange.call(this.props.onChange, e.target.value);
   };
 
-  render() {
+  render () {
     const { status, errMsg } = this.state;
     const { className, label, name, type, validates, onChange, getValidator, ...props } = this.props;
     return (
       <div className={`form-group ${className || ''} ${status}`}>
-        <label className="control-label" htmlFor={name || ''}>{errMsg || label}</label>
+        <label className='control-label' htmlFor={name || ''}>{errMsg || label}</label>
         <input
-          ref={input => this.state.element = input}
-          className="form-control"
+          ref={input => { this.state.element = input; }}
+          className='form-control'
           name={name || ''}
           type={type || 'text'}
           onChange={this.change}
           {...props}
         />
       </div>
-    )
+    );
   }
 }
 

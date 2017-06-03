@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Form from '../../components/inside/AdminForm'
-import { fetchArticleTypes } from '../../actions/articles'
-import { fetchUpdateBlog, fetchAdmin } from '../../actions/inside'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Form from '../../components/inside/AdminForm';
+import { fetchArticleTypes } from '../../actions/articles';
+import { fetchUpdateBlog, fetchAdmin } from '../../actions/inside';
 
 class Admin extends Component {
-  componentWillMount() {
+  componentWillMount () {
     const { admin, types, dispatch } = this.props;
     if (!admin.name) dispatch(fetchAdmin());
     if (types.length === 0) dispatch(fetchArticleTypes());
@@ -14,7 +14,7 @@ class Admin extends Component {
 
   handleSubmit = updateData => this.props.dispatch(fetchUpdateBlog(updateData));
 
-  render() {
+  render () {
     const { admin, types, typesIsFetching, typesId, isUpdating } = this.props;
     return (
       <Form
@@ -25,7 +25,7 @@ class Admin extends Component {
         isFetching={typesIsFetching}
         isUpdating={isUpdating}
         onSubmit={this.handleSubmit} />
-    )
+    );
   }
 }
 
@@ -41,4 +41,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Admin)
+export default connect(mapStateToProps)(Admin);
+
+Admin.PropTypes = {
+  admin: PropTypes.object.isRequired,
+  types: PropTypes.array.isRequired,
+  typesIsFetching: PropTypes.bool.isRequired,
+  typesId: PropTypes.number.isRequired,
+  isUpdating: PropTypes.bool.isRequired
+};

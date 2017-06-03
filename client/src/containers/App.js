@@ -16,3 +16,9 @@ export default class App extends Component {
     );
   }
 }
+
+App.PropTypes = {
+  store: PropTypes.object.isRequired,
+  routes: PropTypes.object.isRequired,
+  browserHistory: PropTypes.object.isRequired
+};

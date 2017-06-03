@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route, IndexRoute, IndexRedirect, browserHistory } from 'react-router';
+import { Route, IndexRedirect } from 'react-router';
 import Blog from '../containers/Blog';
 import Article from '../containers/articles/Article';
 import ArticleLists from '../containers/articles/Lists';
