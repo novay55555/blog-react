@@ -5,7 +5,7 @@ gulp.task('default', ['prettify'], () => {});
 
 gulp.task('prettify', ['jsprettify', 'cssprettify'], () => {});
 
-gulp.task('jsprettify', () => 
+gulp.task('jsprettify', () =>
   gulp.src('./src/**/**/*.js')
     .pipe(prettify({
       'indent_size': 2,
@@ -15,11 +15,10 @@ gulp.task('jsprettify', () =>
     .pipe(gulp.dest(file => file.base))
 );
 
-gulp.task('cssprettify', () => 
+gulp.task('cssprettify', () =>
   gulp.src('./src/**/**/*.css')
     .pipe(prettify({
       'indent_size': 2
     }))
     .pipe(gulp.dest(file => file.base))
 );
-

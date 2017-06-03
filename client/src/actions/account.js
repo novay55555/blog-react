@@ -1,6 +1,6 @@
-import { Defer, notification } from '../lib/common'
-import md5 from 'blueimp-md5'
-import config from '../lib/config'
+import { Defer, notification } from '../lib/common';
+import md5 from 'blueimp-md5';
+import config from '../lib/config';
 
 const accountApi = config.api.account;
 const { get, post } = Defer($);

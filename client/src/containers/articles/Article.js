@@ -1,28 +1,27 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Container from '../../components/common/Container'
-import Aside from '../../components/articles/Aside'
-import { fetchArticleTypes } from '../../actions/articles'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Container from '../../components/common/Container';
+import Aside from '../../components/articles/Aside';
+import { fetchArticleTypes } from '../../actions/articles';
 
 class Article extends Component {
-
-  componentWillMount() {
+  componentWillMount () {
     this.props.dispatch(fetchArticleTypes());
   }
 
-  render() {
+  render () {
     const { types, isFetching } = this.props;
     return (
-      <Container isFluid={true}>
-        <div className="col-lg-2 col-sm-3">
+      <Container isFluid>
+        <div className='col-lg-2 col-sm-3'>
           <Aside lists={types} />
         </div>
-        <div className="col-lg-8 col-sm-8">
+        <div className='col-lg-8 col-sm-8'>
           {this.props.children}
         </div>
       </Container>
-    )
+    );
   }
 }
 
@@ -31,10 +30,10 @@ const mapStateToProps = state => {
   return {
     types,
     isFetching
-  }
+  };
 };
 
-export default connect(mapStateToProps)(Article)
+export default connect(mapStateToProps)(Article);
 
 Article.PropTypes = {
   types: PropTypes.array.isRequired,

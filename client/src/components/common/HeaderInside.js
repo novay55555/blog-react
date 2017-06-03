@@ -1,29 +1,28 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
-import commonClass from './common.css'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
+import commonClass from './common.css';
 
 export default class InsideHeader extends Component {
-
-  render() {
+  render () {
     const { logo, navs } = this.props;
     return (
       <div className={commonClass.header}>
-        <nav className="navbar navbar-inverse">
-          <div className="container-fluid">
-            <div className="navbar-header">
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarList" aria-expanded="false">
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
+        <nav className='navbar navbar-inverse'>
+          <div className='container-fluid'>
+            <div className='navbar-header'>
+              <button type='button' className='navbar-toggle collapsed' data-toggle='collapse' data-target='#navbarList' aria-expanded='false'>
+                <span className='sr-only'>Toggle navigation</span>
+                <span className='icon-bar' />
+                <span className='icon-bar' />
+                <span className='icon-bar' />
               </button>
-              <Link className="navbar-brand" to="/">
-                <img src={logo || ''} alt="" />
+              <Link className='navbar-brand' to='/'>
+                <img src={logo || ''} alt='' />
               </Link>
             </div>
-            <div className="collapse navbar-collapse" id="navbarList">
-              <ul className="nav navbar-nav">
+            <div className='collapse navbar-collapse' id='navbarList'>
+              <ul className='nav navbar-nav'>
                 {
                   navs.map((nav, i) => (<li key={i}><Link to={nav.path}>{nav.text}</Link></li>))
                 }
@@ -32,7 +31,7 @@ export default class InsideHeader extends Component {
           </div>
         </nav>
       </div>
-    )
+    );
   }
 }
 

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
-import articleCss from './articles.css'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
+import articleCss from './articles.css';
 
 export default class ArticleLists extends Component {
-  render() {
+  render () {
     const { articles } = this.props;
     return (
       <ul className={`list-group ${articleCss.list}`}>
@@ -24,7 +24,7 @@ export default class ArticleLists extends Component {
           ))
         }
       </ul>
-    )
+    );
   }
 }
 
@@ -35,6 +35,6 @@ ArticleLists.PropTypes = {
     author: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     articleType: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired
   }).isRequired
 };

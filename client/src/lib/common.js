@@ -1,5 +1,5 @@
-import { NotificationManager } from 'react-notifications'
-import config from './config'
+import { NotificationManager } from 'react-notifications';
+import config from './config';
 
 const { api } = config;
 
@@ -17,9 +17,9 @@ export const Defer = $ => {
   const get = (url, options = {}) => {
     let def = $.Deferred();
     let opts = $.extend({
-      type: "GET",
+      type: 'GET',
       url: url,
-      dataType: "json",
+      dataType: 'json',
       success: data => {
         if (data.code === api.successCode) {
           def.resolve(data.content);
@@ -83,7 +83,7 @@ export const loadScript = url => {
 };
 
 /**
- * 动态加载多个script	
+ * 动态加载多个script
  * @param  {array} urls 脚本路径数组
  * @return {array} defs Deferred对象数组
  */
@@ -121,7 +121,7 @@ export const loadStylesheets = urls => {
 };
 
 /**
- * 日期格式化   
+ * 日期格式化
  * @param {number} timestamp 时间戳
  * @param {string} formatStyle 格式化形式
  * @return {string} 格式化的日期
@@ -141,7 +141,7 @@ export const dateFormatter = (timestamp, formatStyle) => {
     default:
       return year + '-' + month + '-' + date;
   }
-}
+};
 
 /**
  * 提示插件封装, 文档详见
@@ -162,7 +162,7 @@ export const notification = (options = {}) => {
 /**
  * 对querySelectorAll的再次封装, 便于直接使用数组的方法
  * @param {string} selector 选择器
- * @param {DOM} context 原生DOM 
+ * @param {DOM} context 原生DOM
  */
 export const querySelectors = (selector, context = document) => Array.prototype.slice.call(context.querySelectorAll(selector));
 
@@ -176,5 +176,5 @@ export const throttleFunc = (func, wait) => {
   return () => {
     clearTimeout(timer);
     timer = setTimeout(func, wait);
-  }
+  };
 };

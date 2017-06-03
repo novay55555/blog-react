@@ -1,7 +1,7 @@
-import { browserHistory } from 'react-router'
-import { Defer, dateFormatter, notification } from '../lib/common'
-import config from '../lib/config'
-import { loadScript, loadStylesheet } from '../lib/common'
+import { browserHistory } from 'react-router';
+import { Defer, dateFormatter, notification } from '../lib/common';
+import config from '../lib/config';
+import { loadScript, loadStylesheet } from '../lib/common';
 const articleApi = config.api.articles;
 const { get, post } = Defer($);
 

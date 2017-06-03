@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
 
 export default class ListGroupLink extends Component {
-  render() {
+  render () {
     const { className, lists } = this.props;
     return (
       <div className={`list-group ${className || ''}`}>
         {
           lists.map((list, i) => (
-            <Link to={list.link} key={i} className="list-group-item">
-              {list.count ? <span className="badge">{list.count}</span> : ''}
+            <Link to={list.link} key={i} className='list-group-item'>
+              {list.count ? <span className='badge'>{list.count}</span> : ''}
               {list.text}
             </Link>
           ))
         }
       </div>
-    )
+    );
   }
 }
 

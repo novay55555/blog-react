@@ -1,6 +1,6 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
-import rootReducer from '../reduces'
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from '../reduces';
 
 const enhancer = compose(
   applyMiddleware(thunk)
@@ -8,4 +8,4 @@ const enhancer = compose(
 
 const configStore = initialState => createStore(rootReducer, initialState, enhancer);
 
-export default configStore
+export default configStore;

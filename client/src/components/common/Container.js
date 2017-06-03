@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Container extends Component {
-  render() {
+  render () {
     const { className, children, isFluid, ...props } = this.props;
     return (
       <div className={`${isFluid ? 'container-fluid' : 'container'} ${className || ''}`} {...props}>
-        <div className="row">
+        <div className='row'>
           {children}
         </div>
       </div>
-    )
+    );
   }
 }
 

@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux'
-import { actionTypes } from '../actions/inside'
+import { combineReducers } from 'redux';
+import { actionTypes } from '../actions/inside';
 
 const articles = (state = { activeIndex: 0, articleMode: 'add' }, action) => {
   switch (action.type) {
@@ -113,7 +113,7 @@ const users = (state = { items: [], page: 1, total: 0, current: {} }, action) =>
       return {
         ...state,
         current: action.user
-      }
+      };
     default:
       return state;
   }

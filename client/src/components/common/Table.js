@@ -1,38 +1,38 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Table extends Component {
-  render() {
+  render () {
     const { columns, dataSource, className, ...props } = this.props;
     return (
       <table className={`table ${className}`} {...props}>
-				<thead>
-					<tr>
-						{
+        <thead>
+          <tr>
+            {
 							columns.map(column => <th key={column.key}>{column.title}</th>)
 						}
-					</tr>
-				</thead>
+          </tr>
+        </thead>
 
-				<tbody>
-					{
+        <tbody>
+          {
 						dataSource.map(data => (
-							<tr key={data.id}>
-								{
+  <tr key={data.id}>
+    {
 									columns.map(column => (
-										<td key={column.key}>
-											{
+  <td key={column.key}>
+    {
 												column.render ? column.render(data[column.key], data) : data[column.key]
 											}
-										</td>
+  </td>
 									))
 								}
-							</tr>
+  </tr>
 						))
 					}
-				</tbody>
-			</table>
-    )
+        </tbody>
+      </table>
+    );
   }
 }
 

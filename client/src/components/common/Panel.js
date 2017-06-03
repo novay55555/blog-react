@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Panel extends Component {
-  render() {
+  render () {
     const { className, type, title } = this.props;
     return (
       <div className={`panel panel-${type || 'default'} ${className || ''}`}>
-        <div className="panel-heading">
-          <h3 className="panel-title">{title}</h3>
+        <div className='panel-heading'>
+          <h3 className='panel-title'>{title}</h3>
         </div>
-        <div className="panel-body">
+        <div className='panel-body'>
           {this.props.children}
         </div>
       </div>
-    )
+    );
   }
 }
 

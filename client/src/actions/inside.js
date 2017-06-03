@@ -1,7 +1,7 @@
-import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common'
-import md5 from 'blueimp-md5'
-import config from '../lib/config'
-import * as ArticlesActions from './articles'
+import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common';
+import md5 from 'blueimp-md5';
+import config from '../lib/config';
+import * as ArticlesActions from './articles';
 
 const { get, post } = Defer($);
 const articleApi = config.api.articles;
@@ -18,7 +18,7 @@ export const actionTypes = {
   EDITING_ARTICLE: 'EDITING_ARTICLE',
   EDITED_ARTICLE: 'EDITED_ARTICLE',
   ERROR_EDIT_ARTICLE: 'ERROR_EDIT_ARTICLE',
-  ENTERED_INSIDE: 'ENTERED_INSIDE', // 给定进入过里世界的标识, 以后再从博客进入无需在拉取数据 
+  ENTERED_INSIDE: 'ENTERED_INSIDE', // 给定进入过里世界的标识, 以后再从博客进入无需在拉取数据
   GETTING_USERS: 'GETTING_USERS',
   GOT_USERS: 'GOT_USERS',
   ERROR_GET_USERS: 'ERROR_GET_USERS',
@@ -78,7 +78,7 @@ const deletingUser = () => ({
 const deletedUser = (users, id) => ({
   type: actionTypes.DELETED_USER,
   updateItems: () => {
-    users.splice(users.findIndex(user => user.id === id), 1)
+    users.splice(users.findIndex(user => user.id === id), 1);
     return users;
   }
 });
@@ -265,7 +265,7 @@ export const loadMarkdownEditor = () => {
         })
         .fail(() => {
           notification({ type: 'error', message: 'Fail to load highlightjs' });
-        })
+        });
     } else {
       def.resolve();
     }
@@ -292,7 +292,7 @@ export const fetchDeleteArticle = id => (dispatch, getState) => {
   get(`${articleApi.delete(id)}`)
     .done(() => dispatch(deletedArticle(getState().articles.lists.items, id)))
     .fail(errMsg => {
-      dispatch(errorDeleteArticle())
+      dispatch(errorDeleteArticle());
       notification({ type: 'error', message: errMsg, timeout: 3000 });
     });
 };
@@ -372,7 +372,7 @@ export const fetchUpdateBlog = updateData => dispatch => {
     })
     .fail(errMsg => {
       dispatch(errorEditBlog());
-      notification({ type: 'error', message: errMsg })
+      notification({ type: 'error', message: errMsg });
     });
 };
 

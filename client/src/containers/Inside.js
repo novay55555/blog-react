@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import Header from '../components/common/HeaderInside'
-import Footer from '../components/common/Footer'
-import Container from '../components/common/Container'
-import { NotificationContainer } from 'react-notifications'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Header from '../components/common/HeaderInside';
+import Footer from '../components/common/Footer';
+import Container from '../components/common/Container';
+import { NotificationContainer } from 'react-notifications';
 export default class Inside extends Component {
-  render() {
+  render () {
     return (
       <div>
         <Header
@@ -32,6 +32,6 @@ export default class Inside extends Component {
         <Footer />
         <NotificationContainer />
       </div>
-    )
+    );
   }
 }

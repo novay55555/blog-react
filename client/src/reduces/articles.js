@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux'
-import { actionTypes as articleActionTypes } from '../actions/articles'
-import { actionTypes as insideActionTypes } from '../actions/inside'
+import { combineReducers } from 'redux';
+import { actionTypes as articleActionTypes } from '../actions/articles';
+import { actionTypes as insideActionTypes } from '../actions/inside';
 
 const lists = (state = { items: [] }, action) => {
   switch (action.type) {
@@ -87,7 +87,7 @@ const types = (state = { items: [] }, action) => {
         ...state,
         isFetching: false,
         errMsg: action.errMsg
-      }
+      };
     case insideActionTypes.EDITED_BLOG:
       return {
         ...state,
@@ -154,7 +154,7 @@ const current = (state = { item: {} }, action) => {
     default:
       return state;
   }
-}
+};
 
 export default combineReducers({
   lists,

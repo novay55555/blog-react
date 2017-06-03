@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Link } from 'react-router'
-import Panel from '../common/Panel'
-import ArticleTypeList from '../common/ListGroupLink'
-import articlesCss from './articles.css'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router';
+import Panel from '../common/Panel';
+import ArticleTypeList from '../common/ListGroupLink';
+import articlesCss from './articles.css';
 
 export default class Aside extends Component {
-  render() {
+  render () {
     const { lists } = this.props;
     return (
       <Panel className={articlesCss.types} title='文章分类'>
         <ArticleTypeList lists={lists} />
       </Panel>
-    )
+    );
   }
 }
 

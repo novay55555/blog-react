@@ -1,4 +1,4 @@
-import { actionTypes } from '../actions/account'
+import { actionTypes } from '../actions/account';
 
 const account = (state = { isLogin: false }, action) => {
   switch (action.type) {
@@ -82,4 +82,4 @@ const account = (state = { isLogin: false }, action) => {
   }
 };
 
-export default account
+export default account;
