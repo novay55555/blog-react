@@ -1,0 +1,31 @@
+{
+  "name": "blog-react-server",
+  "version": "0.0.1",
+  "description": "express server for my blog",
+  "main": "app.js",
+  "scripts": {
+    "database": "mongod --dbpath f:\\mongodb\\db\\ --logpath f:\\mongodb\\log\\mongodb.log --auth",
+    "gulp": "gulp",
+    "test": "gulp api-test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "mongoose": "^4.9.6",
+    "nodemailer": "^2.3.0"
+  },
+  "devDependencies": {
+    "bluebird": "^3.5.0",
+    "blueimp-md5": "^2.7.0",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-jsbeautifier": "^2.1.0",
+    "gulp-mocha": "^4.3.1",
+    "mocha-clean": "^1.0.0",
+    "request": "^2.81.0"
+  }
+}
