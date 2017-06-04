@@ -74,3 +74,16 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(Users);
+
+Users.PropTypes = {
+  items: PropTypes.array.isRequired,
+  page: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  isDeleting: PropTypes.bool.isRequired,
+  errMsg: PropTypes.string.isRequired,
+  searchName: PropTypes.string.isRequired,
+  activeModal: PropTypes.string.isRequired,
+  editUser: PropTypes.object.isRequired
+};
