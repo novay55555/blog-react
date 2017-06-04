@@ -1,14 +1,15 @@
 {
   "name": "blog-react-server",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "express server for my blog",
   "main": "app.js",
   "scripts": {
+    "product": "NODE_ENV=production pm2 start app.js --name blog",
     "database": "mongod --dbpath f:\\mongodb\\db\\ --logpath f:\\mongodb\\log\\mongodb.log --auth",
     "gulp": "gulp",
     "test": "gulp api-test"
   },
-  "author": "",
+  "author": "gunhawk <gunhawk998@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",

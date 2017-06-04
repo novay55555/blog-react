@@ -518,15 +518,6 @@ Api.get('/api/inside/admin', (req, res) => {
   }).catch(err => res.json(err));
 });
 
-Api.use((req, res) => {
-  res.status(404).send(apiStatus.notFount.msg);
-});
-
-Api.use((err, req, res) => {
-  console.error(err.stack);
-  res.status(500).send(apiStatus.error.msg);
-});
-
 module.exports = Api;
 
 /**
