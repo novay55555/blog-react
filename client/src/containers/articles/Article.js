@@ -15,7 +15,7 @@ class Article extends Component {
     return (
       <Container isFluid>
         <div className='col-lg-2 col-sm-3'>
-          <Aside lists={types} />
+          <Aside lists={types} isFetching={isFetching} />
         </div>
         <div className='col-lg-8 col-sm-8'>
           {this.props.children}

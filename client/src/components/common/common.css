@@ -117,6 +117,19 @@ button {
   color: #ff0000;
 }
 
+.loading{
+  width: 50px;
+  height: 50px;
+  border-width: 4px;
+  border-style: solid;
+  border-color: #999;
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+  border-radius: 50%;
+  animation: loading-rotating .2s ease-in-out infinite;
+}
+
 @media (min-width: 1024px) {
    ::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -146,11 +159,11 @@ button {
   }
 }
 
-@keyframes navbar-slide {
+@keyframes loading-rotating {
   from {
-    height: 0;
+    transform: rotate3d(0, 0, 1, 0);
   }
   to {
-    height: 52px;
+    transform: rotate3d(0, 0, 1, 270deg);
   }
 }

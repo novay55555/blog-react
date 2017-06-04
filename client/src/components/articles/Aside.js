@@ -6,10 +6,12 @@ import articlesCss from './articles.css';
 
 export default class Aside extends Component {
   render () {
-    const { lists } = this.props;
+    const { lists, isFetching } = this.props;
     return (
       <Panel className={articlesCss.types} title='文章分类'>
-        <ArticleTypeList lists={lists} />
+        {
+          isFetching ? <div className={articlesCss.loading} /> : <ArticleTypeList className='animated fadeIn' lists={lists} />
+        }
       </Panel>
     );
   }
