@@ -8,7 +8,7 @@ export default class Inside extends Component {
     return (
       <div>
         <Header
-          logo='/build/img/kato.jpg'
+          logo='/img/kato.jpg'
           navs={[
             {
               text: '文章管理',
