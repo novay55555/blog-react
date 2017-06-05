@@ -29,7 +29,7 @@ class Blog extends Component {
     return (
       <div>
         <Header
-          logo='/build/img/kato.jpg'
+          logo='/img/kato.jpg'
           navs={
             accountInfo.isAdmin
               ? [
