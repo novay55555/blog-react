@@ -8,7 +8,7 @@ import { fetchArticle } from '../../actions/articles';
 
 class ArticleContent extends Component {
   componentWillMount () {
-    this.props.dispatch(fetchArticle(this.props.params.id));
+    this.props.dispatch(fetchArticle(parseInt(this.props.params.id)));
   }
 
   render () {

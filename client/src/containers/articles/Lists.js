@@ -12,7 +12,7 @@ class ArticleLists extends Component {
     const { searchTitle, searchType, page } = this.props.params;
     if (searchTitle) return this.props.dispatch(fetchArticlesByTitle(searchTitle, page));
     if (searchType) return this.props.dispatch(fetchArticlesByType(searchType, page));
-    this.props.dispatch(fetchArticles(page));
+    this.props.dispatch(fetchArticles(parseInt(page)));
   }
 
   componentWillReceiveProps (nextState) {
@@ -25,7 +25,7 @@ class ArticleLists extends Component {
       return this.props.dispatch(fetchArticlesByType(searchType, page));
     }
     if (!searchTitle && !searchType) {
-      if (this.props.params.page !== page || this.props.params.searchTitle !== searchTitle || this.props.params.searchType !== searchType) return this.props.dispatch(fetchArticles(page));
+      if (this.props.params.page !== page || this.props.params.searchTitle !== searchTitle || this.props.params.searchType !== searchType) return this.props.dispatch(fetchArticles(parseInt(page)));
     }
   }
 
