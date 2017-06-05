@@ -29,7 +29,7 @@ export default class ArticleForm extends Component {
 
   componentWillReceiveProps (nextState) {
     if (nextState.mode === 'edit') return this.setState(nextState.article);
-    if (nextState.mode === 'add' && !this.props.author) return this.setState({ author: nextState.author });
+    if (nextState.mode === 'add' && nextState.author && nextState.articleTypes.length > 0) return this.setState({ author: nextState.author, articleType: nextState.articleTypes[0].text });
   }
 
   componentDidMount () {

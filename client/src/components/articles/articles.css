@@ -59,6 +59,12 @@
   font-size: 14px;
 }
 
+.content img{
+  margin: 10px auto;
+  display: block;
+  max-width: 100%;
+}
+
 @media (max-width: 767px) {
   .types {
     display: none;

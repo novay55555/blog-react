@@ -27,9 +27,7 @@ export const Defer = $ => {
           def.reject(data.msg);
         }
       },
-      error: jqXHR => {
-        def.reject(jqXHR.responseText);
-      }
+      error: () => def.reject(config.apiErrMsg)
     }, options);
     $.ajax(opts);
     return def;
@@ -54,9 +52,7 @@ export const Defer = $ => {
           def.reject(data.msg);
         }
       },
-      error: jqXHR => {
-        def.reject(jqXHR.responseText);
-      }
+      error: () => def.reject(config.apiErrMsg)
     }, options);
     $.ajax(opts);
     return def;

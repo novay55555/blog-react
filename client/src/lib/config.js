@@ -27,7 +27,8 @@ const config = {
     },
     blog: `/api/inside/blog`,
     admin: `/api/inside/admin`
-  }
+  },
+  apiErrMsg: '服务器大姨妈, 请稍后再试 =. ='
 };
 
 export default config;
