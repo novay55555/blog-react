@@ -1,7 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const cssExtractTextPlugin = new ExtractTextPlugin({ filename: 'app.css', allChunks: true });
+const cssExtractTextPlugin = new ExtractTextPlugin({ filename: '[contenthash].css', allChunks: true });
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
 module.exports = {
   context: __dirname,
@@ -12,7 +14,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/build/',
-    filename: 'bundle.js'
+    filename: '[hash].js'
   },
   module: {
     rules: [{
@@ -74,6 +76,13 @@ module.exports = {
       filename: 'vendor.js'
     }),
     new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      alwaysWriteToDisk: true,
+      minify: false,
+      template: './index.ejs',
+      filename: path.join(__dirname, 'index.html')
+    }),
+    new HtmlWebpackHarddiskPlugin(),
     cssExtractTextPlugin
   ],
   devServer: {
