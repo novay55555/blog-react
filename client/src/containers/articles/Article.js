@@ -7,7 +7,7 @@ import { fetchArticleTypes } from '../../actions/articles';
 
 class Article extends Component {
   componentWillMount () {
-    this.props.dispatch(fetchArticleTypes());
+    this.props.types.length === 0 && this.props.dispatch(fetchArticleTypes());
   }
 
   render () {
