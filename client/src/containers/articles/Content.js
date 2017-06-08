@@ -14,10 +14,10 @@ class ArticleContent extends Component {
 
   openImage = e => {
     const elem = e.target;
-    if(elem.tagName.toLowerCase() === 'img') window.open(elem.src);
+    if (elem.tagName.toLowerCase() === 'img') window.open(elem.src);
   };
 
-  componentWillUnmount(){
+  componentWillUnmount () {
     document.removeEventListener('click', this.openImage);
   }
 
