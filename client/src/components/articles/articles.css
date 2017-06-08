@@ -73,6 +73,11 @@
   margin: 10px auto;
   display: block;
   max-width: 100%;
+  cursor: pointer;
+}
+
+.content img:hover{
+  box-shadow: 0 0 20px #999;
 }
 
 @media (max-width: 767px) {
