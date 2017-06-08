@@ -1,5 +1,10 @@
 /* bootstrap样式重置 */
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 a:focus,
 a:hover {
   text-decoration: none;

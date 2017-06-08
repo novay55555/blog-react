@@ -59,7 +59,17 @@
   font-size: 14px;
 }
 
-.content img{
+.content ol {
+  padding-left: 20px;
+  list-style-type: decimal;
+}
+
+.content ul {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.content img {
   margin: 10px auto;
   display: block;
   max-width: 100%;
