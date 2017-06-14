@@ -7,6 +7,8 @@
     "product": "NODE_ENV=production pm2 start app.js --name blog",
     "database": "mongod --dbpath f:\\mongodb\\db\\ --logpath f:\\mongodb\\log\\mongodb.log --auth",
     "gulp": "gulp",
+    "build-doc": "apidoc -f \".*\\.js$\" -i ./api -o ./doc ",
+    "read-doc": "browser-sync start --server --startPath ./doc/index.html",
     "test": "gulp api-test"
   },
   "author": "gunhawk <gunhawk998@gmail.com>",
@@ -20,8 +22,10 @@
     "nodemailer": "^2.3.0"
   },
   "devDependencies": {
+    "apidoc": "^0.17.6",
     "bluebird": "^3.5.0",
     "blueimp-md5": "^2.7.0",
+    "browser-sync": "^2.18.12",
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-jsbeautifier": "^2.1.0",

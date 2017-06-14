@@ -4,3 +4,4 @@ node_modules/
 client/build/
 client/index.html
 server/credenticals.js
+server/doc/
