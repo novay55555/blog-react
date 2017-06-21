@@ -15,12 +15,9 @@ const apiStatus = config.api;
  * @api {get} /api/articles/types 获取文章类型
  * @apiGroup Articles
  * @apiName Get article types
- * @apiSuccess {Array} content 文章类型
- * @apiSuccessExample {json} Example:
- * {
- *  code: 1,
- *  content: ['javascript', 'nodejs']
- * }
+ * @apiSuccess {Object} content 文章类型
+ * @apiSuccess {String} content._id 文章类型id
+ * @apiSuccess {String[]} content.type 文章类型数组
  * @apiVersion 1.0.0
  */
 Api.get('/api/articles/types', (req, res) => {
@@ -567,7 +564,7 @@ Api.get('/api/inside/users/:page', (req, res) => {
  * @apiParam {Number}  id         用户id
  * @apiParam {String}  password   密码
  * @apiParam {String}  email      邮箱
- * @apiSuccessExample 
+ * @apiSuccessExample {json} Example:
  * {
  *  code: 1,
  *  content: {}
@@ -591,7 +588,7 @@ Api.post('/api/inside/user/edit', (req, res) => {
  * @apiGroup Inside
  * @apiName Delete a user
  * @apiParam {Number}  id  用户id
- * @apiSuccessExample 
+ * @apiSuccessExample {json} Example: 
  * {
  *  code: 1,
  *  content: {}
@@ -656,14 +653,14 @@ Api.get('/api/inside/users/search/:name/:page', (req, res) => {
  * @api {post} /api/inside/blog 更新博客
  * @apiGroup Inside
  * @apiName Update blog settings
- * @apiParam (group) {object} admin 管理员帐号数据
+ * @apiParam {object} admin 管理员帐号数据
  * @apiParam {String} admin.name 帐号
  * @apiParam {String} admin.password 密码(可选)
  * @apiParam {String} admin.email 邮箱
- * @apiParam (group) {object} types 文章类型数据
+ * @apiParam {object} types 文章类型数据
  * @apiParam {String} types.id 文章类型的ObjectId
  * @apiParam {array} types.data 文章类型集合 
- * @apiSuccessExample 
+ * @apiSuccessExample {json} Example:
  * {
  *  code: 1,
  *  content: {}
@@ -716,6 +713,8 @@ Api.get('/api/inside/admin', (req, res) => {
     });
   }).catch(err => res.json(err));
 });
+
+Api.use('/api/*', (req, res) => res.json({code: apiStatus.notFount.code, msg: apiStatus.notFount.msg}));
 
 module.exports = Api;
 

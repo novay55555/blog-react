@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "product": "NODE_ENV=production pm2 start app.js --name blog",
-    "database": "mongod --dbpath f:\\mongodb\\db\\ --logpath f:\\mongodb\\log\\mongodb.log --auth",
+    "database": "mongod --dbpath g:\\mine\\mongodb --logpath g:\\mine\\mongodb\\log\\mongodb.log",
     "gulp": "gulp",
     "build-doc": "apidoc -f \".*\\.js$\" -i ./api -o ./doc ",
     "read-doc": "browser-sync start --server --startPath ./doc/index.html",

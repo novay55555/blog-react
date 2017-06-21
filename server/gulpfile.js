@@ -16,7 +16,7 @@ gulp.task('jsprettify', () =>
 );
 
 gulp.task('api-test', () =>
-  gulp.src('./qa/test-api.js', { read: false })
+  gulp.src('./qa/index.js', { read: false })
   .pipe(mocha({
     ui: 'tdd',
     timeout: 5000,
