@@ -1,7 +1,6 @@
 const request = require('request');
 const Promise = require('bluebird');
 const md5 = require('blueimp-md5');
-
 const baseURL = 'http://localhost:3000';
 const adminData = {
   name: 'admin',
