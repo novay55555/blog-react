@@ -10,15 +10,13 @@ const { api } = config;
  */
 export const Defer = $ => {
   /**
-   * GET方法
-   * @param {string} url API路径
+   * 内部公共defer方法封装
    * @param {object} options 底层ajax的选项
    */
-  const get = (url, options = {}) => {
+  const _defer = options => {
     const def = $.Deferred();
     const opts = $.extend({
-      type: 'GET',
-      url: url,
+      contentType: 'application/json; charset=utf-8',
       dataType: 'json',
       success: data => {
         if (data.code === api.successCode) {
@@ -33,33 +31,56 @@ export const Defer = $ => {
     return def;
   };
   /**
+   * GET方法
+   * @param {string} url API路径
+   * @param {object} options 底层ajax的选项
+   */
+  const get = (url, options = {}) => {
+    const opts = $.extend({ url }, options);
+    return _defer(opts);
+  };
+  /**
    * POST方法
    * @param {string} url API路径
    * @param {object} data post参数
    * @param {object} options 底层ajax的选项
    */
   const post = (url, data = {}, options = {}) => {
-    const def = $.Deferred();
     const opts = $.extend({
-      type: 'POST',
-      url: url,
-      data: data,
-      dataType: 'json',
-      success: data => {
-        if (data.code === api.successCode) {
-          def.resolve(data.content);
-        } else {
-          def.reject(data.msg);
-        }
-      },
-      error: () => def.reject(config.apiErrMsg)
+      method: 'POST',
+      url,
+      data: JSON.stringify(data)
     }, options);
-    $.ajax(opts);
-    return def;
+    return _defer(opts);
+  };
+  /**
+   * PUT方法
+   * @param {string} url API路径
+   * @param {object} data post参数
+   * @param {object} options 底层ajax的选项
+   */
+  const put = (url, data = {}, options = {}) => {
+    const opts = $.extend({
+      method: 'PUT',
+      url,
+      data: JSON.stringify(data)
+    }, options);
+    return _defer(opts);
+  };
+  /**
+   * DELETE方法
+   * @param {string} url API路径
+   * @param {object} options 底层ajax的选项
+   */
+  const del = (url, data = {}, options = {}) => {
+    const opts = $.extend({ method: 'DELETE', url }, options);
+    return _defer(opts);
   };
   return {
     get,
-    post
+    post,
+    put,
+    del
   };
 };
 

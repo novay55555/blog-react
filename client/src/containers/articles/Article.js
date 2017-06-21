@@ -28,7 +28,10 @@ class Article extends Component {
 const mapStateToProps = state => {
   const { items: types, isFetching } = state.articles.types;
   return {
-    types,
+    types: types.map(type => ({
+      link: `/articles/${type}/1`,
+      text: type
+    })),
     isFetching
   };
 };

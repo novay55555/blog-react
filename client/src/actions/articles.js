@@ -75,10 +75,7 @@ const gettingArticleTypes = () => ({
 
 const gotArticleTypes = typeItem => ({
   type: actionTypes.GOT_ARTICLE_TYPES,
-  items: typeItem.type.map(type => ({
-    link: `/articles/${type}/1`,
-    text: type
-  })),
+  items: typeItem.type,
   id: typeItem._id
 });
 

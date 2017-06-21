@@ -1,7 +1,7 @@
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+let mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var commentSchema = Schema({
+const commentSchema = Schema({
   _article: { type: Number, ref: 'Articles' },
   replyUserId: { type: Number, ref: 'Users' },
   content: String,
@@ -13,5 +13,5 @@ var commentSchema = Schema({
   }],
   date: Number
 });
-
+mongoose.Promise = global.Promise;
 module.exports = mongoose.model('Comment', commentSchema);

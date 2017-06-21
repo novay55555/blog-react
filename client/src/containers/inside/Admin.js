@@ -17,14 +17,19 @@ class Admin extends Component {
   render () {
     const { admin, types, typesIsFetching, typesId, isUpdating } = this.props;
     return (
-      <Form
-        account={admin.name}
-        email={admin.email}
-        types={types}
-        typesId={typesId}
-        isFetching={typesIsFetching}
-        isUpdating={isUpdating}
-        onSubmit={this.handleSubmit} />
+      <div>
+        {
+          Object.keys(admin).length === 0 ? ''
+            : <Form
+              account={admin.name}
+              email={admin.email}
+              types={types}
+              typesId={typesId}
+              isFetching={typesIsFetching}
+              isUpdating={isUpdating}
+              onSubmit={this.handleSubmit} />
+        }
+      </div>
     );
   }
 }
@@ -34,7 +39,7 @@ const mapStateToProps = state => {
   const { items: types, isFetching: typesIsFetching, id: typesId } = state.articles.types;
   return {
     admin,
-    types: types.map(type => type.text),
+    types,
     typesIsFetching,
     typesId,
     isUpdating

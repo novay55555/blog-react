@@ -3,7 +3,7 @@ import md5 from 'blueimp-md5';
 import config from '../lib/config';
 import * as ArticlesActions from './articles';
 
-const { get, post } = Defer($);
+const { get, post, put, del } = Defer($);
 const articleApi = config.api.articles;
 const userApi = config.api.users;
 
@@ -43,10 +43,7 @@ const edittingBlog = () => ({
 const editedBlog = updateData => ({
   type: actionTypes.EDITED_BLOG,
   admin: updateData.admin,
-  types: updateData.types.data.map(type => ({
-    link: `/articles/${type}/1`,
-    text: type
-  }))
+  types: updateData.types.data
 });
 
 const errorEditBlog = () => ({
@@ -289,7 +286,7 @@ export const fetchInsideArticle = id => dispatch => {
 
 export const fetchDeleteArticle = id => (dispatch, getState) => {
   dispatch(deleteingArticle());
-  get(`${articleApi.delete(id)}`)
+  del(`${articleApi.delete(id)}`)
     .done(() => dispatch(deletedArticle(getState().articles.lists.items, id)))
     .fail(errMsg => {
       dispatch(errorDeleteArticle());
@@ -299,7 +296,7 @@ export const fetchDeleteArticle = id => (dispatch, getState) => {
 
 export const fetchEditArticle = article => (dispatch, getState) => {
   dispatch(editingArticle());
-  post(`${articleApi.edit(article.id)}`, article)
+  put(articleApi.edit, article)
     .done(() => {
       dispatch(editedArticle(article, getState().articles.lists.items));
       notification({ message: '编辑成功' });
@@ -336,7 +333,7 @@ export const getEditUserData = id => (dispatch, getState) => {
 export const fetchEditUser = (id, password, email, callback) => (dispatch, getState) => {
   const users = getState().inside.users.items;
   dispatch(edittingUser());
-  post(`${userApi.edit}`, { id, password: md5(password), email })
+  put(`${userApi.edit}`, { id, password: md5(password), email })
     .done(data => {
       dispatch(editedUser(users, { id, password: md5(password), email }));
       callback && callback();
@@ -350,7 +347,7 @@ export const fetchEditUser = (id, password, email, callback) => (dispatch, getSt
 export const fetchDeleteUser = id => (dispatch, getState) => {
   const users = getState().inside.users.items;
   dispatch(deletingUser());
-  get(`${userApi.delete(id)}`)
+  del(`${userApi.delete(id)}`)
     .done(data => dispatch(deletedUser(users, id)))
     .fail(errMsg => {
       dispatch(errorDeleteUser());
@@ -365,7 +362,7 @@ export const fetchUpdateBlog = updateData => dispatch => {
     delete updateData.admin.password;
   }
   dispatch(edittingBlog());
-  post(`${config.api.blog}`, updateData)
+  put(`${config.api.blog}`, updateData)
     .done(() => {
       dispatch(editedBlog(updateData));
       notification({ message: '更新成功' });
@@ -377,6 +374,7 @@ export const fetchUpdateBlog = updateData => dispatch => {
 };
 
 export const fetchAdmin = () => dispatch => {
+  notification({type: 'info', message: 'Now loading...'});
   get(`${config.api.admin}`)
     .done(data => dispatch(getAdmin(data)))
     .fail(errMsg => notification({ type: 'error', message: errMsg }));

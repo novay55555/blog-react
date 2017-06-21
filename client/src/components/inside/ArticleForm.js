@@ -29,7 +29,7 @@ export default class ArticleForm extends Component {
 
   componentWillReceiveProps (nextState) {
     if (nextState.mode === 'edit' && !nextState.isUpdating) return this.setState(nextState.article);
-    if (nextState.mode === 'add' && nextState.author && nextState.articleTypes.length > 0) return this.setState({ author: nextState.author, articleType: nextState.articleTypes[0].text });
+    if (nextState.mode === 'add' && nextState.author && nextState.articleTypes.length > 0) return this.setState({ author: nextState.author, articleType: nextState.articleTypes[0] });
   }
 
   componentDidMount () {
@@ -136,10 +136,10 @@ export default class ArticleForm extends Component {
                 ? (mode === 'add'
                   ? articleTypes.map((type, i) => <button key={i}
                     className={`btn ${i === currentTypeIndex ? 'btn-primary' : 'btn-default'}`}
-                    onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>)
+                    onClick={() => this.handleTypeChange(type, i)}>{type}</button>)
                   : articleTypes.map((type, i) => <button key={i}
-                    className={`btn ${articleType === type.text ? 'btn-primary' : 'btn-default'}`}
-                    onClick={() => this.handleTypeChange(type.text, i)}>{type.text}</button>))
+                    className={`btn ${articleType === type ? 'btn-primary' : 'btn-default'}`}
+                    onClick={() => this.handleTypeChange(type, i)}>{type}</button>))
                 : ''
             }
           </p>
@@ -169,10 +169,7 @@ export default class ArticleForm extends Component {
 }
 
 ArticleForm.PropTypes = {
-  articleTypes: PropTypes.arrayOf({
-    text: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired
-  }).isRequired,
+  articleTypes: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   onSubmit: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isUpdating: PropTypes.bool.isRequired,

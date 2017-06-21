@@ -1,5 +1,5 @@
-var mongoose = require('mongoose');
-var userSchema = mongoose.Schema({
+const mongoose = require('mongoose');
+const userSchema = mongoose.Schema({
   _id: Number,
   name: String,
   password: String,
@@ -7,7 +7,7 @@ var userSchema = mongoose.Schema({
   role: Number,
   photoUrl: String
 });
-var CounterSchema = mongoose.Schema({
+const CounterSchema = mongoose.Schema({
   _id: {
     type: String,
     required: true
@@ -17,13 +17,14 @@ var CounterSchema = mongoose.Schema({
     default: 0
   }
 });
-var userCounter = mongoose.model('UserCounters', CounterSchema);
-userSchema.pre('save', function(next) {
-  var doc = this;
-  userCounter.findByIdAndUpdate({ _id: 'userId' }, { $inc: { seq: 1 } }, { upsert: true }, function(err, counter) {
+const userCounter = mongoose.model('UserCounters', CounterSchema);
+userSchema.pre('save', function (next) {
+  const doc = this;
+  userCounter.findByIdAndUpdate({ _id: 'userId' }, { $inc: { seq: 1 } }, { upsert: true }, (err, counter) => {
     if (err) return next(err);
     counter ? doc._id = counter.seq + 1 : doc._id = 1;
     next();
-  })
+  });
 });
+mongoose.Promise = global.Promise;
 module.exports = mongoose.model('Users', userSchema);
