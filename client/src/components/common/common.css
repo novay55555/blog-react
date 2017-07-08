@@ -37,10 +37,14 @@ html {
 
 body {
   position: relative;
-  padding-top: 73px;
   padding-bottom: 125px;
   min-height: 100%;
   font-size: 16px;
+}
+
+main{
+  padding-top: 10px;
+  padding-left: 75px;
 }
 
 a {
@@ -96,6 +100,103 @@ button {
   text-align: center;
   border-top: 1px solid #dedede;
   z-index: 1;
+}
+
+.slidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 75px;
+  background: #222;
+  z-index: 998;
+}
+
+.slidebar ul{
+  margin-bottom: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #222;
+}
+
+.slidebar li{
+  padding: 20px 0;
+  text-align: center;
+}
+.slidebar li:global(.active){
+  overflow-y: initial;
+}
+
+.slidebar li>:global(.glyphicon){
+  padding: 5px;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+  transition: transform .25s ease-in-out;
+}
+
+.slidebar li>:global(.glyphicon):hover{
+  transform: rotateZ(360deg)
+}
+
+.slidebar li:global(.active)>:global(.glyphicon){
+  color: #eee;
+}
+
+.slidebar :global(.children){
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  transition: transform .25s ease-in-out;
+  transform: translate3d(0, 0, 0);
+}
+
+.slidebar li:global(.active) :global(.children){
+  transform: translate3d(100%, 0, 0)
+}
+
+.slidebar :global(.list-group-item){
+  background: rgba(0, 0, 0, .9);
+  border-color: #222;
+  color: #eee;
+  width: 150px;
+}
+
+.slidebar :global(.feature-search){
+  width: 180px;
+}
+.slidebar :global(.feature-search)>input{
+  height: 44px;
+}
+.slidebar :global(.feature-search)>a{
+  color: #ccc;
+}
+.slidebar :global(.feature-search)>a:hover{
+  color: #66afe9;
+}
+
+.btn-slidebar-mobile{
+  padding: 8px;
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 998;
+  display: none;
+  border-radius: 4px;
+  text-align: center;
+  background: #222;
+  color: #555;
+  cursor: pointer;
+}
+.btn-slidebar-mobile:hover{
+  color: #eee;
+}
+.btn-slidebar-mobile:global(.active){
+  color: #eee;
 }
 
 .search {
@@ -156,11 +257,30 @@ button {
 }
 
 @media (max-width: 767px) {
+  main{
+    padding-top: 0;
+  }
   .header form:global(.form-inline) :global(.form-group) {
     margin-bottom: 0;
   }
   .header :global(.username) {
     width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  main{
+    padding-left: 0;
+  }
+  .slidebar{
+    transition: transform .25s ease-in-out;
+    transform: translate3d(-100%, 0, 0);
+  }
+  .slidebar:global(.active){
+    transform: translate3d(0, 0, 0);
+  }
+  .btn-slidebar-mobile{
+    display: block;
   }
 }
 

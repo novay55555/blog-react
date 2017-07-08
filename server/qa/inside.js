@@ -27,7 +27,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'publish an article success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to update an article', done => {
@@ -48,7 +49,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'update an article success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to delete an article', done => {
@@ -58,7 +60,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'delete an article success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to get articles', done => {
@@ -67,7 +70,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'get articles success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to search articles by title', done => {
@@ -76,7 +80,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'search articles by title success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to get users', done => {
@@ -85,7 +90,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'get users success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to search users by name', done => {
@@ -94,7 +100,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'search users success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to delete a user', done => {
@@ -106,7 +113,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'delete a user success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to update a user', done => {
@@ -125,7 +133,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'update a user success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to get admin info', done => {
@@ -134,7 +143,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'get admin info success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to update blog info', done => {
@@ -157,7 +167,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'update blog success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
   });
 };

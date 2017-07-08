@@ -21,7 +21,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'register success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to sign in', done => {
@@ -30,7 +31,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'sign in success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to sign out', done => {
@@ -39,7 +41,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'sign out success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to check out session alived', done => {
@@ -48,7 +51,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'session is alived');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to check out session dead', done => {
@@ -58,7 +62,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.sessionTimeout.code, 'session is dead');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
   });
 };

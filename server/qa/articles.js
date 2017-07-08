@@ -15,7 +15,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'get articles success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to get article types', done => {
@@ -23,7 +24,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'get article typs success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to search articles by title', done => {
@@ -31,7 +33,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'search articles by title success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to search articles by type', done => {
@@ -39,7 +42,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'search articles by type success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
 
     test('should be abled to get an article', done => {
@@ -49,7 +53,8 @@ module.exports = () => {
         .then(data => {
           assert.equal(data.code, apiStatus.success.code, 'get an article success');
           done();
-        });
+        })
+        .catch(err => done(err));
     });
   });
 };

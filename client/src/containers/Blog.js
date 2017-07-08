@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Header from '../components/common/HeaderBlog';
+import Slidebar from './SlidebarBlog';
+import SigninModal from '../components/common/SigninModal';
+import RegisterModal from '../components/common/RegisterModal';
 import Footer from '../components/common/Footer';
 import { NotificationContainer } from 'react-notifications';
-import { fetchRegister, fetchSignin, fetchSignout, showModal, hideModal, fetchSession } from '../actions/account';
+import { fetchRegister, fetchSignin, fetchSignout, hideModal, fetchSession } from '../actions/account';
 import { linkToSearchPath } from '../actions/articles';
 
 class Blog extends Component {
@@ -18,56 +20,29 @@ class Blog extends Component {
 
   handleSignout = () => this.props.dispatch(fetchSignout());
 
-  handleModalShow = modalName => this.props.dispatch(showModal(modalName));
-
   handleModalHide = () => this.props.dispatch(hideModal());
 
   handleSearch = title => linkToSearchPath(title);
 
   render () {
-    const { accountInfo, activeModal, isFetching } = this.props;
+    const { activeModal, isFetching } = this.props;
     return (
       <div>
-        <Header
-          logo='/img/kato.jpg'
-          navs={
-            accountInfo.isAdmin
-              ? [
-                {
-                  text: '博客',
-                  path: '/'
-                },
-                {
-                  text: 'スタディー',
-                  path: '/study'
-                },
-                {
-                  text: '里世界',
-                  path: '/inside-world'
-                }
-              ] : [
-                {
-                  text: '博客',
-                  path: '/'
-                },
-                {
-                  text: 'スタディー',
-                  path: '/study'
-                }
-              ]}
-          onSignin={this.handleSignin}
-          onRegister={this.handleRegister}
-          onSignout={this.handleSignout}
-          onModalShow={this.handleModalShow}
-          onModalHide={this.handleModalHide}
-          onSearch={this.handleSearch}
-          activeModal={activeModal}
-          accountInfo={accountInfo}
-          isFetching={isFetching} />
+        <Slidebar />
         <main>
           {this.props.children}
         </main>
         <Footer />
+        <SigninModal
+          onSignin={this.handleSignin}
+          onCancel={this.handleModalHide}
+          visiable={activeModal === 'signin'}
+          isFetching={isFetching} />
+        <RegisterModal
+          onRegister={this.handleRegister}
+          onCancel={this.handleModalHide}
+          visiable={activeModal === 'register'}
+          isFetching={isFetching} />
         <NotificationContainer />
       </div>
     );
@@ -75,13 +50,8 @@ class Blog extends Component {
 }
 
 const mapStateToProps = state => {
-  const { isLogin, username, activeModal, isAdmin, isFetching } = state.account;
+  const { activeModal, isFetching } = state.account;
   return {
-    accountInfo: {
-      isLogin,
-      username,
-      isAdmin
-    },
     activeModal,
     isFetching
   };
@@ -90,11 +60,5 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps)(Blog);
 
 Blog.PropTypes = {
-  accountInfo: {
-    isLogin: PropTypes.bool,
-    username: PropTypes.string,
-    isAdmin: PropTypes.bool
-  },
-  activeModal: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired
+  activeModal: PropTypes.string.isRequired
 };

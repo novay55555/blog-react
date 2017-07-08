@@ -1,44 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Container from '../../components/common/Container';
-import Aside from '../../components/articles/Aside';
-import { fetchArticleTypes } from '../../actions/articles';
+import Author from '../../components/articles/Author';
+import articlesCss from '../../components/articles/articles.css';
 
-class Article extends Component {
-  componentWillMount () {
-    this.props.types.length === 0 && this.props.dispatch(fetchArticleTypes());
-  }
-
+export default class Article extends Component {
   render () {
-    const { types, isFetching } = this.props;
     return (
-      <Container isFluid>
+      <Container className={articlesCss.container} isFluid>
         <div className='col-lg-2 col-sm-3'>
-          <Aside lists={types} isFetching={isFetching} />
+          <Author />
         </div>
-        <div className='col-lg-8 col-sm-8'>
+        <div className='col-lg-10 col-sm-9'>
           {this.props.children}
         </div>
       </Container>
     );
   }
 }
-
-const mapStateToProps = state => {
-  const { items: types, isFetching } = state.articles.types;
-  return {
-    types: types.map(type => ({
-      link: `/articles/${type}/1`,
-      text: type
-    })),
-    isFetching
-  };
-};
-
-export default connect(mapStateToProps)(Article);
-
-Article.PropTypes = {
-  types: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired
-};
