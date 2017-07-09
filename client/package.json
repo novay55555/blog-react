@@ -7,7 +7,7 @@
     "build": "gulp && webpack -p",
     "dev": "webpack-dev-server --progress --inline --hot",
     "format": "gulp format",
-    "lint": "semistandard --fix && semistandard ./src/**/*.js, ./gulpfile.js"
+    "lint": "semistandard --fix"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,12 @@
       "$",
       "hljs"
     ],
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "ignore": [
+      "node_modules/",
+      "build/",
+      "vendor/"
+    ]
   },
   "dependencies": {
     "babel-cli": "^6.24.1",

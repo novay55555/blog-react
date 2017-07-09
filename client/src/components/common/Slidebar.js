@@ -15,7 +15,7 @@ export default class Slidebar extends Component {
     const $li = $(this.container).find('li');
     this.setState({
       liHeight: $li.outerHeight(),
-      liPaddingTop: parseInt($li.css('padding'))
+      liPaddingTop: ($li.outerHeight() - $li.height()) / 2
     });
     document.addEventListener('click', this.hideFeatureChilren);
   }
