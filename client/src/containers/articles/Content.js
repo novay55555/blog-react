@@ -9,16 +9,6 @@ import { fetchArticle } from '../../actions/articles';
 class ArticleContent extends Component {
   componentWillMount () {
     this.props.dispatch(fetchArticle(parseInt(this.props.params.id)));
-    document.addEventListener('click', this.openImage);
-  }
-
-  openImage = e => {
-    const elem = e.target;
-    if (elem.tagName.toLowerCase() === 'img') window.open(elem.src);
-  };
-
-  componentWillUnmount () {
-    document.removeEventListener('click', this.openImage);
   }
 
   render () {

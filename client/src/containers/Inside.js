@@ -23,11 +23,9 @@ export default class Inside extends Component {
               path: '/inside-world/admin'
             }
           ]} />
-        <main>
-          <Container>
-            {this.props.children}
-          </Container>
-        </main>
+        <Container style={{paddingTop: 72}}>
+          {this.props.children}
+        </Container>
         <Footer />
         <NotificationContainer />
       </div>

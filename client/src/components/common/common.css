@@ -152,10 +152,12 @@ button {
   right: 0;
   z-index: -1;
   transition: transform .25s ease-in-out;
+  transform: translate(0, 0);
   transform: translate3d(0, 0, 0);
 }
 
 .slidebar li:global(.active) :global(.children){
+  transform: translate(100%, 0);
   transform: translate3d(100%, 0, 0)
 }
 
@@ -289,6 +291,6 @@ button {
     transform: rotate3d(0, 0, 1, 0);
   }
   to {
-    transform: rotate3d(0, 0, 1, 270deg);
+    transform: rotate3d(0, 0, 1, 360deg);
   }
 }

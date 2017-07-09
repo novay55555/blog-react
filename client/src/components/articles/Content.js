@@ -7,13 +7,23 @@ import { querySelectors } from '../../lib/common';
 export default class ArticleContent extends Component {
   componentDidMount () {
     if (!this.props.isFetching && Object.keys(this.props.article).length > 0) querySelectors('pre code').forEach(block => hljs.highlightBlock(block));
+    this.container.addEventListener('click', this.openImage);
+  }
+
+  openImage = e => {
+    const elem = e.target;
+    if (elem.tagName.toLowerCase() === 'img') window.open(elem.src);
+  };
+
+  componentWillUnmount () {
+    this.container.removeEventListener('click', this.openImage);
   }
 
   render () {
     const { article } = this.props;
     const html = marked(article.content || '');
     return (
-      <div className={`animated fadeIn ${articleCss.content}`}>
+      <div ref={ref => { this.container = ref; }} className={`animated fadeIn ${articleCss.content}`}>
         <h2>{article.title}</h2>
         <p>
           <span>作者: {article.author}</span>
