@@ -11,7 +11,7 @@ export default class App extends Component {
   render () {
     return (
       <Provider store={store}>
-        <Router routes={routes} history={browserHistory} />
+        <Router routes={routes} history={browserHistory} onUpdate={() => window.scrollTo(0, 0)} />
       </Provider>
     );
   }
