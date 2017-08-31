@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 import { Link } from 'react-router';
 import Table from '../../components/common/Table';
 import insideCss from './inside.css';

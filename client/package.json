@@ -21,7 +21,6 @@
   "homepage": "https://github.com/novay55555/blog-react#readme",
   "semistandard": {
     "globals": [
-      "$",
       "hljs"
     ],
     "parser": "babel-eslint",

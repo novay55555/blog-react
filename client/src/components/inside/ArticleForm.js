@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 import marked from 'marked';
 import Input from '../common/Input';
 import Textarea from '../common/Textarea';

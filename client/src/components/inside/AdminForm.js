@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 import Input from '../common/Input';
 import insideCss from './inside.css';
 import { notification } from '../../lib/common';

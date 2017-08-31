@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 import Search from '../common/SearchInput';
 import insideCss from './inside.css';
 

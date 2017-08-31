@@ -1,14 +1,16 @@
+import $ from 'jquery';
 import { NotificationManager } from 'react-notifications';
 import config from './config';
+import browserChecker from '../../vendor/browser';
 
 const { api } = config;
+const browser = browserChecker();
 
 /**
  * jQuery Deferred封装
- * @param {function} $ jQuery构造函数
  * @return {object} jQuery的ajax方法对象
  */
-export const Defer = $ => {
+export const Defer = () => {
   /**
    * 内部公共defer方法封装
    * @param {object} options 底层ajax的选项
@@ -36,7 +38,9 @@ export const Defer = $ => {
    * @param {object} options 底层ajax的选项
    */
   const get = (url, options = {}) => {
-    const opts = $.extend({ url }, options);
+    const opts = $.extend({
+      url: browser.isIE9() ? `${url}?t=${Date.now()}` : url
+    }, options);
     return _defer(opts);
   };
   /**

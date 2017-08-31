@@ -3,7 +3,7 @@ import md5 from 'blueimp-md5';
 import config from '../lib/config';
 
 const accountApi = config.api.account;
-const { get, post } = Defer($);
+const { get, post } = Defer();
 
 export const actionTypes = {
   POSTING_SIGNIN: 'POSTING_SIGNIN',

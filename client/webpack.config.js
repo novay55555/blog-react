@@ -90,5 +90,9 @@ module.exports = {
       '/api': 'http://localhost:3000'
     },
     historyApiFallback: true
-  }
+  },
+  externals: {
+    jquery: 'jQuery'
+  },
+  devtool: 'source-map'
 };

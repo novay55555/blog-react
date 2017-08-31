@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import $ from 'jquery';
 import commonCss from './common.css';
 
 export default class Slidebar extends Component {

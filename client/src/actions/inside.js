@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common';
 import md5 from 'blueimp-md5';
 import config from '../lib/config';
@@ -91,13 +92,8 @@ const edittingUser = () => ({
 const editedUser = (users, editedUser) => ({
   type: actionTypes.EDITED_USER,
   updateItems: () => {
-    for (let i = 0, l = users.length; i < l; i++) {
-      const user = users[i];
-      if (user.id === editedUser.id) {
-        users[i] = Object.assign(user, editedUser);
-        break;
-      }
-    }
+    const index = users.findIndex(user => user.id === editedUser.id);
+    users[index] = Object.assign(users[index], editedUser);
     return users;
   }
 });
@@ -137,13 +133,8 @@ const editedArticle = (editArticle, articles) => ({
   type: actionTypes.EDITED_ARTICLE,
   item: editArticle,
   getNewItems: () => {
-    for (let i = 0, l = articles.length; i < l; i++) {
-      let article = articles[i];
-      if (article.id === editArticle.id) {
-        articles[i] = Object.assign(article, editArticle);
-        break;
-      }
-    }
+    const i = articles.findIndex(article => article.id === editArticle.id);
+    articles[i] = Object.assign(articles[i], editArticle);
     return articles;
   }
 });
