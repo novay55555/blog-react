@@ -94,5 +94,5 @@ module.exports = {
   externals: {
     jquery: 'jQuery'
   },
-  devtool: 'source-map'
+  devtool: 'eval-source-map'
 };
