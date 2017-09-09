@@ -1,6 +1,8 @@
+import { combineReducers } from 'redux';
 import { actionTypes } from '../actions/account';
+import { actionTypes as insideActionTypes } from '../actions/inside';
 
-const account = (state = { isLogin: false }, action) => {
+const user = (state = { isLogin: false }, action) => {
   switch (action.type) {
     case actionTypes.POSTING_SIGNIN:
       return {
@@ -82,4 +84,40 @@ const account = (state = { isLogin: false }, action) => {
   }
 };
 
-export default account;
+const admin = (state = { photo: '', name: '', job: '', intro: '' }, action) => {
+  switch (action.type) {
+    case actionTypes.GETTING_ADMIN:
+      return {
+        ...state,
+        isFetching: true,
+        errMsg: ''
+      };
+    case actionTypes.GOT_ADMIN:
+      return {
+        ...state,
+        photo: action.admin.photoUrl || '/img/kato.jpg',
+        name: action.admin.name,
+        job: action.admin.job,
+        intro: action.admin.intro,
+        isFetching: false
+      };
+    case actionTypes.ERROR_GET_ADMIN:
+      return {
+        ...state,
+        isFetching: false,
+        errMsg: action.errMsg
+      };
+    case insideActionTypes.POSTED_ADMIN_AVATAR:
+      return {
+        ...state,
+        photo: action.avatar
+      };
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({
+  user,
+  admin
+});

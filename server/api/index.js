@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const Api = express.Router();
 const nodemailer = require('nodemailer');
@@ -198,6 +200,43 @@ Api.get('/api/articles/search/type/:type/:page', (req, res) => {
 });
 
 /**
+ * @api {put} /api/user/avatar/:id 上传用户头像
+ * @apiGroup Account
+ * @apiName Upload user avatar
+ * @apiParam {String} id 用户id
+ * @apiParam {Object} avatar 用户选择的图片
+ * @apiSuccessExample {json} Example:
+ * {
+ *  code: 1,
+ *  content: {
+ *    avatar: ''
+ *  }
+ * }
+ * @apiVersion 1.0.0
+ */
+Api.put('/api/user/avatar/:id', (req, res) => {
+  const userId = req.params.id;
+  const avatarBase64 = req.body.avatar;
+  checkLogin(req.session)
+    .then(() => {
+      const match = avatarBase64.match(/data:image\/\w+/);
+      if (!match) return res.json(apiStatus.illegalType);
+      const type = match[0].split('/')[1];
+      const data = Buffer.from(avatarBase64.replace(/^data:image\/(png|gif|jpeg|jpg);base64,/, ''), 'base64');
+      const filePath = `${config.upload.path}/avatar-${Date.now()}.${type}`;
+      const photoUrl = filePath.replace(config.upload.path, '/img');
+      fs.writeFile(filePath, data, err => {
+        if (err) return res.json({ code: apiStatus.error.code, msg: err.message });
+        User.findByIdAndUpdate(userId, { photoUrl }, err => {
+          if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg })
+          res.json({ code: apiStatus.success.code, content: { avatar: photoUrl } });
+        });
+      });
+    })
+    .catch(err => res.json({ code: apiStatus.illegalSession.code, msg: err.message }));
+});
+
+/**
  * @api {post} /api/login 登录
  * @apiGroup Account
  * @apiName Sign in by account
@@ -325,6 +364,24 @@ Api.post('/api/register', (req, res) => {
     });
   });
 });
+
+/**
+ * @api {get} /api/admin 获取用于展示博主的信息
+ * @apiGroup Account
+ * @apiName Get bloger info to show
+ * @apiSuccess {Object} content 结果集
+ * @apiSuccess {String} content.name 帐号
+ * @apiSuccess {String} content.photoUrl 图片
+ * @apiSuccess {String} content.job 工作
+ * @apiSuccess {String} content.intro 简介
+ * @apiVersion 1.0.0
+ */
+Api.get('/api/admin', (req, res) => {
+  User.findOne({ role: 0 }, 'name job intro photoUrl', (err, admin) => {
+    if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
+    res.json({ code: apiStatus.success.code, content: admin });
+  });
+})
 
 /**
  * @api {get} /api/inside/articles/:page 后台获取文章列表
@@ -651,11 +708,13 @@ Api.get('/api/inside/users/search/:name/:page', (req, res) => {
  * @api {put} /api/inside/blog 更新博客
  * @apiGroup Inside
  * @apiName Update blog settings
- * @apiParam {object} admin 管理员帐号数据
+ * @apiParam {Object} admin 管理员帐号数据
  * @apiParam {String} admin.name 帐号
  * @apiParam {String} admin.password 密码(可选)
  * @apiParam {String} admin.email 邮箱
- * @apiParam {object} types 文章类型数据
+ * @apiParam {String} admin.job 职业
+ * @apiParam {String} admin.intro 简介
+ * @apiParam {Object} types 文章类型数据
  * @apiParam {String} types.id 文章类型的ObjectId
  * @apiParam {array} types.data 文章类型集合
  * @apiSuccessExample {json} Example:
@@ -701,6 +760,8 @@ Api.put('/api/inside/blog', (req, res) => {
  * @apiSuccess {String} content.name 用户名
  * @apiSuccess {String} content.password 密码
  * @apiSuccess {Number} content.role 角色
+ * @apiSuccess {String} content.job 职业
+ * @apiSuccess {String} content.intro 简介
  * @apiVersion 1.0.0
  */
 Api.get('/api/inside/admin', (req, res) => {
@@ -722,7 +783,12 @@ module.exports = Api;
  * @param {object} session 用户session对象
  * @returns {Promise} Promise对象
  */
-function checkAdmin (session) {
+function checkAdmin(session) {
   if (!session.isAdmin) return Promise.reject({ code: apiStatus.illegalSession.code, msg: apiStatus.illegalSession.msg }); // eslint-disable-line prefer-promise-reject-errors
+  return Promise.resolve();
+}
+
+function checkLogin(session) {
+  if (!session.isLogin) return Promise.reject(new Error(apiStatus.illegalSession.msg));
   return Promise.resolve();
 }

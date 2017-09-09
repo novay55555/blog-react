@@ -34,8 +34,24 @@ export const actionTypes = {
   GET_ADMIN: 'GET_ADMIN',
   EDITTING_BLOG: 'EDITTING_BLOG',
   EDITED_BLOG: 'EDITED_BLOG',
-  ERROR_EDIT_BLOG: 'ERROR_EDIT_BLOG'
+  ERROR_EDIT_BLOG: 'ERROR_EDIT_BLOG',
+  POSTING_ADMIN_AVATAR: 'POSTING_ADMIN_AVATAR',
+  POSTED_ADMIN_AVATAR: 'POSTED_ADMIN_AVATAR',
+  ERROR_POST_ADMIN_AVATAR: 'ERROR_POST_ADMIN_AVATAR'
 };
+
+const postingAdminAvatar = () => ({
+  type: actionTypes.POSTING_ADMIN_AVATAR
+});
+
+const postedAdminAvatar = avatar => ({
+  type: actionTypes.POSTED_ADMIN_AVATAR,
+  avatar
+});
+
+const errorPostAdminAvatar = () => ({
+  type: actionTypes.ERROR_POST_ADMIN_AVATAR
+});
 
 const edittingBlog = () => ({
   type: actionTypes.EDITTING_BLOG
@@ -222,10 +238,10 @@ export const loadMarkdownEditor = () => {
     if (typeof $.fn.markdown === 'undefined') {
       notification({ type: 'info', message: 'Loading markdown editor' });
       $.when(
-          loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
-          loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
-          loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
-        )
+        loadScript('/vendor/markdown-editor/bootstrap-markdown.js'),
+        loadScript('/vendor/markdown-editor/jquery.hotkeys.js'),
+        loadStylesheet('/vendor/markdown-editor/bootstrap-markdown.min.css')
+      )
         .done(() => {
           notification({ message: 'Markdown editor loaded!' });
           def.resolve();
@@ -244,9 +260,9 @@ export const loadMarkdownEditor = () => {
     if (!window.hasOwnProperty('hljs')) {
       notification({ type: 'info', message: 'Loading highlightjs' });
       $.when(
-          loadScript('/vendor/highlightjs/highlight.js'),
-          loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
-        )
+        loadScript('/vendor/highlightjs/highlight.js'),
+        loadStylesheet('/vendor/highlightjs/monokai-sublime.css')
+      )
         .done(() => {
           notification({ message: 'Highlightjs loaded!' });
           def.resolve();
@@ -365,8 +381,22 @@ export const fetchUpdateBlog = updateData => dispatch => {
 };
 
 export const fetchAdmin = () => dispatch => {
-  notification({type: 'info', message: 'Now loading...'});
+  notification({ type: 'info', message: 'Now loading...' });
   get(`${config.api.admin}`)
     .done(data => dispatch(getAdmin(data)))
     .fail(errMsg => notification({ type: 'error', message: errMsg }));
 };
+
+export const fetchUploadAdminAvatar = (id, avatar) => dispatch => new Promise(resolve => {
+  dispatch(postingAdminAvatar());
+  put(config.api.uploadAvatar(id), {avatar})
+    .done(data => {
+      notification({message: '更换成功'});
+      dispatch(postedAdminAvatar(data.avatar));
+      resolve();
+    })
+    .fail(errMsg => {
+      dispatch(errorPostAdminAvatar());
+      notification({ type: 'error', message: errMsg });
+    });
+});

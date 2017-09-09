@@ -18,8 +18,25 @@ export const actionTypes = {
   GOT_SIGNOUT: 'GOT_SIGNOUT',
   ERROR_GET_SIGNOUT: 'ERROR_GET_SIGNOUT',
   CHECKOUT_SESSION_ALIVE: 'CHECKOUT_SESSION_ALIVE',
-  CHECKOUT_SESSION_DEAD: 'CHECKOUT_SESSION_DEAD'
+  CHECKOUT_SESSION_DEAD: 'CHECKOUT_SESSION_DEAD',
+  GETTING_ADMIN: 'GETTING_ADMIN',
+  GOT_ADMIN: 'GOT_ADMIN',
+  ERROR_GET_ADMIN: 'ERROR_GET_ADMIN'
 };
+
+const gettingAdmin = () => ({
+  type: actionTypes.GETTING_ADMIN
+});
+
+const gotAdmin = admin => ({
+  type: actionTypes.GOT_ADMIN,
+  admin
+});
+
+const errorGetAdmin = errMsg => ({
+  type: actionTypes.ERROR_GET_ADMIN,
+  errMsg
+});
 
 const checkoutSessionDead = () => ({
   type: actionTypes.CHECKOUT_SESSION_DEAD
@@ -119,4 +136,11 @@ export const fetchSession = () => dispatch => {
   get(`${accountApi.checkout}`)
     .done(data => dispatch(checkoutSessionAlive(data.username, data.isAdmin)))
     .fail(errMsg => dispatch(checkoutSessionDead()));
+};
+
+export const fetchAdmin = () => dispatch => {
+  dispatch(gettingAdmin());
+  get(`${accountApi.admin}`)
+    .done(data => dispatch(gotAdmin(data)))
+    .fail(() => dispatch(errorGetAdmin('No zuo no die, there is something bad happend :)')));
 };

@@ -1,11 +1,13 @@
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
   _id: Number,
   name: String,
   password: String,
   email: String,
   role: Number,
-  photoUrl: String
+  photoUrl: String,
+  job: String,
+  intro: String
 });
 const CounterSchema = mongoose.Schema({
   _id: {

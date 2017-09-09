@@ -3,20 +3,25 @@ import PropTypes from 'prop-types';
 import $ from 'jquery';
 import Input from '../common/Input';
 import insideCss from './inside.css';
-import { notification } from '../../lib/common';
+import { notification, loadCropper } from '../../lib/common';
 
 export default class AdminForm extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      id: props.id || '',
       account: props.account || '',
       password: '',
       email: props.email || '',
+      job: props.job || '',
+      intro: props.intro || '',
+      photo: props.photo || '',
       accountValidator: null,
       emailValidator: null,
       types: props.types || [],
       typeValue: '',
-      typesId: props.typesId || ''
+      typesId: props.typesId || '',
+      isUploadMode: false
     };
   }
 
@@ -26,9 +31,22 @@ export default class AdminForm extends Component {
         account: nextState.account,
         email: nextState.email,
         types: nextState.types,
-        typesId: nextState.typesId
+        typesId: nextState.typesId,
+        job: nextState.job,
+        intro: nextState.intro,
+        photo: nextState.photo,
+        id: nextState.id
       });
     }
+  }
+
+  componentDidMount () {
+    loadCropper().done(() => {
+      this.$cropper = $(this.image).cropper({
+        viewMode: 2,
+        preview: '.preview'
+      });
+    });
   }
 
   addType = name => {
@@ -49,14 +67,16 @@ export default class AdminForm extends Component {
   };
 
   handleSubmit = () => {
-    const { account, password, email, accountValidator, emailValidator, types, typesId } = this.state;
+    const { account, password, email, job, intro, accountValidator, emailValidator, types, typesId } = this.state;
     const [accountIsPass, emailIsPass] = [accountValidator.start(), emailValidator.start()];
     if (accountIsPass && emailIsPass) {
       this.props.onSubmit({
         admin: {
           name: account,
           password,
-          email
+          email,
+          job,
+          intro
         },
         types: {
           id: typesId,
@@ -66,15 +86,55 @@ export default class AdminForm extends Component {
     }
   }
 
+  handlePhotoChoose = e => {
+    const image = e.target.files[0];
+    if (!image) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      this.setState({ isUploadMode: true });
+      this.$cropper.cropper('replace', e.target.result);
+      this.$cropper._fileType = image.type;
+    };
+    reader.readAsDataURL(image);
+  }
+
+  handleCropperOk = e => {
+    const { id } = this.state;
+    this.props.onUpload(id, this.$cropper.cropper('getCroppedCanvas').toDataURL(this.$cropper._fileType)).then(() => {
+      this.$cropper.attr('src', '');
+      this.setState({ isUploadMode: false });
+    });
+  }
+
+  handleCropperCancel = e => {
+    $(e.target).closest('.cropper').siblings('.photo').find('.preview').html('');
+    this.$cropper.attr('src', '');
+    this.setState({ isUploadMode: false });
+  }
+
   render () {
-    const { account, email, types, typeValue } = this.state;
-    const { isFetching, isUpdating } = this.props;
+    const { account, email, job, intro, photo, types, typeValue, isUploadMode } = this.state;
+    const { isFetching, isUpdating, isUploading } = this.props;
     return (
       <form
         style={isFetching ? { opacity: 0.5, pointerEvents: 'none' } : {}}
         className={insideCss.adminForm}
         onSubmit={e => e.preventDefault()}
         onKeyDown={e => e.keyCode === 13 && e.preventDefault()} >
+        <div className={insideCss.upload}>
+          <div className='photo'>
+            <img src={photo} alt='' />
+            <input type='file' title='更换头像' onChange={this.handlePhotoChoose} accept='image/*' />
+            <div className='preview' />
+          </div>
+          <div className='cropper' style={isUploadMode ? { display: 'block' } : { display: 'none' }}>
+            <img ref={ref => { this.image = ref; }} />
+            <div className='cropper-btns' style={isUploading ? {opacity: 0.5, pointerEvents: 'none'} : {}}>
+              <button className='btn btn-success' onClick={this.handleCropperOk}>确定</button>
+              <button className='btn btn-danger' onClick={this.handleCropperCancel}>取消</button>
+            </div>
+          </div>
+        </div>
         <Input
           label='管理员帐号'
           placeholder='管理员帐号'
@@ -113,6 +173,16 @@ export default class AdminForm extends Component {
           }
           getValidator={emailValidator => this.setState({ emailValidator })}
           onChange={email => this.setState({ email })} />
+        <Input
+          label='职业'
+          placeholder='输入职业则会显示在首页'
+          value={job}
+          onChange={job => this.setState({ job })} />
+        <Input
+          label='简介'
+          placeholder='输入简介则会显示在首页'
+          value={intro}
+          onChange={intro => this.setState({ intro })} />
         <div className='form-group'>
           <label htmlFor=''>文章类型</label>
           <p className='types-add'>
@@ -153,6 +223,8 @@ export default class AdminForm extends Component {
 AdminForm.PropTypes = {
   account: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
+  job: PropTypes.string,
+  intro: PropTypes.string,
   types: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   typesId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired

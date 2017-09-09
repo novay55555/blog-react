@@ -199,3 +199,24 @@ export const throttleFunc = (func, wait) => {
     timer = setTimeout(func, wait);
   };
 };
+
+export const loadCropper = () => {
+  const def = $.Deferred();
+  if (typeof $.fn.cropper === 'undefined') {
+    notification({type: 'info', message: 'start to load cropper'});
+    $.when(
+      loadScript('/vendor/cropper/cropper.min.js'),
+      loadStylesheet('/vendor/cropper/cropper.min.css')
+    )
+      .done(() => {
+        notification({message: 'cropper loaded!'});
+        def.resolve();
+      })
+      .fail(() => {
+        notification({type: 'error', message: 'fail to load cropper'});
+      });
+  } else {
+    def.resolve();
+  }
+  return def;
+};

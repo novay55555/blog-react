@@ -50,7 +50,7 @@ class Blog extends Component {
 }
 
 const mapStateToProps = state => {
-  const { activeModal, isFetching } = state.account;
+  const { activeModal, isFetching } = state.account.user;
   return {
     activeModal,
     isFetching

@@ -5,7 +5,8 @@ const config = {
       signin: `/api/login`,
       register: `/api/register`,
       signout: `/api/signout`,
-      checkout: `/api/checkout`
+      checkout: `/api/checkout`,
+      admin: '/api/admin'
     },
     articles: {
       lists: page => `/api/articles/${page}`,
@@ -26,7 +27,8 @@ const config = {
       delete: id => `/api/inside/user/delete/${id}`
     },
     blog: `/api/inside/blog`,
-    admin: `/api/inside/admin`
+    admin: `/api/inside/admin`,
+    uploadAvatar: id => `/api/user/avatar/${id}`
   },
   apiErrMsg: '服务器大姨妈, 请稍后再试 =. ='
 };

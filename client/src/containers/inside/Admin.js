@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Form from '../../components/inside/AdminForm';
 import { fetchArticleTypes } from '../../actions/articles';
-import { fetchUpdateBlog, fetchAdmin } from '../../actions/inside';
+import { fetchUpdateBlog, fetchAdmin, fetchUploadAdminAvatar } from '../../actions/inside';
 
 class Admin extends Component {
   componentWillMount () {
@@ -14,8 +14,10 @@ class Admin extends Component {
 
   handleSubmit = updateData => this.props.dispatch(fetchUpdateBlog(updateData));
 
+  handleUpload = (id, avatar) => this.props.dispatch(fetchUploadAdminAvatar(id, avatar));
+
   render () {
-    const { admin, types, typesIsFetching, typesId, isUpdating } = this.props;
+    const { admin, types, typesIsFetching, typesId, isUpdating, isUploading } = this.props;
     return (
       <div>
         {
@@ -23,11 +25,17 @@ class Admin extends Component {
             : <Form
               account={admin.name}
               email={admin.email}
+              job={admin.job}
+              intro={admin.intro}
               types={types}
               typesId={typesId}
               isFetching={typesIsFetching}
               isUpdating={isUpdating}
-              onSubmit={this.handleSubmit} />
+              isUploading={isUploading}
+              photo={admin.photoUrl}
+              id={admin.id}
+              onSubmit={this.handleSubmit}
+              onUpload={this.handleUpload} />
         }
       </div>
     );
@@ -35,14 +43,15 @@ class Admin extends Component {
 }
 
 const mapStateToProps = state => {
-  const { item: admin, isUpdating } = state.inside.admin;
+  const { item: admin, isUpdating, isUploading } = state.inside.admin;
   const { items: types, isFetching: typesIsFetching, id: typesId } = state.articles.types;
   return {
     admin,
     types,
     typesIsFetching,
     typesId,
-    isUpdating
+    isUpdating,
+    isUploading
   };
 };
 
@@ -53,5 +62,6 @@ Admin.PropTypes = {
   types: PropTypes.array.isRequired,
   typesIsFetching: PropTypes.bool.isRequired,
   typesId: PropTypes.number.isRequired,
-  isUpdating: PropTypes.bool.isRequired
+  isUpdating: PropTypes.bool.isRequired,
+  isUploading: PropTypes.bool.isRequired
 };

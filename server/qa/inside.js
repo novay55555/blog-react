@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-
+const fs = require('fs');
 const chai = require('chai');
 const md5 = require('blueimp-md5');
 const utils = require('./utils');
@@ -170,5 +170,27 @@ module.exports = () => {
         })
         .catch(err => done(err));
     });
+
+    test('should be abled to upload admin avatar', done => {
+      const bitmap = fs.readFileSync(`${config.upload.path}/kato.jpg`);
+      const base64 = 'data:image/jpg;base64,' + Buffer.from(bitmap).toString('base64');
+      signinByAdmin()
+        .then(() => reqHandler.get(`${baseURL}/api/inside/admin`))
+        .then(data => reqHandler.put(`${baseURL}/api/user/avatar/${data.content._id}`, { body: { avatar: base64 } }))
+        .then(data => {
+          assert.equal(data.code, apiStatus.success.code, 'upload admin avatar success');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    test('should be abled to show admin introduce', done => {
+      reqHandler.get(`${baseURL}/api/admin`)
+        .then(data => {
+          assert.equal(data.code, apiStatus.success.code, 'show admin introduce success');
+          done();
+        })
+        .catch(err => done(err));
+    })
   });
 };

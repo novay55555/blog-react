@@ -102,7 +102,7 @@ class SlidebarBlog extends Component {
 }
 
 const mapStateToProps = state => {
-  const { isLogin, username, isAdmin, isFetching } = state.account;
+  const { isLogin, username, isAdmin, isFetching } = state.account.user;
   const { items: types } = state.articles.types;
   return {
     accountInfo: {

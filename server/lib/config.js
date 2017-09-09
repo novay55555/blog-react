@@ -1,3 +1,4 @@
+const path = require('path');
 const config = {
   api: {
     success: {
@@ -24,6 +25,10 @@ const config = {
       code: 5,
       msg: '参数缺失'
     },
+    illegalType: {
+      code: 6,
+      msg: '非法类型'
+    },
     illegalSession: {
       code: 9,
       msg: '非法使用权限'
@@ -36,6 +41,9 @@ const config = {
       code: 500,
       msg: 'Server has jjBooooom ;)'
     }
+  },
+  upload: {
+    path: path.join(__dirname, '..', '..', 'client', 'img')
   }
 };
 

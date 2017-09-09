@@ -42,6 +42,25 @@ const admin = (state = { item: {}, hasEntered: false }, action) => {
         ...state,
         isUpdating: false
       };
+    case actionTypes.POSTING_ADMIN_AVATAR:
+      return {
+        ...state,
+        isUploading: true
+      };
+    case actionTypes.POSTED_ADMIN_AVATAR:
+      return {
+        ...state,
+        isUploading: false,
+        item: {
+          ...state['item'],
+          photoUrl: action.avatar
+        }
+      };
+    case actionTypes.ERROR_POST_ADMIN_AVATAR:
+      return {
+        ...state,
+        isUploading: false
+      };
     default:
       return state;
   }

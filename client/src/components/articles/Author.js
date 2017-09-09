@@ -1,31 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import commonCss from '../common/common.css';
 import articlesCss from './articles.css';
 
 export default class Author extends Component {
-  constructor () {
-    super();
-    this.state = {  // TODO: 以后后台配置
-      photo: '/img/kato.jpg',
-      username: 'gunhawk',
-      job: 'Frontend developer',
-      words: 'Coding is part of my life, 加藤恵は大好き＝。＝',
-      connect: [{github: 'https://github.com/novay55555'}]
-    };
-  }
   render () {
-    const {photo, username, job, words} = this.state;
-    const { className } = this.props;
+    const { className, photo, name, job, intro, isFetching, errMsg } = this.props;
     return (
       <div className={`${articlesCss.author} ${className || ''}`}>
-        <div className='photo'>
-          <img src={photo} alt={username} />
-        </div>
-        <div className='intro'>
-          <p>{username}</p>
-          <p>{job}</p>
-          <p>{words}</p>
-        </div>
+        {
+          isFetching ? <div className={commonCss.loading} style={{width: 100, height: 50, display: 'inline-block'}} />
+            : (
+              errMsg ? <h3>{errMsg}</h3>
+                : <div>
+                  <div className='photo'>
+                    <img src={photo} alt={name} />
+                  </div>
+                  <div className='intro'>
+                    <p>{name}</p>
+                    <p>{job}</p>
+                    <p>{intro}</p>
+                  </div>
+                </div>
+            )
+        }
       </div>
     );
   }
@@ -33,7 +31,9 @@ export default class Author extends Component {
 
 Author.PropTypes = {
   photo: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   job: PropTypes.string.isRequired,
-  words: PropTypes.string.isRequired
+  intro: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  errMsg: PropTypes.string
 };
