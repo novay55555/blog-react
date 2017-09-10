@@ -4,7 +4,7 @@ import md5 from 'blueimp-md5';
 import config from '../lib/config';
 import * as ArticlesActions from './articles';
 
-const { get, post, put, del } = Defer($);
+const { get, post, put, del } = Defer();
 const articleApi = config.api.articles;
 const userApi = config.api.users;
 
