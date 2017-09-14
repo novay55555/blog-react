@@ -5,6 +5,8 @@ const cssExtractTextPlugin = new ExtractTextPlugin({ filename: '[contenthash].cs
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
+const isProduct = process.env.NODE_ENV === 'production';
+
 module.exports = {
   context: __dirname,
   entry: {
@@ -94,5 +96,5 @@ module.exports = {
   externals: {
     jquery: 'jQuery'
   },
-  devtool: 'eval-source-map'
+  devtool: isProduct ? '' : 'source-map'
 };
