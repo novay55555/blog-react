@@ -51,7 +51,7 @@ export default class Error extends Component {
         <p>I'll find it out sooner or later</p>
         <div className='progress' style={{ maxWidth: 998, margin: '0 auto', position: 'relative' }}>
           <div ref={ref => { this.progressBar = ref; }} className='progress-bar progress-bar-info' role='progressbar' aria-valuenow={progress} aria-valuemin='0' aria-valuemax='100' style={{ width: `${progress}%` }} />
-          <div className='progress-text' style={{ position: 'absolute', top: 0, left: '50%', textAlign: 'center', lineHeight: '20px', transform: 'translateX(-50%)', webkitTransform: 'translateX(-50%)' }}>
+          <div className='progress-text' style={{ position: 'absolute', top: 0, left: '50%', textAlign: 'center', lineHeight: '20px', transform: 'translateX(-50%)', WebkitTransform: 'translateX(-50%)', color: '#9900cc' }}>
             {isBack ? 'Holy shit :(' : `${progress}%`}
           </div>
         </div>
