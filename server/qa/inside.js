@@ -191,6 +191,6 @@ module.exports = () => {
           done();
         })
         .catch(err => done(err));
-    })
+    });
   });
 };

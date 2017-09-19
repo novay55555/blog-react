@@ -3,7 +3,7 @@ const Promise = require('bluebird');
 const md5 = require('blueimp-md5');
 const baseURL = 'http://localhost:3000';
 const adminData = {
-  name: 'admin',
+  name: 'admin1',
   password: md5('123456')
 };
 
@@ -50,17 +50,33 @@ const register = () => {
   };
   return reqHandler.post(`${baseURL}/api/register`, { body: regData })
     .then(data => {
-      if (data.code === 1) return Promise.resolve(regData);
+      if (data.code === 1) {
+        return Promise.resolve(regData);
+      } else {
+        return Promise.reject(new Error(data.msg));
+      }
     });
 };
 
 const signin = () => {
   return register()
     .then(data => reqHandler.post(`${baseURL}/api/login`, { body: data }))
-    .then(data => Promise.resolve(data));
+    .then(data => {
+      if (data.code === 1) {
+        return Promise.resolve(data);
+      } else {
+        return Promise.reject(new Error(data.msg));
+      }
+    });
 };
 
-const signinByAdmin = () => reqHandler.post(`${baseURL}/api/login`, { body: adminData }).then(data => Promise.resolve(data));
+const signinByAdmin = () => reqHandler.post(`${baseURL}/api/login`, { body: adminData }).then(data => {
+  if (data.code === 1) {
+    return Promise.resolve(data);
+  } else {
+    return Promise.reject(new Error(data.msg));
+  }
+});
 
 const publishArticle = () => {
   return signinByAdmin()

@@ -46,7 +46,7 @@ module.exports = () => {
         .catch(err => done(err));
     });
 
-    test('should be abled to get an article', done => {
+    test('should be abled to get an article by admin', done => {
       publishArticle()
         .then(data => Promise.resolve(data.content._id))
         .then(id => reqHandler.get(`${baseURL}/api/article/${id}`))
