@@ -1,10 +1,10 @@
 import $ from 'jquery';
 import { browserHistory } from 'react-router';
-import { Defer, dateFormatter, loadScript, loadStylesheet } from '../lib/common';
+import { $defer, dateFormatter, loadScript, loadStylesheet } from '../lib/common';
 import config from '../lib/config';
 const articleApi = config.api.articles;
 
-const { get } = Defer();
+const { get } = $defer;
 
 export const actionTypes = {
   GETTING_ARTICLES: 'GETTING_ARTICLES',

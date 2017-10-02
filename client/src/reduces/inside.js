@@ -114,7 +114,7 @@ const users = (state = { items: [], page: 1, total: 0, current: {} }, action) =>
       return {
         ...state,
         isDeleting: false,
-        items: action.updateItems()
+        items: state.items.filter(item => item.id !== action.id)
       };
     case actionTypes.ERROR_DELETE_USER:
       return {

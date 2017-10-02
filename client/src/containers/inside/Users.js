@@ -58,7 +58,7 @@ class Users extends Component {
 
 const mapStateToProps = state => {
   const { items, page, total, isFetching, isEditing, isDeleting, errMsg, searchName, current: editUser } = state.inside.users;
-  const { activeModal } = state.account;
+  const { activeModal } = state.account.user;
   return {
     items,
     page,

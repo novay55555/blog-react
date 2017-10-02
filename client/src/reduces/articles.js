@@ -51,7 +51,7 @@ const lists = (state = { items: [] }, action) => {
       return {
         ...state,
         isUpdating: false,
-        items: action.getItems()
+        items: state.items.filter(item => item.id !== action.id)
       };
     case insideActionTypes.ERROR_DELETE_ARTICLE:
       return {

@@ -203,6 +203,7 @@
 
 .upload{
   composes: author from '../articles/articles.css';
+  position: static;
 }
 
 .upload :global(.photo){

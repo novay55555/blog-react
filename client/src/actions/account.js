@@ -1,9 +1,9 @@
-import { Defer, notification } from '../lib/common';
+import { $defer, notification } from '../lib/common';
 import md5 from 'blueimp-md5';
 import config from '../lib/config';
 
 const accountApi = config.api.account;
-const { get, post } = Defer();
+const { get, post } = $defer;
 
 export const actionTypes = {
   POSTING_SIGNIN: 'POSTING_SIGNIN',

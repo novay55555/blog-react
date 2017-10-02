@@ -8,9 +8,8 @@ const browser = browserChecker();
 
 /**
  * jQuery Deferred封装
- * @return {object} jQuery的ajax方法对象
  */
-export const Defer = () => {
+export const $defer = (() => {
   /**
    * 内部公共defer方法封装
    * @param {object} options 底层ajax的选项
@@ -76,7 +75,7 @@ export const Defer = () => {
    * @param {string} url API路径
    * @param {object} options 底层ajax的选项
    */
-  const del = (url, data = {}, options = {}) => {
+  const dele = (url, data = {}, options = {}) => {
     const opts = $.extend({ method: 'DELETE', url }, options);
     return _defer(opts);
   };
@@ -84,9 +83,9 @@ export const Defer = () => {
     get,
     post,
     put,
-    del
+    dele
   };
-};
+})();
 
 /**
  * 动态加载单个script

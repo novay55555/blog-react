@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class Error extends Component {
+export default class NotFound extends Component {
   constructor () {
     super();
     this.state = {
@@ -24,6 +24,10 @@ export default class Error extends Component {
       this.setState({ isBack: false });
       this.animate();
     });
+  }
+
+  componentWillUnmount () {
+    clearTimeout(this.timer);
   }
 
   increase = () => {

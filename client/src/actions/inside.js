@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import { Defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common';
+import { $defer, dateFormatter, notification, loadScript, loadStylesheet } from '../lib/common';
 import md5 from 'blueimp-md5';
 import config from '../lib/config';
 import * as ArticlesActions from './articles';
 
-const { get, post, put, del } = Defer();
+const { get, post, put, dele } = $defer;
 const articleApi = config.api.articles;
 const userApi = config.api.users;
 
@@ -89,12 +89,9 @@ const deletingUser = () => ({
   type: actionTypes.DELETING_USER
 });
 
-const deletedUser = (users, id) => ({
+const deletedUser = id => ({
   type: actionTypes.DELETED_USER,
-  updateItems: () => {
-    users.splice(users.findIndex(user => user.id === id), 1);
-    return users;
-  }
+  id
 });
 
 const errorDeleteUser = () => ({
@@ -163,12 +160,9 @@ const deleteingArticle = () => ({
   type: actionTypes.DELETING_ARTICLE
 });
 
-const deletedArticle = (articles, id) => ({
+const deletedArticle = id => ({
   type: actionTypes.DELETED_ARTICLE,
-  getItems: () => {
-    articles.splice(articles.findIndex(article => article.id === id), 1);
-    return articles;
-  }
+  id
 });
 
 const errorDeleteArticle = () => ({
@@ -293,8 +287,8 @@ export const fetchInsideArticle = id => dispatch => {
 
 export const fetchDeleteArticle = id => (dispatch, getState) => {
   dispatch(deleteingArticle());
-  del(`${articleApi.delete(id)}`)
-    .done(() => dispatch(deletedArticle(getState().articles.lists.items, id)))
+  dele(`${articleApi.delete(id)}`)
+    .done(() => dispatch(deletedArticle(id)))
     .fail(errMsg => {
       dispatch(errorDeleteArticle());
       notification({ type: 'error', message: errMsg, timeout: 3000 });
@@ -354,8 +348,8 @@ export const fetchEditUser = (id, password, email, callback) => (dispatch, getSt
 export const fetchDeleteUser = id => (dispatch, getState) => {
   const users = getState().inside.users.items;
   dispatch(deletingUser());
-  del(`${userApi.delete(id)}`)
-    .done(data => dispatch(deletedUser(users, id)))
+  dele(`${userApi.delete(id)}`)
+    .done(data => dispatch(deletedUser(id)))
     .fail(errMsg => {
       dispatch(errorDeleteUser());
       notification({ type: 'error', message: errMsg });
