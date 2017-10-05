@@ -170,7 +170,7 @@ Api.get('/api/articles/search/title/:title/:page', (req, res) => {
  */
 Api.get('/api/articles/search/type/:type/:page', (req, res) => {
   const page = parseInt(req.params.page);
-  const condition = new RegExp(req.params.type, 'i');
+  const condition = new RegExp('\^' + req.params.type +'\$', 'i');
   const articlesPromise = new Promise((resolve, reject) => {
     Article.find({ articleType: condition }, (err, articles) => {
       if (err) return reject(apiStatus.databaseError.msg);
