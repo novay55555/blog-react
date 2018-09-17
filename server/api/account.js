@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const nodemailer = require('nodemailer');
+const svgCaptcha = require('svg-captcha');
 const User = require('../models/user.js');
 const credenticals = require('../credenticals');
 const config = require('../lib/config');
@@ -57,7 +58,7 @@ Api.put('/api/user/avatar/:id', (req, res) => {
  * @apiSuccess {Boolean} content.isLogin 是否已登录
  * @apiVersion 1.0.0
  */
-Api.post('/api/login', (req, res) => {
+Api.post('/api/login', checkCaptcha, (req, res) => {
   User.find({ name: req.body.name, password: req.body.password }, (err, user) => {
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
     if (!user.length) return res.json({ code: apiStatus.illegalLogin.code, msg: apiStatus.illegalLogin.msg });
@@ -127,7 +128,7 @@ Api.get('/api/checkout', (req, res) => {
  * @apiSuccess {Boolean} content.isLogin 是否已登录
  * @apiVersion 1.0.0
  */
-Api.post('/api/register', (req, res) => {
+Api.post('/api/register', checkCaptcha, (req, res) => {
   User.find({ name: req.body.name }, (err, user) => {
     if (err) return res.json({ code: apiStatus.databaseError.code, msg: apiStatus.databaseError.msg });
     if (user.length) return res.json({ code: apiStatus.userExist.code, msg: apiStatus.userExist.msg });
@@ -192,9 +193,28 @@ Api.get('/api/admin', (req, res) => {
   });
 });
 
+Api.get('/api/captcha', (req, res) => {
+  const captcha = svgCaptcha.create(req.query || {});
+  req.session.captcha = captcha.text.toLowerCase();
+
+  res.json({code: apiStatus.success.code, content: captcha.data});
+})
+
 module.exports = Api;
 
 function checkLogin (session) {
   if (!session.isLogin) return Promise.reject(new Error(apiStatus.illegalSession.msg));
   return Promise.resolve();
+}
+
+function checkCaptcha(req, res, next) {
+  if(req.body.captcha === undefined) {
+    return res.json(apiStatus.paramsRequired);
+  }
+  
+  if(req.body.captcha.toLowerCase() !== req.session.captcha) {
+    return res.json(apiStatus.illegalCaptcha);
+  }
+
+  next();
 }

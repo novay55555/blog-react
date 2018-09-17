@@ -33,6 +33,10 @@ const config = {
       code: 9,
       msg: '非法使用权限'
     },
+    illegalCaptcha: {
+      code: 10,
+      msg: '错误的验证码'
+    },
     notFount: {
       code: 404,
       msg: 'Not Fount any :('
