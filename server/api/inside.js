@@ -339,6 +339,7 @@ Api.get('/api/inside/users/search/:name/:page', (req, res) => {
  * @apiParam {String} admin.email 邮箱
  * @apiParam {String} admin.job 职业
  * @apiParam {String} admin.intro 简介
+ * @apiParam {String} admin.photoUrl 头像url
  * @apiParam {Object} types 文章类型数据
  * @apiParam {String} types.id 文章类型的ObjectId
  * @apiParam {array} types.data 文章类型集合
